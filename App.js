@@ -1,10 +1,12 @@
 import Events from 'screens/Events'
 import EventDetail from 'screens/EventDetail'
 import {createStackNavigator, createAppContainer} from 'react-navigation'
+import Login from './src/screens/Login';
 
 console.disableYellowBox = true
 
 export default createAppContainer(createStackNavigator({
+  Login:{screen: Login},
   Events: {screen: Events},
   EventDetail: {screen: EventDetail}
 },

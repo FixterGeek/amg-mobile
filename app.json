@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "org.fixter.amg"
+    },
+    "description": "AMG Mobile App",
+    "githubUrl": "https://github.com/FixterGeek/amg-mobile.git",
+    "androidStatusBar": {
+      "backgroundColor": "#000000"
     }
   }
 }

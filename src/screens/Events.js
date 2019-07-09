@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import EventCard from 'components/events/EventCard'
 
 export default class Events extends Component{
-
+    static navigationOptions = {headerVisible:true, headerLeft: null, title: "Próximos Eventos"}
     state = {
         events:[
             {
@@ -51,11 +51,6 @@ export default class Events extends Component{
         let {events} = this.state
         return(
             <View>
-                <Text
-                    style={styles.header}
-                >
-                    Próximos Eventos
-                </Text>
                 <ScrollView 
                 contentContainerStyle={{padding:10}}>
                     {events.map(this.renderEventCard)}
