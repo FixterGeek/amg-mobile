@@ -18,12 +18,15 @@ import Loader from "react-native-modal-loader";
 let background = require('../../assets/login_bacground.png')
 let logo = require('../../assets/logo.png')
 
-export default class Home extends React.Component {
-    static navigationOptions = { headerVisible: true }
+export default class EditAccount extends React.Component {
+    static navigationOptions = { headerVisible: true, title: "Editar Info" }
 
     state = {
         user: {},
-        loading: false
+        loading: false,
+        form: {
+            first_name: ''
+        }
     }
 
     signOut = () => {
@@ -35,13 +38,21 @@ export default class Home extends React.Component {
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
                 enableAutomaticScroll={(Platform.OS === 'ios')}
-                contentContainerStyle={{ flex: 1, backgroundColor: "red" }}>
-
+                contentContainerStyle={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+                <View>
+                    <Text>Nombres:</Text>
+                    <TextInput
+                        style={[styles.input]}
+                        onChangeText={(text) => this.setState({ text })}
+                        value="Tu nombre"
+                    />
+                </View>
             </KeyboardAwareScrollView>
         )
     }
 }
 
 let styles = StyleSheet.create({
-    container: {}
+    container: {},
+    input: { height: 40, borderColor: '#9393ff', borderWidth: 1 }
 })
