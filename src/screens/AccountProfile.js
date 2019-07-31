@@ -3,17 +3,13 @@ import {
     View,
     Image,
     Text,
-    TextInput,
-    ImageBackground,
     StyleSheet,
-    Button,
     Platform
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Loader from "react-native-modal-loader";
 import { AsyncStorage } from 'react-native'
-import EditButton from '../components/common/EditButton';
+import MainMenu from '../components/common/MainMenu';
 
 let userImg = require('../../assets/user-img.png')
 
@@ -51,7 +47,6 @@ export default class AccountProfile extends React.Component {
     render() {
         let { user } = this.state
         user.name = `${user.firstName || "María Eugenia"} ${user.lastName || "Icaza"} ${user.surName || "Chavez"}`
-        console.log("usuario: ", user)
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -97,16 +92,11 @@ export default class AccountProfile extends React.Component {
 
                     </View>
 
-                    {/* <View>
-                        <EditButton
-                            style={{ alignSelf: "flex-end" }}
-                            text="Cerrar sesión"
-                        />
-                    </View> */}
-
+                    <MainMenu />
 
 
                 </View>
+                <MainMenu />
             </KeyboardAwareScrollView>
         )
     }

@@ -12,6 +12,8 @@ import { AppLoading, Asset, Font } from 'expo'
 import { Provider } from 'react-redux'
 import NavigationService from './src/services/NavigationService'
 import { AsyncStorage } from 'react-native'
+import generateStore from './src/redux/Store'
+import 'moment/locale/es'
 
 
 
@@ -82,15 +84,15 @@ export default class App extends Component {
       )
     } else {
       return (
-        // <Provider >
-        <ActionSheetProvider>
-          <AppWithNavigationState
-            ref={navigatorRef => {
-              NavigationService.setTopLevelNavigator(navigatorRef);
-            }}
-          />
-        </ActionSheetProvider>
-        // </Provider>
+        <Provider store={generateStore()}>
+          <ActionSheetProvider>
+            <AppWithNavigationState
+              ref={navigatorRef => {
+                NavigationService.setTopLevelNavigator(navigatorRef);
+              }}
+            />
+          </ActionSheetProvider>
+        </Provider>
       )
     }
   } // render

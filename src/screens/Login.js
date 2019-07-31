@@ -14,13 +14,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from '../services/auth'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AsyncStorage } from 'react-native'
-
+import { getEvents } from '../redux/EventsDuck';
+import { connect } from 'react-redux'
 
 
 let background = require('../../assets/login_bacground.png')
 let logo = require('../../assets/logo.png')
 
-export default class Login extends React.Component {
+class Login extends React.Component {
     static navigationOptions = { headerVisible: false, header: null }
 
     state = {
@@ -34,9 +35,9 @@ export default class Login extends React.Component {
     componentWillMount() {
         AsyncStorage.getItem('userData').then(data => {
             let userParsed = JSON.parse(data)
-            console.log("ora? ", userParsed)
             if (userParsed) {
-                this.props.navigation.navigate('Profile', {
+                this.props.getEvents()
+                this.props.navigation.navigate('Events', {
                     user: userParsed,
                     reload: true
                 })
@@ -64,6 +65,9 @@ export default class Login extends React.Component {
             .then(data => {
                 this.setState({ loading: false })
                 AsyncStorage.setItem('userData', JSON.stringify(data))
+                AsyncStorage.setItem('token', data.token)
+                //get events
+                this.props.getEvents()
                 navigation.navigate('Profile')
             })
             .catch(e => {
@@ -148,6 +152,13 @@ export default class Login extends React.Component {
         )
     }
 }
+
+//redux
+
+function mapStateToProps() {
+    return {}
+}
+export default connect(mapStateToProps, { getEvents })(Login)
 
 let styles = StyleSheet.create({
     loginScreenButton: {
