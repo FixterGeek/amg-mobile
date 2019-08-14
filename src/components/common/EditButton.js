@@ -28,7 +28,7 @@ let styles = StyleSheet.create({
         borderColor: "black"
     },
     text: {
-        fontWeight: "bolder",
+        fontWeight: "bold",
         fontSize: 18,
     }
 })

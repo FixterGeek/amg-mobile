@@ -82,8 +82,7 @@ let styles = StyleSheet.create({
         left: -80,
         color: "darkgrey",
         fontSize: 15,
-        width: 100,
-        float: "right"
+        width: 100
     },
     main: {
         marginBottom: 50,
@@ -91,7 +90,7 @@ let styles = StyleSheet.create({
     },
     circle: {
         position: "relative",
-        borderRadius: "100%",
+        borderRadius: 100,
         backgroundColor: "black",
         width: 50,
         height: 50,

@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MainMenu from '../components/common/MainMenu';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import RegisterButton from '../components/common/RegisterButton';
+import { Linking } from 'react-native'
 
 let map = require('../../assets/map.png')
 
@@ -44,7 +45,9 @@ export default class EventDetail extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Programa')}
+                    >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver programa</Text>
                             <Icon style={styles.icon} name="eye" />
@@ -58,10 +61,14 @@ export default class EventDetail extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(event.permisosURLS[0])}
+                    >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Descargar carta permiso</Text>
-                            <Icon style={styles.icon} name="download" />
+                            <Icon
+
+                                style={styles.icon} name="download" />
                         </View>
                     </TouchableOpacity>
 

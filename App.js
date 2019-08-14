@@ -1,3 +1,4 @@
+import 'moment/locale/es'
 import React, { Component } from 'react'
 import Events from 'screens/Events'
 import EventDetail from 'screens/EventDetail'
@@ -13,9 +14,9 @@ import { Provider } from 'react-redux'
 import NavigationService from './src/services/NavigationService'
 import { AsyncStorage } from 'react-native'
 import generateStore from './src/redux/Store'
-import 'moment/locale/es'
-
-
+import Programa from './src/screens/Programa'
+import Modulo from './src/screens/Modulo';
+import Actividad from './src/screens/Actividad';
 
 console.disableYellowBox = true
 
@@ -101,11 +102,16 @@ export default class App extends Component {
 }
 
 let AppWithNavigationState = createAppContainer(createStackNavigator({
-  Login: { screen: Login },
+  Login: { screen: Actividad },
+  Home: { screen: Login },
   Profile: { screen: AccountProfile },
   EditAccount: { screen: EditAccount },
   Events: { screen: Events },
-  EventDetail: { screen: EventDetail }
+  EventDetail: { screen: EventDetail },
+  Programa: { screen: Programa },
+  Modulo: { screen: Modulo },
+  Actividad: { screen: Actividad }
+
 },
   {
     navigationOptions: {

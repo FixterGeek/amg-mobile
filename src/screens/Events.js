@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { getEvents } from '../redux/EventsDuck'
 import {
     View,
     Text,
@@ -8,6 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import EventCard from 'components/events/EventCard'
 import MainMenu from '../components/common/MainMenu';
 import { connect } from 'react-redux'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class Events extends Component {
     static navigationOptions = { headerVisible: true, headerLeft: null, title: "Próximos Eventos" }
@@ -50,28 +52,30 @@ class Events extends Component {
     }
 
     render() {
-        let events = this.props.events
-        console.log(events[0])
+        //let events = this.props.array
+        //console.log(this.props.status)
         return (
             <View>
                 <ScrollView
                     contentContainerStyle={{ padding: 10 }}>
-                    {events.map(this.renderEventCard)}
+                    {this.props.events.map(this.renderEventCard)}
                 </ScrollView>
                 <MainMenu />
+                <Spinner animation="fade" visible={this.props.fetching} />
             </View>
         )
     }
 }
 
 //redux
-function mapStateToProps(state) {
+function mapStateToProps({ events }) {
     return {
-        events: state.events.array
+        events: events.array,
+        ...events
     }
 }
 
-export default connect(mapStateToProps, {})(Events)
+export default connect(mapStateToProps, { getEvents })(Events)
 
 let styles = StyleSheet.create({
     header: {

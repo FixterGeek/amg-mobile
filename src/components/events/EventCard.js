@@ -2,23 +2,27 @@ import React from 'react'
 import {
     View,
     Text,
-    Image,
+
     TouchableOpacity,
     StyleSheet,
     ImageBackground
 } from 'react-native'
 import moment from 'moment'
+import { connect } from 'react-redux'
+import { getSingleEventAction } from '../../redux/EventsDuck'
 
 let logo = require('../../../assets/gastro.jpg')
 
-export default function EventCard({ event, title, startDate, thumbnailImagesURLS, navigation }) {
+function EventCard({ getSingleEventAction, event, title, startDate, mainImagesURLS, navigation }) {
 
     function push() {
         if (!navigation) return
+        getSingleEventAction(event._id)
         navigation.navigate('EventDetail', { event })
     }
 
-    let image = thumbnailImagesURLS[0]
+    let image = "http://amicsliceu.com/wp-content/uploads/2018/12/paris_noche_museos_01-1.jpg"
+    if (mainImagesURLS) image = mainImagesURLS[0]
 
     return (
         <TouchableOpacity
@@ -28,9 +32,6 @@ export default function EventCard({ event, title, startDate, thumbnailImagesURLS
                 style={[styles.container, { width: '100%', height: '100%' }]}
                 imageStyle={{ borderRadius: navigation && 0 }}
                 source={{ uri: image }}>
-                {/* <Image
-                    style={styles.logo}
-                    source={logo} /> */}
                 <View style={styles.text}>
                     <Text style={styles.size}>
                         {title}
@@ -44,6 +45,12 @@ export default function EventCard({ event, title, startDate, thumbnailImagesURLS
 
     )
 }
+
+function mapState(state) {
+    return {}
+}
+
+export default connect(mapState, { getSingleEventAction })(EventCard)
 
 let styles = StyleSheet.create({
     text: {

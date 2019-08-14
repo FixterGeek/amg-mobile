@@ -29,7 +29,7 @@ let styles = StyleSheet.create({
         alignItems: "center"
     },
     text: {
-        fontWeight: "bolder",
+        fontWeight: "bold",
         fontSize: 18,
         color: "white"
     }

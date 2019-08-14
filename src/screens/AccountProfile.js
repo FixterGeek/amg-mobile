@@ -37,7 +37,8 @@ export default class AccountProfile extends React.Component {
         AsyncStorage.getItem('userData')
             .then(data => {
                 let userParsed = JSON.parse(data)
-                if (userParsed) this.setState({ user: userParsed.user })
+                console.log("user", userParsed)
+                if (userParsed) this.setState({ user: userParsed })
             })
             .catch(() => this.props.navigation.navigate('Login'))
     }

@@ -16,6 +16,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { AsyncStorage } from 'react-native'
 import { getEvents } from '../redux/EventsDuck';
 import { connect } from 'react-redux'
+import { tryLogin, loginSuccess } from '../redux/UserDuck'
 
 
 let background = require('../../assets/login_bacground.png')
@@ -29,26 +30,45 @@ class Login extends React.Component {
             email: null,
             password: null
         },
-        loading: true
+        loading: false
     }
 
-    componentWillMount() {
-        AsyncStorage.getItem('userData').then(data => {
-            let userParsed = JSON.parse(data)
-            if (userParsed) {
-                this.props.getEvents()
-                this.props.navigation.navigate('Events', {
-                    user: userParsed,
-                    reload: true
-                })
-            }
-
-        })
-
+    componentDidUpdate() {
+        if (this.props.loggedIn) {
+            this.props.getEvents()
+            this.props.navigation.navigate('Events', {
+                user: this.props.user,
+                reload: true
+            })
+        }
     }
+
+    // componentWillMount() {
+    //     AsyncStorage.getItem('userData').then(data => {
+    //         let userParsed = JSON.parse(data)
+    //         if (userParsed) {
+    //             this.props.getEvents()
+    //             this.props.navigation.navigate('Events', { // while developing
+    //                 user: userParsed,
+    //                 reload: true
+    //             })
+    //         }
+
+    //     })
+
+    // }
 
     componentDidMount() {
-        this.setState({ loading: false })
+        AsyncStorage.getItem('userData')
+            .then(user => {
+                if (typeof user === "string") {
+                    try {
+                        let parsed = JSON.parse(user)
+                        this.props.loginSuccess(parsed)
+                    } catch (e) { }
+
+                }
+            })
     }
 
     onChange = (field, text) => {
@@ -58,26 +78,11 @@ class Login extends React.Component {
     }
 
     signIn = () => {
-        if (!this.state.auth.email || !this.state.auth.password) return
-        let { navigation } = this.props
-        this.setState({ loading: true })
-        login(this.state.auth)
-            .then(data => {
-                this.setState({ loading: false })
-                AsyncStorage.setItem('userData', JSON.stringify(data))
-                AsyncStorage.setItem('token', data.token)
-                //get events
-                this.props.getEvents()
-                navigation.navigate('Profile')
-            })
-            .catch(e => {
-                this.setState({ loading: false })
-                console.log("error: ", e)
-            })
+        this.props.tryLogin(this.state.auth)
     }
 
     render() {
-
+        let { fetching, error } = this.props
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -88,12 +93,12 @@ class Login extends React.Component {
                     style={styles.container}
                     imageStyle={{ borderRadius: 0 }}
                     source={background}>
-                    <Spinner animation="fade" visible={this.state.loading} />
+                    <Spinner animation="fade" visible={fetching} />
                     <View style={styles.over}>
 
                         <Image
                             source={logo}
-                            style={{ width: 200, textAlign: "center" }}
+                            style={{ width: 200 }}
                             resizeMode='contain'
                         />
                         <View style={styles.searchSection}>
@@ -155,10 +160,13 @@ class Login extends React.Component {
 
 //redux
 
-function mapStateToProps() {
-    return {}
+function mapStateToProps({ user }) {
+    return {
+        ...user,
+        user
+    }
 }
-export default connect(mapStateToProps, { getEvents })(Login)
+export default connect(mapStateToProps, { tryLogin, getEvents, loginSuccess })(Login)
 
 let styles = StyleSheet.create({
     loginScreenButton: {
@@ -175,7 +183,7 @@ let styles = StyleSheet.create({
     loginText: {
         color: '#fff',
         textAlign: 'center',
-        fontWeight: 900,
+        // fontWeight: 900,
     },
     disableLogin: {
         marginTop: 10,
@@ -243,6 +251,5 @@ let styles = StyleSheet.create({
         color: '#fff',
         marginBottom: 20,
         fontFamily: "Avenir",
-        fontWeight: "italic"
     },
 })

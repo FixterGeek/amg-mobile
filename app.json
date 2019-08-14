@@ -27,8 +27,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "org.fixter.amg"
     },
-    "description": "AMG Mobile App",
-    "githubUrl": "https://github.com/FixterGeek/amg-mobile.git",
+    "description": "AMG Mobile App v1.1",
     "androidStatusBar": {
       "backgroundColor": "#000000"
     }
