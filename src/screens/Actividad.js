@@ -13,7 +13,9 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux'
 import { setCurrentActivityAction } from '../redux/EventsDuck'
+import { subscribeToActivityAction } from '../redux/UserDuck'
 import RegisterButton from '../components/common/RegisterButton';
+import GastroModal from '../components/common/GastroModal'
 
 let map = require('../../assets/map.png')
 
@@ -24,15 +26,27 @@ class Actividad extends React.Component {
         title: "Actividad"
     }
 
-    componentDidUpdate() {
+    state = {
+        open: false,
+        modalText: "Te inscribirás a esta actividad"
+    }
 
+    componentWillReceiveProps(newProps) {
+        if (newProps.error) {
+            this.setState({ error: newProps.error, modalText: newProps.error })
+        }
     }
     componentDidMount() {
         this.props.setCurrentActivityAction(this.props.actividad)
     }
 
+    onRegister = () => {
+        this.props.subscribeToActivityAction(this.props.actividad._id)
+        this.setState({ open: false })
+    }
+
     render() {
-        let { actividad } = this.props
+        let { actividad, speaker } = this.props
         return (
             <View style={{ flex: 1, }}>
                 <ScrollView style={[styles.container]} >
@@ -43,11 +57,11 @@ class Actividad extends React.Component {
                         <View style={styles.flexCard}>
                             <Image
                                 style={{ width: 100, height: 100 }}
-                                source={{ uri: actividad.speaker.photoURL }} />
+                                source={{ uri: speaker.photoURL }} />
                             <View style={styles.textContainer}>
-                                <Text style={styles.name}>Dr. {actividad.speaker.fullName}</Text>
+                                <Text style={styles.name}>Dr. {speaker.fullName}</Text>
                                 <Text style={{ marginBottom: 20 }} >Gastroenterología</Text>
-                                <Text>{actividad.speaker.origin}</Text>
+                                <Text>{speaker.origin}</Text>
                             </View>
 
                         </View>
@@ -59,25 +73,47 @@ class Actividad extends React.Component {
                         />
                         <Text style={[styles.name, { marginTop: 10 }]}>Grand Fiesta Americana</Text>
                     </View>
-                    <RegisterButton text="Inscribirse" />
+                    <RegisterButton
+                        onPress={this.props.alreadyRegistered ? () => { } : () => this.setState({ open: true })}
+                        text="Inscribirse"
+                        alreadyRegisteredText="Tú asistrás"
+                        alreadyRegistered={this.props.alreadyRegistered}
+                        loading={this.props.fetching}
+                    />
 
                 </ScrollView>
                 <MainMenu />
                 <Spinner animation="fade" visible={actividad.fetching} />
+                <GastroModal
+                    text={this.state.modalText}
+                    acceptButtonText="Inscribirme"
+                    onAccept={this.onRegister}
+                    isVisible={this.state.open}
+                    onCancel={() => this.setState({ open: false })}
+                    noButtons={this.state.error}
+                />
             </View>
         )
     }
 
 }
 
-function mapState({ events }, props) {
+function mapState({ events, user }, props) {
+    let actividad = props.navigation.getParam('actividad') || events.currentActivity
+    let alreadyRegistered = actividad.assistants.find(id => id == user._id)
     return {
         event: events.currentEvent,
-        actividad: props.navigation.getParam('actividad') || events.currentActivity
+        alreadyRegistered,
+        assistants: actividad.assistants,
+        actividad,
+        speaker: actividad.speakers[0],
+        user,
+        fetching: user.fetching,
+        error: user.error || null
     }
 }
 
-export default connect(mapState, { setCurrentActivityAction })(Actividad)
+export default connect(mapState, { setCurrentActivityAction, subscribeToActivityAction })(Actividad)
 
 let styles = StyleSheet.create({
     container: {

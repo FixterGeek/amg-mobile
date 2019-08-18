@@ -7,7 +7,7 @@ import Login from './src/screens/Login';
 import EditAccount from './src/screens/EditAccount'
 import AccountProfile from './src/screens/AccountProfile';
 import {
-  ActionSheetProvider,
+  ActionSheetProvider
 } from '@expo/react-native-action-sheet'
 import { AppLoading, Asset, Font } from 'expo'
 import { Provider } from 'react-redux'
@@ -17,10 +17,13 @@ import generateStore from './src/redux/Store'
 import Programa from './src/screens/Programa'
 import Modulo from './src/screens/Modulo';
 import Actividad from './src/screens/Actividad';
+import Exams from './src/screens/Exams';
+import Exam from './src/screens/Exam';
+//import ScoreScreen from './src/components/exams/ScoreScreen';
 
 console.disableYellowBox = true
 
-export default class App extends Component {
+class App extends Component {
 
   state = {
     isLoadingComplete: false,
@@ -99,10 +102,15 @@ export default class App extends Component {
   } // render
 
 
-}
+} //component
+
+export default App
+
+
+
 
 let AppWithNavigationState = createAppContainer(createStackNavigator({
-  Login: { screen: Actividad },
+  Login: { screen: Login },
   Home: { screen: Login },
   Profile: { screen: AccountProfile },
   EditAccount: { screen: EditAccount },
@@ -110,7 +118,9 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   EventDetail: { screen: EventDetail },
   Programa: { screen: Programa },
   Modulo: { screen: Modulo },
-  Actividad: { screen: Actividad }
+  Actividad: { screen: Actividad },
+  Exams: { screen: Exams },
+  Exam: { screen: Exam }
 
 },
   {

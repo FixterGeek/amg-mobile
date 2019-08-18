@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AMG Events",
-    "slug": "amg-events",
+    "name": "GASTRO",
+    "slug": "gastro",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
@@ -25,11 +25,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "org.fixter.amg"
+      "bundleIdentifier": "mx.com.gastro.app"
     },
-    "description": "AMG Mobile App v1.1",
+    "description": "AMG Mobile App v1.0",
     "androidStatusBar": {
       "backgroundColor": "#000000"
+    },
+    "android": {
+      "package": "mx.com.gastro.app",
+      "versionCode": 1
     }
   }
 }

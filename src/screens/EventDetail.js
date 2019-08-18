@@ -25,7 +25,7 @@ export default class EventDetail extends React.Component {
     render() {
         let event = this.props.navigation.getParam('event')
 
-        console.warn(event)
+        //        console.warn(event)
 
         return (
             <View style={{ flex: 1 }}>
@@ -70,6 +70,16 @@ export default class EventDetail extends React.Component {
 
                                 style={styles.icon} name="download" />
                         </View>
+
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Exams', { event })}>
+                        <View style={[styles.button]}>
+                            <Text style={[styles.ver]} >Examenes</Text>
+                            <Icon
+                                style={styles.icon} name="check-square" />
+                        </View>
+
                     </TouchableOpacity>
 
                     <View style={styles.titles}>

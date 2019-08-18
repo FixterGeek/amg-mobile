@@ -21,12 +21,12 @@ class Programa extends React.Component {
 
     componentDidUpdate() {
         if (this.props.event.error) {
-            this.props.navigation.navigate('Events')
+            //this.props.navigation.navigate('Events')
         }
     }
     componentDidMount() {
         if (this.props.event.error) {
-            this.props.navigation.navigate('Events')
+            //this.props.navigation.navigate('Events')
         }
     }
 

@@ -6,11 +6,13 @@ import userReducer from './UserDuck';
 import { createEpicMiddleware, combineEpics } from 'redux-observable'
 import configReducer from './configDuck'
 import { userLoginEpic, persistUserEpic, hydrateUserEpic } from './UserDuck'
+import examReducer from './examDuck'
 
 let rootReducer = combineReducers({
     events: eventReducer,
     user: userReducer,
-    config: configReducer
+    config: configReducer,
+    exam: examReducer
 })
 
 let rootEpic = combineEpics(userLoginEpic, persistUserEpic, getEventsEpic)

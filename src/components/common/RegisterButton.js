@@ -5,22 +5,53 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native'
-import NavigationService from '../../services/NavigationService'
+import Spinner from 'react-native-loading-spinner-overlay'
 
-export default function RegisterButton({ text, style, marginVertical }) {
+export default function RegisterButton({ disabled, loading, text, style, marginVertical, onPress, alreadyRegistered, alreadyRegisteredText }) {
+    if (disabled) return (
+        <View style={[styles.container, style, { marginVertical: marginVertical || 50, marginBottom: 100 }, styles.disabled]}>
+            <Text style={[styles.text]}>{text || "Registrarse"}</Text>
+        </View>
+    )
+    if (alreadyRegistered) return (
+        <TouchableOpacity
+            onPress={onPress}
+        >
+            <View style={[styles.alreadyContainer, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
+                <Text style={[styles.text]}>{alreadyRegisteredText || "Registrado"}</Text>
+            </View>
+            <Spinner animation="fade" visible={loading} />
+        </TouchableOpacity>
+
+    )
     return (
         <TouchableOpacity
-            onPress={() => { }}
+            onPress={onPress}
         >
             <View style={[styles.container, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
-                <Text style={[styles.text]}>{text || "Edit"}</Text>
+                <Text style={[styles.text]}>{text || "Registrarse"}</Text>
             </View>
+            <Spinner animation="fade" visible={loading} />
         </TouchableOpacity>
 
     )
 }
 
+RegisterButton.defaultProps = {
+    onPress: () => { }
+}
+
 let styles = StyleSheet.create({
+    disabled: {
+        backgroundColor: "lightgrey"
+    },
+    alreadyContainer: {
+        flex: 0,
+        padding: 20,
+        backgroundColor: "green",
+        borderColor: "black",
+        alignItems: "center"
+    },
     container: {
         flex: 0,
         padding: 20,

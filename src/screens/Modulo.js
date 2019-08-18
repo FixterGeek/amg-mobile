@@ -53,7 +53,7 @@ class Modulo extends React.Component {
                                     </View>
                                     <View style={[styles.wideCard]}>
                                         <Text >{a.activityName}</Text>
-                                        <Text style={styles.miniText}>Dr. {a.speaker.fullName}</Text>
+                                        <Text style={styles.miniText}>Dr. {a.speakers[0].fullName}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>)
@@ -72,8 +72,6 @@ class Modulo extends React.Component {
 
 function mapState({ events }, props) {
     let modulo = events.currentEvent.modules.find(m => m._id === props.navigation.getParam('modulo')._id)
-    console.log("modulll", modulo)
-    console.log("navig", props.navigation.getParam('modulo'))
     return {
         event: events.currentEvent,
         module: modulo
@@ -109,7 +107,7 @@ let styles = StyleSheet.create({
         paddingHorizontal: 10,
         // paddingVertical: 30,
         backgroundColor: "#cfecff",
-        flexDirection: "row",
+        flexDirection: "column",
         flexWrap: "wrap",
         // height: 80
 

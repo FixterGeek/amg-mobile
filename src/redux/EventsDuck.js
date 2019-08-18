@@ -53,7 +53,9 @@ const GET_SINGLE_EVENT_ERROR = "GET_SINGLE_EVENT_ERROR"
 const SET_CURRENT_EVENT = "SET_CURRENT_EVENT"
 const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY"
 
+
 //actions
+
 export function setCurrentActivity(activity) {
     return {
         type: SET_CURRENT_ACTIVITY,
@@ -132,11 +134,12 @@ function reducer(state = initialState, action) {
 // action creators
 
 // thunks 
+
+
 export let setCurrentActivityAction = (activity) => (dispatch) => {
     if (Object.values(activity).length < 2) {
         AsyncStorage.getItem('activity')
             .then(string => {
-                console.log("siubo", string)
                 if (string) dispatch(setCurrentActivity(JSON.parse(string)))
             })
     } else {
@@ -168,7 +171,7 @@ export function getEventsEpic(action$, state$) {
         switchMap(([action, { token }]) => {
             //console.log("token: ", token)
             return concat(
-                ajax.get(baseURL + "events", { 'Content-Type': 'application/json', "Authorization": token }).pipe(
+                ajax.get(baseURL + 'events?query={"status":"published"}', { 'Content-Type': 'application/json', "Authorization": token }).pipe(
                     map(res => {
                         //console.log("res: ", res.response)
                         return getEventsSuccess(res.response)

@@ -54,14 +54,15 @@ class Events extends Component {
     render() {
         //let events = this.props.array
         //console.log(this.props.status)
+        if (this.props.fetching && this.props.events.length < 1) return <Spinner animation="fade" visible={this.props.fetching} />
         return (
-            <View>
+            <View style={styles.container}>
                 <ScrollView
                     contentContainerStyle={{ padding: 10 }}>
                     {this.props.events.map(this.renderEventCard)}
                 </ScrollView>
                 <MainMenu />
-                <Spinner animation="fade" visible={this.props.fetching} />
+
             </View>
         )
     }
@@ -78,6 +79,9 @@ function mapStateToProps({ events }) {
 export default connect(mapStateToProps, { getEvents })(Events)
 
 let styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     header: {
         fontSize: 30,
         textAlign: "center",
