@@ -38,7 +38,7 @@ class Login extends React.Component {
             this.props.getEvents()
             this.props.navigation.navigate('Events', {
                 user: this.props.user,
-                reload: true
+                reload: false
             })
         }
     }

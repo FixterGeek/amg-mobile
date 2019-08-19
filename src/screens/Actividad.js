@@ -4,12 +4,11 @@ import {
     StyleSheet,
     Image,
     Text,
-
+    ScrollView,
 } from 'react-native'
-import EventCard from 'components/events/EventCard'
-import Icon from 'react-native-vector-icons/FontAwesome';
+//import EventCard from 'components/events/EventCard'
+//import Icon from 'react-native-vector-icons/FontAwesome';
 import MainMenu from '../components/common/MainMenu';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux'
 import { setCurrentActivityAction } from '../redux/EventsDuck'
@@ -41,8 +40,8 @@ class Actividad extends React.Component {
     }
 
     onRegister = () => {
-        this.props.subscribeToActivityAction(this.props.actividad._id)
         this.setState({ open: false })
+        this.props.subscribeToActivityAction(this.props.actividad._id)
     }
 
     render() {
@@ -59,7 +58,7 @@ class Actividad extends React.Component {
                                 style={{ width: 100, height: 100 }}
                                 source={{ uri: speaker.photoURL }} />
                             <View style={styles.textContainer}>
-                                <Text style={styles.name}>Dr. {speaker.fullName}</Text>
+                                <Text style={styles.name}>{speaker.fullName}</Text>
                                 {/* <Text style={{ marginBottom: 20 }} >Gastroenterología</Text> */}
                                 <Text>{speaker.origin}</Text>
                             </View>
@@ -78,12 +77,11 @@ class Actividad extends React.Component {
                         text="Inscribirse"
                         alreadyRegisteredText="Tú asistrás"
                         alreadyRegistered={this.props.alreadyRegistered}
-                        loading={this.props.fetching}
                     />
 
                 </ScrollView>
                 <MainMenu />
-                {/* <Spinner animation="fade" visible={actividad.fetching} /> */}
+                <Spinner animation="fade" visible={this.props.fetching} />
                 <GastroModal
                     text={this.state.modalText}
                     acceptButtonText="Inscribirme"

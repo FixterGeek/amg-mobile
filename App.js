@@ -1,4 +1,4 @@
-import 'moment/locale/es'
+//import 'moment/locale/es'
 import React, { Component } from 'react'
 import Events from 'screens/Events'
 import EventDetail from 'screens/EventDetail'
@@ -12,7 +12,7 @@ import {
 import { AppLoading, Asset, Font } from 'expo'
 import { Provider } from 'react-redux'
 import NavigationService from './src/services/NavigationService'
-import { AsyncStorage } from 'react-native'
+//import { AsyncStorage } from 'react-native'
 import generateStore from './src/redux/Store'
 import Programa from './src/screens/Programa'
 import Modulo from './src/screens/Modulo';
@@ -31,18 +31,18 @@ class App extends Component {
     userData: null
   }
 
-  componentWillMount() {
-    AsyncStorage.getItem('userData').then(user => {
-      let userData = JSON.parse(user)
-      if (userData) {
-        this.setState({ userData })
-        // NavigationActions.navigate('Profile', {
-        //   user: userParsed,
-        //   reload: true
-        // })
-      }
-    }).catch(e => { })
-  }
+  // componentWillMount() {
+  //   AsyncStorage.getItem('userData').then(user => {
+  //     let userData = JSON.parse(user)
+  //     if (userData) {
+  //       this.setState({ userData })
+  //       // NavigationActions.navigate('Profile', {
+  //       //   user: userParsed,
+  //       //   reload: true
+  //       // })
+  //     }
+  //   }).catch(e => { })
+  // }
 
   _loadResourcesAsync = async () => {
     return Promise.all([

@@ -109,15 +109,14 @@ function reducer(state = initialState, action) {
         case SUBSCRIBE_TO_EVENT:
             return { ...state, fetching: true, status: "fetching" }
         case SUBSCRIBE_TO_EVENT_SUCCESS:
-            return { ...state, assistedEvents: [action.payload, ...state.assistedEvents], status: "success" }
+            return { ...state, assistedEvents: [action.payload, ...state.assistedEvents], status: "success", fetching: false, }
         case SUBSCRIBE_TO_EVENT_ERROR:
-            return { ...state, error: action.payload, status: "error" }
+            return { ...state, error: action.payload, status: "error", fetching: false, }
 
         case SUBSCRIBE_TO_ACTIVITY:
             return { ...state, fetching: true, status: "fetching" }
         case SUBSCRIBE_TO_ACTIVITY_SUCCESS:
-            let u = { ...state, fetching: false, assistedActivities: [action.payload, ...state.assistedActivities], status: "success" }
-            return { ...u }
+            return { ...state, assistedActivities: [...state.assistedActivities, action.payload], status: "success", fetching: false }
         case SUBSCRIBE_TO_ACTIVITY_ERROR:
             return { ...state, error: action.payload, status: "error", fetching: false, }
 
@@ -168,11 +167,9 @@ export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
 export let subscribeToActivityAction = (activityId) => (dispatch, getState) => {
     dispatch({ type: SUBSCRIBE_TO_ACTIVITY })
     let { user: { token } } = getState()
-
     return axios.post(baseURL + `eventActivities/${activityId}/assist`, {}, { headers: { Authorization: token } })
         .then(res => {
-
-            dispatch(subscribeToActivitySuccess(res.data))
+            dispatch(subscribeToActivitySuccess({ ...res.data }))
             return res.data
         })
         .catch(e => {
@@ -189,8 +186,6 @@ export let updateUserAction = (formData) => (dispatch, getState) => {
     dispatch({ type: UPDATE_USER })
     return axios.patch(`${baseURL}users/${_id}`, formData, { headers: { Authorization: token } })
         .then(res => {
-            console.log("respuesta", res)
-            console.log("data", res.data)
             dispatch({ type: UPDATE_USER_SUCCESS, payload: { ...res.data } })
             let { user } = getState()
             AsyncStorage.setItem('userData', JSON.stringify(user))

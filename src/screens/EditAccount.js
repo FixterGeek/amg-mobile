@@ -24,9 +24,6 @@ import moment from 'moment'
 import 'moment/locale/es'
 moment.locale('es')
 
-
-let background = require('../../assets/login_bacground.png')
-let logo = require('../../assets/logo.png')
 let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
 
 @connectActionSheet

@@ -21,12 +21,6 @@ class Modulo extends React.Component {
         title: "Ver el Módulo"
     }
 
-    componentDidUpdate() {
-
-    }
-    componentDidMount() {
-
-    }
 
     render() {
         let { module, event } = this.props
@@ -48,12 +42,12 @@ class Modulo extends React.Component {
                                 <View
                                     style={[styles.flexCard]}>
                                     <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
-                                        <Text style={[styles.roman]}>{moment(a.createdAt).format('h:mm')}</Text>
-                                        <Text style={[styles.roman]}>{moment(a.createdAt).format('a').toUpperCase()}</Text>
+                                        <Text style={[styles.roman]}>{moment(new Date(a.startTime)).format('h:mm')}</Text>
+                                        <Text style={[styles.roman]}>{moment(new Date(a.startTime)).format('a').toUpperCase()}</Text>
                                     </View>
                                     <View style={[styles.wideCard]}>
                                         <Text >{a.activityName}</Text>
-                                        <Text style={styles.miniText}>Dr. {a.speakers[0].fullName}</Text>
+                                        <Text style={styles.miniText}>{a.speakers[0].fullName}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>)

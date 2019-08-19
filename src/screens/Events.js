@@ -1,19 +1,31 @@
 import React, { Component } from 'react'
-import { getEvents } from '../redux/EventsDuck'
 import {
     View,
     Text,
     StyleSheet
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
-import EventCard from 'components/events/EventCard'
+import EventCard from '../components/events/EventCard'
 import MainMenu from '../components/common/MainMenu';
 import { connect } from 'react-redux'
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from 'react-native-loading-spinner-overlay'
 
 class Events extends Component {
     static navigationOptions = { headerVisible: true, headerLeft: null, title: "Próximos Eventos" }
 
+    state = {
+        spin: true
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (!newProps.fetching) {
+            // console.log("apagar")
+            setTimeout(() => this.setState({ spin: false }), 300)
+        } else if (newProps.fetching) {
+            // console.log("encender")
+            setTimeout(() => this.setState({ spin: true }), 300)
+        }
+    }
 
     renderEventCard = (e, i) => {
         return (<EventCard
@@ -25,15 +37,15 @@ class Events extends Component {
     }
 
     render() {
-        if (this.props.fetching && this.props.events.length < 1) return <Spinner animation="fade" visible={this.props.fetching} />
         return (
             <View style={styles.container}>
                 <ScrollView
                     contentContainerStyle={{ padding: 10 }}>
                     {this.props.events.map(this.renderEventCard)}
+                    {this.props.events.length < 1 && <Text style={styles.none}>No hay eventos publicados</Text>}
                 </ScrollView>
                 <MainMenu />
-
+                <Spinner visible={this.state.spin} />
             </View>
         )
     }
@@ -42,16 +54,23 @@ class Events extends Component {
 //redux
 function mapStateToProps({ events }) {
     return {
+        ...events,
         events: events.array,
-        ...events
     }
 }
 
-export default connect(mapStateToProps, { getEvents })(Events)
+export default connect(mapStateToProps, {})(Events)
 
 let styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    none: {
+        marginTop: 20,
+        fontSize: 25,
+        fontWeight: "100",
+        paddingHorizontal: 30,
+        paddingVertical: 10
     },
     header: {
         fontSize: 30,

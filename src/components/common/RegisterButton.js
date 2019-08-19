@@ -5,7 +5,6 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native'
-import Spinner from 'react-native-loading-spinner-overlay'
 
 export default function RegisterButton({ disabled, loading, text, style, marginVertical, onPress, alreadyRegistered, alreadyRegisteredText }) {
     if (disabled) return (
@@ -20,7 +19,6 @@ export default function RegisterButton({ disabled, loading, text, style, marginV
             <View style={[styles.alreadyContainer, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
                 <Text style={[styles.text]}>{alreadyRegisteredText || "Registrado"}</Text>
             </View>
-            <Spinner animation="fade" visible={loading} />
         </TouchableOpacity>
 
     )
@@ -31,7 +29,6 @@ export default function RegisterButton({ disabled, loading, text, style, marginV
             <View style={[styles.container, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
                 <Text style={[styles.text]}>{text || "Registrarse"}</Text>
             </View>
-            <Spinner animation="fade" visible={loading} />
         </TouchableOpacity>
 
     )

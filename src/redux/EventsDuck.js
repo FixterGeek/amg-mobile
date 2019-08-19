@@ -117,7 +117,7 @@ function reducer(state = initialState, action) {
         case GET_EVENTS:
             return { ...state, status: "fetching", fetching: true }
         case GET_EVENTS_SUCCESS:
-            return { ...state, array: action.payload, fetching: false, status: "success" }
+            return { ...state, array: [...action.payload], fetching: false, status: "success" }
         case GET_SINGLE_EVENT:
             return { ...state, currentEvent: { fetching: true } }
         case GET_SINGLE_EVENT_ERROR:
@@ -174,7 +174,7 @@ export function getEventsEpic(action$, state$) {
                 ajax.get(baseURL + 'events?query={"status":"published"}', { 'Content-Type': 'application/json', "Authorization": token }).pipe(
                     map(res => {
                         //console.log("res: ", res.response)
-                        return getEventsSuccess(res.response)
+                        return getEventsSuccess([...res.response])
                     }),
                     catchError(err => {
                         console.log("error", err)
