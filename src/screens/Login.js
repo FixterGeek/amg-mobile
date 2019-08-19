@@ -87,7 +87,7 @@ class Login extends React.Component {
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
                 enableAutomaticScroll={(Platform.OS === 'ios')}
-                contentContainerStyle={{ flex: 1, backgroundColor: "red" }}>
+                contentContainerStyle={{ flex: 1, backgroundColor: "grey" }}>
 
                 <ImageBackground
                     style={styles.container}
@@ -145,7 +145,12 @@ class Login extends React.Component {
 
                         <View style={{ flex: 0, flexDirection: "row", marginTop: 100 }}>
                             <Text style={{ color: "#fff" }} >¿No tienes cuenta? </Text>
-                            <Text style={{ color: "#28abd8" }} > Registrate aquí</Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Signup')}
+                            >
+                                <Text style={{ color: "#28abd8" }} > Registrate aquí</Text>
+                            </TouchableOpacity>
+
                         </View>
 
 
@@ -201,7 +206,7 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-        fontFamily: "Avenir"
+
 
     },
     over: {
@@ -250,6 +255,6 @@ let styles = StyleSheet.create({
         backgroundColor: 'transparent',
         color: '#fff',
         marginBottom: 20,
-        fontFamily: "Avenir",
+
     },
 })

@@ -48,7 +48,7 @@ class Programa extends React.Component {
                                     modulo: m
                                 })}
                                 key={m._id}
-                                style={{ height: 60 }}>
+                                style={{ height: 60, width: "100%" }}>
 
                                 <View style={[styles.wideCard]}>
                                     <Text style={styles.number}>{i + 1}</Text>
@@ -89,6 +89,7 @@ let styles = StyleSheet.create({
         marginLeft: 20
     },
     roman: {
+        width: 290,
         paddingBottom: 10,
         paddingTop: 10,
         paddingHorizontal: 10,
@@ -97,11 +98,13 @@ let styles = StyleSheet.create({
         maxWidth: 300
     },
     wideCard: {
+
         marginLeft: 0,
         flexDirection: "row",
         alignItems: "center",
         flex: 1,
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+
     },
     title: {
         fontSize: 18,

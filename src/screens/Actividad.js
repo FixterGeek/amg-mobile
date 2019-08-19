@@ -60,7 +60,7 @@ class Actividad extends React.Component {
                                 source={{ uri: speaker.photoURL }} />
                             <View style={styles.textContainer}>
                                 <Text style={styles.name}>Dr. {speaker.fullName}</Text>
-                                <Text style={{ marginBottom: 20 }} >Gastroenterología</Text>
+                                {/* <Text style={{ marginBottom: 20 }} >Gastroenterología</Text> */}
                                 <Text>{speaker.origin}</Text>
                             </View>
 
@@ -71,7 +71,7 @@ class Actividad extends React.Component {
                             source={map}
                             resizeMode="cover"
                         />
-                        <Text style={[styles.name, { marginTop: 10 }]}>Grand Fiesta Americana</Text>
+                        <Text style={[styles.name, { marginTop: 10 }]}>Auditorio Complejo Médico "Antonio Fernández Rodríguez"</Text>
                     </View>
                     <RegisterButton
                         onPress={this.props.alreadyRegistered ? () => { } : () => this.setState({ open: true })}
@@ -83,7 +83,7 @@ class Actividad extends React.Component {
 
                 </ScrollView>
                 <MainMenu />
-                <Spinner animation="fade" visible={actividad.fetching} />
+                {/* <Spinner animation="fade" visible={actividad.fetching} /> */}
                 <GastroModal
                     text={this.state.modalText}
                     acceptButtonText="Inscribirme"

@@ -7,7 +7,7 @@ import {
     Platform,
     Image,
     TouchableOpacity,
-    Button
+    Picker
 } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,9 +18,11 @@ import * as ImagePicker from 'expo-image-picker'
 import * as Permissions from 'expo-permissions'
 import { connectActionSheet } from '@expo/react-native-action-sheet'
 import DatePicker from 'react-native-datepicker'
-import { updateUserAction } from '../redux/UserDuck'
-
-
+import { updateUserAction, createUserAction } from '../redux/UserDuck'
+import GastroModal from '../components/common/GastroModal';
+import moment from 'moment'
+import 'moment/locale/es'
+moment.locale('es')
 
 
 let background = require('../../assets/login_bacground.png')
@@ -29,63 +31,38 @@ let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
 
 @connectActionSheet
 class EditAccount extends React.Component {
-    static navigationOptions = { headerVisible: true, title: "Editar Perfil" }
+    //static navigationOptions = { headerVisible: true, title: "Editar Perfil" }
 
     state = {
+        error: false,
         loading: false,
-        file: null,
+        photo: null,
         user: {
-            "__v": "0",
-            "_id": "5d2410a7fdb6ac0017f4578d",
-            "basicData": {
-                "address": {
-                    "coordinates": [],
-                    "type": "Point",
-                },
-                "birthDate": "17-04-1987",
-                "placeOfBirth": {
-                    "coordinates": [],
-                    "type": "Point",
-                },
+            email: '',
+            address: {
+                city: '',
+                state: ''
             },
-            "consultories": [],
-            "createdAt": "2019-07-09T03:57:28.319Z",
-            "email": "bliss@fixter.org",
-            "fiscalData": {
-                "address": {
-                    "coordinates": [],
-                    "type": "Point",
-                },
-            },
-            "followers": [],
-            "following": [],
-            "hash": "",
-            "hospitalActivities": [],
-            "internships": [],
-            "medicalSocieties": [],
-            "membersWhoRecommend": [],
-            "membershipStatus": "Free",
-            "renewals": [],
-            "residencies": [],
-            "salt": "a8f7a61aef852c3431fbb541a2a94c3a4b507aa8c0ccc07ebd2a0e405c5e75bd",
-            "studies": [],
-            "teachingActivities": [],
-            "updatedAt": "2019-07-09T03:57:28.319Z",
-            "userStatus": "Registrado",
-            "workedAtInstitutions": [],
-        }, // user
+            basicData: {
+                photoURL: null,
+                birthDate: '17/04/1987',
+                name: '',
+                dadSurname: '',
+                momSurname: ''
+            }
+        },
         open: true,
         date: "17-04-1987"
     }
 
 
 
-    componentWillMount() {
-        this.setState({ user: this.props.user })
+    componentDidMount() {
+        this.setState({ user: { ...this.state.user, ...this.props.user } })
     }
 
     _takePicture = async (type) => {
-        this.setState({ loading: true })
+        // this.setState({ loading: true })
         await this.askPermissionsAsync()
         let result
         if (type === 'camera') {
@@ -103,14 +80,18 @@ class EditAccount extends React.Component {
                 exif: false,
             })
         }
-        this.setState({ loading: false })
+        //this.setState({ loading: false })
         if (!result.cancelled) {
             //let form = this.state.formData
-            let file = result.uri
-            //console.log(file)
-            this.setState({ file })
+            let photo = {
+                uri: result.uri,
+                type: 'image/jpeg',
+                name: 'photo.jpg'
+            }
+            this.setState({ photo })
         }
     }
+
 
     askPermissionsAsync = async () => {
         await Permissions.askAsync(Permissions.CAMERA)
@@ -139,25 +120,80 @@ class EditAccount extends React.Component {
             },
         )
     }
+
+    isValid = () => {
+        this.setState({ error: false })
+        let error = false
+        let { user: { basicData, address, email, password, password2 } } = this.state
+
+        if (!password || !password2 || password.length < 6 || password !== password2) {
+            error = "Usa una contraseña de mínimo 6 caracteres y verifica que coincida"
+        }
+        if (!basicData.name || basicData.name.length < 5) {
+            error = "Escribe tu nombre completo"
+        }
+        if (!email || email.length < 6 || !email.includes('@')) {
+            error = "Escribe un correo electrónico válido porfavor"
+        }
+        this.setState({ error })
+        return error ? false : true
+    }
+    _createAccount = () => {
+        if (!this.isValid()) return
+        this.props.createUserAction(this._makeFormData())
+            .then(() => {
+                if (this.props.status === "error") {
+                    this.setState({ error: this.props.error })
+                }
+                else if (this.props.status === "success") {
+                    this.props.navigation.navigate('Events')
+                }
+            })
+        // go to events
+    }
+
     _updateUser = () => {
+        this.props.updateUserAction(this._makeFormData())
+            .then(() => {
+                this.props.navigation.navigate('Profile')
+            })
+    }
+
+    _makeFormData = () => {
         let { user } = this.state
-        this.setState({ loading: true })
         let formData = new FormData()
         for (let k in user) {
-            if (Array.isArray(user[k]) || typeof user[k] === "object") {
-                formData.append(k, JSON.stringify(user[k]))
+            if (Array.isArray(user[k])) {
+                for (let el of user[k]) {
+                    formData.append(`${k}[]`, el)
+                }
+            } if (typeof user[k] === "object") {
+                if (k === "photoURL") continue
+                for (let key in user[k]) {
+                    formData.append(`${k}[${key}]`, user[k][key])
+                }
+
             } else {
                 formData.append(k, user[k])
             }
         }
-        this.props.updateUserAction(formData)
+        if (this.state.photo) formData.append('photo', this.state.photo)
+        return formData
     }
 
     onChange = (name, value) => {
         let { user } = this.state
-        if (name === "name" || name == "dadSurname" || name === "momSurname" || name === "birthDate") {
-            console.log(value)
+        if (name === "birthDate") {
             user.basicData[name] = value
+        }
+        else if (name === "email") {
+            user[name] = value.toLowerCase()
+        }
+        else if (name === "name" || name == "dadSurname" || name === "momSurname" || name === "speciality") {
+            user.basicData[name] = value
+        }
+        else if (name === "city" || name === "state") {
+            user.address[name] = value
         }
         else {
             user[name] = value
@@ -166,8 +202,9 @@ class EditAccount extends React.Component {
     }
 
     render() {
-        let { photoURL = pic } = this.state.user
-        let { file, user, loading, open } = this.state
+        let { user, error, photo } = this.state
+        let { basicData, address } = this.state.user
+        let { fetching } = this.props
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -184,19 +221,36 @@ class EditAccount extends React.Component {
                             </TouchableOpacity>
                             <Image
                                 style={styles.image}
-                                source={file ? { uri: file } : { uri: photoURL }}
+                                //source={{ uri: file }}
+                                source={photo ? { uri: photo.uri } : basicData.photoURL ? { uri: basicData.photoURL } : { uri: pic }}
                             />
-                            <TouchableOpacity
-                                onPress={this._updateUser}
-                            >
-                                <Text style={styles.editText}>Actualizar Perfil</Text>
-                            </TouchableOpacity>
+                            {!this.props.loggedIn ?
+                                <TouchableOpacity
+                                    onPress={this._createAccount}
+                                >
+                                    <Text style={styles.editText}>
+                                        Crear cuenta
+                             </Text>
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity
+                                    onPress={this._updateUser}
+                                >
+                                    <Text style={styles.editText}>
+                                        Actualizar Perfil
+                             </Text>
+                                </TouchableOpacity>
+                            }
+
+
+
                         </View>
 
                         <View style={[styles.form]}>
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Correo electrónico:</Text>
                                 <TextInput
+                                    underlineColorAndroid="transparent"
                                     onChangeText={text => this.onChange("email", text)}
                                     style={[styles.input]}
                                     value={user.email}
@@ -205,35 +259,62 @@ class EditAccount extends React.Component {
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Nombres:</Text>
                                 <TextInput
+                                    underlineColorAndroid="transparent"
                                     style={[styles.input]}
                                     onChangeText={text => this.onChange("name", text)}
-                                    value={user.basicData.name}
+                                    value={basicData.name}
                                 />
                             </View>
+
+                            {!this.props.loggedIn && <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Password:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    secureTextEntry={true}
+                                    style={[styles.password]}
+                                    onChangeText={text => this.onChange("password", text)}
+                                    value={user.password}
+                                />
+                            </View>}
+                            {!this.props.loggedIn && <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Repite tu Password:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    secureTextEntry={true}
+                                    style={[styles.password]}
+                                    onChangeText={text => this.onChange("password2", text)}
+                                    value={user.password2}
+                                />
+                            </View>}
+
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Apellido paterno:</Text>
                                 <TextInput
+                                    underlineColorAndroid="transparent"
                                     style={[styles.input]}
                                     onChangeText={text => this.onChange("dadSurname", text)}
-                                    value={user.basicData.dadSurname}
+                                    value={basicData.dadSurname}
                                 />
                             </View>
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Apelido materno:</Text>
                                 <TextInput
+                                    underlineColorAndroid="transparent"
                                     style={[styles.input]}
                                     onChangeText={text => this.onChange("momSurname", text)}
-                                    value={user.basicData.momSurname}
+                                    value={basicData.momSurname}
                                 />
                             </View>
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Fecha de nacimiento:</Text>
                                 <DatePicker
-                                    style={{ width: 300, marginBottom: 20 }}
-                                    date={user.basicData.birthDate}
-                                    mode="date"
+                                    style={{ minWidth: 300, marginBottom: 20 }}
+                                    locale="es"
+                                    date={basicData.birthDate}
+                                    //mode="time"
+                                    androidMode="spinner"
                                     placeholder="Tu fecha de nacimiento"
-                                    format="DD-MM-YYYY"
+                                    format="DD/MM/YYYY"
                                     minDate="01-01-1930"
                                     maxDate="01-01-2007"
                                     confirmBtnText="Aceptar"
@@ -242,35 +323,69 @@ class EditAccount extends React.Component {
                                 // onDateChange={date => this.setState({ date })}
                                 />
                             </View>
-
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Especialidad:</Text>
+                                <Text style={[styles.label]} >Ciudad:</Text>
                                 <TextInput
+                                    underlineColorAndroid="transparent"
                                     style={[styles.input]}
-                                    onChangeText={text => this.onChange("speciality", text)}
-                                    value={user.speciality}
+                                    onChangeText={text => this.onChange("city", text)}
+                                    value={address.city}
                                 />
                             </View>
-
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Estado:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.input]}
+                                    onChangeText={text => this.onChange("state", text)}
+                                    value={address.state}
+                                />
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Especialidad:</Text>
+                                <Picker
+                                    selectedValue={basicData.speciality}
+                                    style={styles.picker}
+                                    onValueChange={text => this.onChange("speciality", text)} >
+                                    <Picker.Item label="Cirujano" value="Cirujano" />
+                                    <Picker.Item label="Gastroenterología" value="Gastroenterología" />
+                                    <Picker.Item label="Endoscopia" value="Endoscopia" />
+                                    <Picker.Item label="Motilidad" value="Motilidad" />
+                                    <Picker.Item label="Medicina Interna" value="Medicina Interna" />
+                                    <Picker.Item label="Otra" value="Otra" />
+                                </Picker>
+                            </View>
                         </View>
 
                     </View>
                 </ScrollView>
-                <Spinner animation="fade" visible={loading} />
+                <GastroModal
+                    isVisible={error}
+                    text={error}
+                    onlyOne
+                    onAccept={() => this.setState({ error: false })}
+                />
+                <Spinner animation="fade" visible={fetching} />
             </KeyboardAwareScrollView >
         )
     }
 }
 
-function mapState(state) {
+function mapState({ user }) {
     return {
-        user: state.user
+        user: { ...user },
+        ...user,
+        ...user.basicData,
+        ...user.address
     }
 }
 
-export default connect(mapState, { updateUserAction })(EditAccount)
+export default connect(mapState, { createUserAction, updateUserAction })(EditAccount)
 
 let styles = StyleSheet.create({
+    picker: {
+        height: 200, minWidth: 300
+    },
     form: {
         flex: 1,
         flexDirection: "column",
@@ -313,6 +428,7 @@ let styles = StyleSheet.create({
         marginBottom: 10
     },
     input: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
+    password: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
     camera: {
         color: "#1f2536",
         fontSize: 30,

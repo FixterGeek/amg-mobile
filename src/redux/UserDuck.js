@@ -15,8 +15,22 @@ import { ajax } from 'rxjs/ajax'
 import axios from 'axios'
 
 let baseURL = "https://amg-api.herokuapp.com/"
+//let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
+
 
 let initialState = {
+    email: '',
+    address: {
+        city: '',
+        state: ''
+    },
+    basicData: {
+        photoURL: null,
+        birthDate: '17/04/1987',
+        name: '',
+        dadSurname: '',
+        momSurname: ''
+    },
     error: null,
     fetching: false,
     status: "logedOut", // logedOut || fetching || success ||
@@ -24,6 +38,10 @@ let initialState = {
 }
 
 //constants
+const CREATE_USER = "CREATE_USER"
+const CREATE_USER_ERROR = "CREATE_USER_ERROR"
+const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS"
+
 const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 const TRY_LOGIN = "TRY_LOGIN"
 const LOGIN_ERROR = "LOGIN_ERROR"
@@ -46,7 +64,6 @@ export let subscribeToActivitySuccess = (activity) => ({ type: SUBSCRIBE_TO_ACTI
 export let subscribeToActivityError = (err) => ({ type: SUBSCRIBE_TO_ACTIVITY_ERROR, payload: err })
 export let subscribeToEventSuccess = (event) => ({ type: SUBSCRIBE_TO_EVENT_SUCCESS, payload: event })
 export let subscribeToEventError = (err) => ({ type: SUBSCRIBE_TO_EVENT_ERROR, payload: err })
-
 
 export function tryLogin(auth) {
     return {
@@ -71,6 +88,24 @@ export function loginUserError(error) {
 // reducer
 function reducer(state = initialState, action) {
     switch (action.type) {
+        case CREATE_USER:
+            return { fetching: true, status: "fetching" }
+        case CREATE_USER_ERROR:
+            return { ...state, fetching: false, status: "error", error: action.payload }
+        case CREATE_USER_SUCCESS:
+            return { ...action.payload, status: "success", fetching: false }
+
+        case UPDATE_USER:
+            return {
+                ...state,
+                status: "fetching",
+                //fetching: true
+            }
+        case UPDATE_USER_ERROR:
+            return { ...state, fetching: false, status: "error", error: action.payload }
+        case UPDATE_USER_SUCCESS:
+            return { ...state, fetching: false, status: "success", ...action.payload }
+
         case SUBSCRIBE_TO_EVENT:
             return { ...state, fetching: true, status: "fetching" }
         case SUBSCRIBE_TO_EVENT_SUCCESS:
@@ -81,14 +116,11 @@ function reducer(state = initialState, action) {
         case SUBSCRIBE_TO_ACTIVITY:
             return { ...state, fetching: true, status: "fetching" }
         case SUBSCRIBE_TO_ACTIVITY_SUCCESS:
-            let u = { ...state, assistedActivities: [action.payload, ...state.assistedActivities], status: "success" }
-            console.log("suscrito:", u)
+            let u = { ...state, fetching: false, assistedActivities: [action.payload, ...state.assistedActivities], status: "success" }
             return { ...u }
         case SUBSCRIBE_TO_ACTIVITY_ERROR:
-            return { ...state, error: action.payload, status: "error" }
+            return { ...state, error: action.payload, status: "error", fetching: false, }
 
-        case UPDATE_USER:
-            return { ...state, status: "fetching", fetching: true }
         case LOGIN_SUCCESS:
             return { loggedIn: true, ...action.payload, status: "success", fetching: false }
         case TRY_LOGIN:
@@ -105,6 +137,22 @@ function reducer(state = initialState, action) {
 }
 
 // action creators
+export let createUserAction = (user) => (dispatch) => {
+    dispatch({ type: CREATE_USER })
+    return axios.post(`${baseURL}auth/signup`, user)
+        .then(res => {
+            dispatch({ type: CREATE_USER_SUCCESS, payload: { ...res.data } })
+            dispatch({ type: LOGIN_SUCCESS, payload: { ...res.data.user, token: res.data.token } })
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+            dispatch({ type: CREATE_USER_ERROR, payload: err.response.data.message })
+        })
+}
+
+
+
 export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
     let { user: { token } } = getState()
     return axios.post(baseURL + `events/${eventId}/assist`, {}, { headers: { Authorization: token } })
@@ -120,11 +168,10 @@ export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
 export let subscribeToActivityAction = (activityId) => (dispatch, getState) => {
     dispatch({ type: SUBSCRIBE_TO_ACTIVITY })
     let { user: { token } } = getState()
-    console.log("token ", token)
-    console.log("id ", activityId)
+
     return axios.post(baseURL + `eventActivities/${activityId}/assist`, {}, { headers: { Authorization: token } })
         .then(res => {
-            console.log("data: ", res.data)
+
             dispatch(subscribeToActivitySuccess(res.data))
             return res.data
         })
@@ -137,15 +184,25 @@ export let subscribeToActivityAction = (activityId) => (dispatch, getState) => {
 }
 
 // thunks
-// export function updateUserAction(formData){
-//     return (dispatch, getState)=>{
-//         let user = getState().user
-//         dispatch({type:UPDATE_USER})
-//         return axios.patch(baseURL + `/${user._id}`,formData, {headers:{Authorization:user.token}})
-//         .then()
-//         .catch()
-//     }
-// }
+export let updateUserAction = (formData) => (dispatch, getState) => {
+    let { user: { token, _id } } = getState()
+    dispatch({ type: UPDATE_USER })
+    return axios.patch(`${baseURL}users/${_id}`, formData, { headers: { Authorization: token } })
+        .then(res => {
+            console.log("respuesta", res)
+            console.log("data", res.data)
+            dispatch({ type: UPDATE_USER_SUCCESS, payload: { ...res.data } })
+            let { user } = getState()
+            AsyncStorage.setItem('userData', JSON.stringify(user))
+            return res.data
+        })
+        .catch(e => {
+            console.log("errour", e)
+            dispatch({ type: UPDATE_USER_ERROR, payload: e.response.data.message })
+            return e
+        })
+}
+
 
 export function signOutAction() {
     return (dispatch) => {

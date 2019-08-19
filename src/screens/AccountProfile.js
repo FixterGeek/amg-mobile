@@ -5,16 +5,14 @@ import {
     Text,
     StyleSheet,
     Platform,
-    Button
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AsyncStorage } from 'react-native'
 import MainMenu from '../components/common/MainMenu';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { signOutAction } from '../redux/UserDuck'
 import { connect } from 'react-redux'
-import Modal from 'react-native-modal'
+import GastroModal from '../components/common/GastroModal';
 
 
 
@@ -33,6 +31,7 @@ class AccountProfile extends React.Component {
 
 
     state = {
+        tooltip: false,
         user: {},
         loading: false,
         open: false
@@ -58,24 +57,18 @@ class AccountProfile extends React.Component {
 
     componentWillMount() {
         this._setNavigationParams()
-        AsyncStorage.getItem('userData')
-            .then(data => {
-                let userParsed = JSON.parse(data)
-                console.log("user", userParsed)
-                if (userParsed) this.setState({ user: userParsed })
-            })
-            .catch(() => this.props.navigation.navigate('Login'))
     }
 
     logOut = () => {
-        console.log("pachurrado")
         this.props.signOutAction()
         this.props.navigation.navigate('Login')
     }
 
     render() {
-        let { user, open } = this.state
-        user.name = `${user.firstName || "María Eugenia"} ${user.lastName || "Icaza"} ${user.surName || "Chavez"}`
+        let { title, name, dadSurname, momSurname, birthDate, city, state, membershipStatus, speciality, photoURL } = this.props
+        let { user, open, tooltip } = this.state
+        let nombre = `${name || ''} ${dadSurname || ''} ${momSurname || ''}`
+        if (nombre === '  ' || !nombre) nombre = "No has completado tus datos"
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -85,18 +78,18 @@ class AccountProfile extends React.Component {
                     <View style={[styles.container]}>
                         {/* basic info */}
                         <View style={[styles.basicInfo]}>
-                            <Image style={[styles.image]} source={user.photoURL ? { uri: user.photoURL } : userImg} />
+                            <Image style={[styles.image]} source={photoURL ? { uri: photoURL } : userImg} />
                             <Text style={[styles.name]}>
-                                {user.gender === "Male" ? "Dr." : "Dra."} {user.name}
+                                {nombre}
                             </Text>
                             <Text style={[styles.simpleText]}>
-                                {user.city || "Mérida, Yucatan"}
+                                {city ? `${city}, ${state}` : "Completa tu datos de ubicación"}
                             </Text>
                             <View>
                                 <Text style={[styles.header]}>
-                                    {user.type || "Socio emérito"}
+                                    {`Socio ${membershipStatus}`}
                                 </Text>
-                                <Text>Gastroenterología</Text>
+                                <Text>{speciality}</Text>
                             </View>
                         </View>
                         {/* Followers */}
@@ -105,116 +98,62 @@ class AccountProfile extends React.Component {
                                 <Text style={styles.followers}>
                                     Seguidores:
                            </Text>
-                                <Text style={styles.followNumber}>102</Text>
+                                <Text style={styles.followNumber}>0</Text>
                             </View>
                             <View style={[styles.number]}>
                                 <Text style={styles.followers}>
                                     Seguidos:
                            </Text>
-                                <Text style={styles.followNumber}>68</Text>
+                                <Text style={styles.followNumber}>0</Text>
                             </View>
                         </View>
                         {/* history */}
-                        <View style={[styles.history]}>
-                            <View style={[styles.histoyCard]}>
-                                <Text style={styles.historyText}>Mis pagos</Text>
+                        <TouchableOpacity onPress={() => this.setState({ tooltip: true })}>
+                            <View style={[styles.history]}>
+                                <View style={[styles.histoyCard]}>
+                                    <Text style={styles.historyText}>Mis pagos</Text>
+                                </View>
+                                <View style={[styles.histoyCard]}>
+                                    <Text style={styles.historyText}>Mis constancias</Text>
+                                </View>
+                                <View style={[styles.histoyCard]}>
+                                    <Text style={styles.historyText}>Mis publicaciones</Text>
+                                </View>
                             </View>
-                            <View style={[styles.histoyCard]}>
-                                <Text style={styles.historyText}>Mis constancias</Text>
-                            </View>
-                            <View style={[styles.histoyCard]}>
-                                <Text style={styles.historyText}>Mis publicaciones</Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
                 <MainMenu />
-                <Modal isVisible={open}>
-                    <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>GASTRO</Text>
-                        <Text style={styles.modalSubTitle}>¿Estas segur@ de que deseas cerrar sesión?</Text>
-                        <View style={[styles.modalButtons]}>
-                            <TouchableOpacity
-                                onPress={() => this.setState({ open: false })}
-                                style={styles.modalButtonCancel} >
-                                <Text style={styles.textCancel}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={this.logOut}
-                                style={styles.modalButton} >
-                                <Text style={styles.buttonText}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
+                <GastroModal
+                    isVisible={open}
+                    text={"¿Estas segur@ de que deseas cerrar sesión?"}
+                    onCancel={() => this.setState({ open: false })}
+                    onAccept={this.logOut}
+                    acceptButtonText="Cerrar sesión"
+                />
+                <GastroModal
+                    isVisible={tooltip}
+                    title="Versión de prueba"
+                    text={"Esta función estará disponible en la siguiente versión"}
+                    onAccept={() => this.setState({ tooltip: false })}
+                    onlyOne={true}
+                />
             </KeyboardAwareScrollView>
         )
     }
 }
 
-function mapState(state) {
-    return {}
+function mapState({ user }) {
+    return {
+        ...user,
+        ...user.basicData,
+        ...user.address
+    }
 }
 
 export default connect(mapState, { signOutAction })(AccountProfile)
 
 let styles = StyleSheet.create({
-    modal: {
-        backgroundColor: "white",
-        paddingVertical: 20,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderRadius: 12,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        minHeight: 100
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 20
-    },
-    modalSubTitle: {
-        textAlign: "center",
-        fontSize: 18,
-        maxWidth: 200
-    },
-    modalButtons: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 30,
-        flexDirection: 'row'
-    },
-    modalButton: {
-        marginHorizontal: 5,
-        backgroundColor: "#28abd8",
-        borderWidth: 0,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderRadius: 10,
-        minWidth: 120,
-        textAlign: "center"
-    },
-    buttonText: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    textCancel: {
-        color: "#28abd8",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    modalButtonCancel: {
-        marginHorizontal: 5,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        backgroundColor: "white",
-        borderRadius: 10,
-        borderColor: "#28abd8",
-        borderWidth: 2,
-        minWidth: 120,
-
-    },
     container: {
         flex: 1,
         flexDirection: "column",
@@ -280,7 +219,8 @@ let styles = StyleSheet.create({
         fontWeight: "bold"
     },
     name: {
-        fontSize: 18
+        fontSize: 18,
+        marginVertical: 20
     },
     history: {
         marginTop: 20,

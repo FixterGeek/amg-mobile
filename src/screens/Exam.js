@@ -46,7 +46,7 @@ let initialState = {
 }
 
 class Exam extends React.Component {
-    static navigationOptions = { headerVisible: true, title: "Examenes del evento", headerLeft: null }
+    static navigationOptions = { title: "Examen", headerLeft: null }
 
     state = { ...initialState }
 

@@ -54,7 +54,9 @@ export default class EventDetail extends React.Component {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Speakers')}
+                    >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver ponentes</Text>
                             <Icon style={styles.icon} name="microphone" />
@@ -62,7 +64,12 @@ export default class EventDetail extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => Linking.openURL(event.permisosURLS[0])}
+                        onPress={() => {
+                            if (event.permisosURLS[0]) {
+                                Linking.openURL(event.permisosURLS[0])
+                            }
+
+                        }}
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Descargar carta permiso</Text>
@@ -89,7 +96,7 @@ export default class EventDetail extends React.Component {
                         <Text>
                             {event.description[0]}
                         </Text>
-                        <Text style={styles.title}>
+                        {/* <Text style={styles.title}>
                             Valor curricular
                     </Text>
                         <Text>
@@ -100,7 +107,7 @@ export default class EventDetail extends React.Component {
                     </Text>
                         <Text>
                             {event.description[2]}
-                        </Text>
+                        </Text> */}
                     </View>
 
 

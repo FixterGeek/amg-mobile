@@ -19,6 +19,7 @@ import Modulo from './src/screens/Modulo';
 import Actividad from './src/screens/Actividad';
 import Exams from './src/screens/Exams';
 import Exam from './src/screens/Exam';
+import Speakers from './src/screens/Speakers';
 //import ScoreScreen from './src/components/exams/ScoreScreen';
 
 console.disableYellowBox = true
@@ -48,8 +49,8 @@ class App extends Component {
       Asset.loadAsync([
         require('./assets/splash.jpg'),
       ]),
-      //   Font.loadAsync({
-      //     'museo-sans-100': require('./assets/fonts/MuseoSans-100.otf'),
+      //Font.loadAsync({
+      //'museo-sans-100': require('./assets/fonts/MuseoSans-100.otf')
       //     'museo-sans-100-italic': require(
       //       './assets/fonts/MuseoSans-100Italic.otf'),
       //     'museo-sans-300': require('./assets/fonts/MuseoSans-300.otf'),
@@ -62,14 +63,15 @@ class App extends Component {
       //     'museo-sans-500-italic': require(
       //       './assets/fonts/MuseoSans_500_Italic.otf'),
       //     'museo-sans-900': require('./assets/fonts/MuseoSans_900.otf'),
-      //   }),
+      //}),
     ])
   }
 
   _handleLoadingError = error => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
-    console.warn(error)
+    //console.warn(error)
+    console.error(error)
   }
 
   _handleFinishLoading = () => {
@@ -111,6 +113,7 @@ export default App
 
 let AppWithNavigationState = createAppContainer(createStackNavigator({
   Login: { screen: Login },
+  Signup: { screen: EditAccount },
   Home: { screen: Login },
   Profile: { screen: AccountProfile },
   EditAccount: { screen: EditAccount },
@@ -118,6 +121,7 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   EventDetail: { screen: EventDetail },
   Programa: { screen: Programa },
   Modulo: { screen: Modulo },
+  Speakers: { screen: Speakers },
   Actividad: { screen: Actividad },
   Exams: { screen: Exams },
   Exam: { screen: Exam }

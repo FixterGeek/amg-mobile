@@ -33,10 +33,14 @@ class Exams extends React.Component {
         modalText: "Estas a punto de comenzar el examen, sólo dispondras de 20min para ompletarlo apartir de que presiones aceptar."
     }
 
+
+
     componentWillMount() {
+
         let event = this.props.navigation.getParam('event')
         this.props.getExamsFromEventAction(event._id)
     }
+
 
     tryToFetchExam = (exam) => {
         this.props.getExamAction(exam._id)
@@ -65,7 +69,7 @@ class Exams extends React.Component {
                             onPress={() => this.tryToFetchExam(exam)}
                             key={i}
                         >
-                            <Text style={styles.mainDate}>{moment(exam.date).format('LL')}</Text>
+                            <Text style={styles.mainDate}>{moment(exam.startTime).format('LL')}</Text>
                             <View
                                 style={[styles.flexCard]}>
                                 <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
@@ -113,6 +117,7 @@ let styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     mainDate: {
+        marginTop: 20,
         fontSize: 25,
         fontWeight: "100",
         paddingHorizontal: 30,

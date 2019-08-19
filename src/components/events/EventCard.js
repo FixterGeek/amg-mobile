@@ -23,7 +23,6 @@ function EventCard({ getSingleEventAction, event, title, startDate, mainImagesUR
 
     let image = "http://amicsliceu.com/wp-content/uploads/2018/12/paris_noche_museos_01-1.jpg"
     if (mainImagesURLS) image = mainImagesURLS[0]
-
     return (
         <TouchableOpacity
             onPress={push}
@@ -37,7 +36,7 @@ function EventCard({ getSingleEventAction, event, title, startDate, mainImagesUR
                         {title}
                     </Text>
                     <Text style={styles.p}>
-                        {moment(startDate).format('LL')}
+                        {moment(new Date(startDate)).format('LL')}
                     </Text>
                 </View>
             </ImageBackground>
