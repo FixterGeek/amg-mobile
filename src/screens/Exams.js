@@ -30,7 +30,7 @@ class Exams extends React.Component {
         user: {},
         loading: false,
         open: false,
-        modalText: "Estas a punto de comenzar el examen, sólo dispondras de 20min para ompletarlo apartir de que presiones aceptar."
+        modalText: "Estas a punto de comenzar el examen, el tiempo es limitado y solo podrás responderlo una vez"
     }
 
 

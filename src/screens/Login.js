@@ -30,7 +30,8 @@ class Login extends React.Component {
             email: null,
             password: null
         },
-        loading: false
+        loading: false,
+        error: false
     }
 
     componentDidUpdate() {
@@ -81,8 +82,15 @@ class Login extends React.Component {
         this.props.tryLogin(this.state.auth)
     }
 
+    componentWillReceiveProps(newProps) {
+        if (!newProps.error) return
+        this.setState({ error: newProps.error })
+
+    }
+
     render() {
-        let { fetching, error } = this.props
+        let { fetching } = this.props
+        let { error } = this.state
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -101,6 +109,7 @@ class Login extends React.Component {
                             style={{ width: 200 }}
                             resizeMode='contain'
                         />
+                        {error && <Text style={styles.error}>Usuario o contraseña incorrectos</Text>}
                         <View style={styles.searchSection}>
                             <Icon style={styles.searchIcon} name="envelope" size={20} color="#000" />
                             <TextInput
@@ -174,6 +183,11 @@ function mapStateToProps({ user }) {
 export default connect(mapStateToProps, { tryLogin, getEvents, loginSuccess })(Login)
 
 let styles = StyleSheet.create({
+    error: {
+        textAlign: "center",
+        fontSize: 16,
+        color: "red"
+    },
     loginScreenButton: {
         marginTop: 10,
         paddingTop: 15,

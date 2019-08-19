@@ -250,7 +250,9 @@ export function userLoginEpic(action$, state$) {
                     }),
                     catchError(err => {
                         console.log("error", err)
-                        return of(loginUserError(err.response.name))
+                        console.log("error", err.response.name)
+                        let error = err.response.name ? err.response.name : "El usuario o contraseña son incorrectos"
+                        return of(loginUserError(error))
                     })
                 )
 

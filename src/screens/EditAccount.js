@@ -221,38 +221,14 @@ class EditAccount extends React.Component {
                                 //source={{ uri: file }}
                                 source={photo ? { uri: photo.uri } : basicData.photoURL ? { uri: basicData.photoURL } : { uri: pic }}
                             />
-                            {!this.props.loggedIn ?
-                                <TouchableOpacity
-                                    onPress={this._createAccount}
-                                >
-                                    <Text style={styles.editText}>
-                                        Crear cuenta
-                             </Text>
-                                </TouchableOpacity>
-                                :
-                                <TouchableOpacity
-                                    onPress={this._updateUser}
-                                >
-                                    <Text style={styles.editText}>
-                                        Actualizar Perfil
-                             </Text>
-                                </TouchableOpacity>
-                            }
+
 
 
 
                         </View>
 
                         <View style={[styles.form]}>
-                            <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Correo electrónico:</Text>
-                                <TextInput
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={text => this.onChange("email", text)}
-                                    style={[styles.input]}
-                                    value={user.email}
-                                />
-                            </View>
+
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Nombres:</Text>
                                 <TextInput
@@ -260,6 +236,35 @@ class EditAccount extends React.Component {
                                     style={[styles.input]}
                                     onChangeText={text => this.onChange("name", text)}
                                     value={basicData.name}
+                                />
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Apellido paterno:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.input]}
+                                    onChangeText={text => this.onChange("dadSurname", text)}
+                                    value={basicData.dadSurname}
+                                />
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Apelido materno:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.input]}
+                                    onChangeText={text => this.onChange("momSurname", text)}
+                                    value={basicData.momSurname}
+                                />
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Correo electrónico:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={text => this.onChange("email", text)}
+                                    style={[styles.input]}
+                                    value={user.email}
                                 />
                             </View>
 
@@ -285,24 +290,6 @@ class EditAccount extends React.Component {
                             </View>}
 
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Apellido paterno:</Text>
-                                <TextInput
-                                    underlineColorAndroid="transparent"
-                                    style={[styles.input]}
-                                    onChangeText={text => this.onChange("dadSurname", text)}
-                                    value={basicData.dadSurname}
-                                />
-                            </View>
-                            <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Apelido materno:</Text>
-                                <TextInput
-                                    underlineColorAndroid="transparent"
-                                    style={[styles.input]}
-                                    onChangeText={text => this.onChange("momSurname", text)}
-                                    value={basicData.momSurname}
-                                />
-                            </View>
-                            <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Fecha de nacimiento:</Text>
                                 <DatePicker
                                     style={{ minWidth: 300, marginBottom: 20 }}
@@ -320,15 +307,7 @@ class EditAccount extends React.Component {
                                 // onDateChange={date => this.setState({ date })}
                                 />
                             </View>
-                            <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Ciudad:</Text>
-                                <TextInput
-                                    underlineColorAndroid="transparent"
-                                    style={[styles.input]}
-                                    onChangeText={text => this.onChange("city", text)}
-                                    value={address.city}
-                                />
-                            </View>
+
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Estado:</Text>
                                 <TextInput
@@ -338,6 +317,17 @@ class EditAccount extends React.Component {
                                     value={address.state}
                                 />
                             </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={[styles.label]} >Ciudad:</Text>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.input]}
+                                    onChangeText={text => this.onChange("city", text)}
+                                    value={address.city}
+                                />
+                            </View>
+
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Especialidad:</Text>
                                 <Picker
@@ -352,6 +342,23 @@ class EditAccount extends React.Component {
                                     <Picker.Item label="Otra" value="Otra" />
                                 </Picker>
                             </View>
+                            {!this.props.loggedIn ?
+                                <TouchableOpacity
+                                    onPress={this._createAccount}
+                                >
+                                    <Text style={styles.editText}>
+                                        Crear cuenta
+                             </Text>
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity
+                                    onPress={this._updateUser}
+                                >
+                                    <Text style={styles.editText}>
+                                        Actualizar Perfil
+                             </Text>
+                                </TouchableOpacity>
+                            }
                         </View>
 
                     </View>
@@ -388,7 +395,8 @@ let styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "flex-start",
         alignItems: "flex-start",
-        width: "100%"
+        width: "100%",
+        marginBottom: 30
     },
     imageContainer: {
         marginVertical: 30,
@@ -402,12 +410,15 @@ let styles = StyleSheet.create({
         borderRadius: 100
     },
     editText: {
+        textAlign: "center",
         color: "#cfecff",
         fontSize: 18,
         marginTop: 20,
         paddingHorizontal: 20,
         paddingVertical: 10,
-        backgroundColor: "#1f2536"
+        backgroundColor: "#1f2536",
+        height: 45,
+        minWidth: "100%"
     },
     container: {
         flex: 1,
