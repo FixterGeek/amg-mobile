@@ -72,6 +72,8 @@ class Exams extends React.Component {
                     {this.props.exams.length < 1 && <Text style={styles.mainDate} >No hay examenes para este evento</Text>}
                     {this.props.exams.map((exam, i) => {
                         let setDate = false
+                        let dayName = moment(exam.startTime).format('dddd')
+                        let human = dayName[0].toUpperCase() + dayName.slice(1) + " " + moment(exam.startTime).format('DD')
                         try {
                             if (dates[moment(exam.startTime, 'DD/MM/YYYY').toString()]) {
                                 setDate = true
@@ -84,7 +86,7 @@ class Exams extends React.Component {
                             onPress={() => this.tryToFetchExam(exam)}
                             key={i}
                         >
-                            {setDate && <Text style={styles.mainDate}>{moment(exam.startTime).format('LL')}</Text>}
+                            {setDate && <Text style={styles.mainDate}>{human}</Text>}
                             <View
                                 style={[styles.flexCard]}>
                                 <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>

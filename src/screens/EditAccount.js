@@ -22,6 +22,7 @@ import { updateUserAction, createUserAction } from '../redux/UserDuck'
 import GastroModal from '../components/common/GastroModal';
 import moment from 'moment'
 import 'moment/locale/es'
+import BasePicker from '../components/common/BasePicker';
 moment.locale('es')
 
 let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
@@ -330,7 +331,37 @@ class EditAccount extends React.Component {
 
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Especialidad:</Text>
-                                <Picker
+                                <BasePicker
+                                    style={styles.picker}
+                                    placeholder={'Selecciona tu especialidad'}
+                                    dataSource={[
+                                        {
+                                            label: 'Cirujano',
+                                            value: 'Cirujano',
+                                        }, {
+                                            label: 'Gastroenterología',
+                                            value: 'Gastroenterología',
+                                        },
+                                        {
+                                            label: 'Endoscopia',
+                                            value: 'Endoscopia',
+                                        },
+                                        {
+                                            label: 'Motilidad',
+                                            value: 'Motilidad',
+                                        },
+                                        {
+                                            label: 'Medicina Interna',
+                                            value: 'Medicina Interna',
+                                        },
+                                        {
+                                            label: 'Otra',
+                                            value: 'Otra',
+                                        }]}
+                                    onChange={text => this.onChange("speciality", text)}
+                                    defaultValue={basicData.speciality}
+                                />
+                                {/* <Picker
                                     selectedValue={basicData.speciality}
                                     style={styles.picker}
                                     onValueChange={text => this.onChange("speciality", text)} >
@@ -340,7 +371,7 @@ class EditAccount extends React.Component {
                                     <Picker.Item label="Motilidad" value="Motilidad" />
                                     <Picker.Item label="Medicina Interna" value="Medicina Interna" />
                                     <Picker.Item label="Otra" value="Otra" />
-                                </Picker>
+                                </Picker> */}
                             </View>
                             {!this.props.loggedIn ?
                                 <TouchableOpacity
