@@ -2,11 +2,14 @@ import React from 'react'
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    Linking
 } from 'react-native'
 import NavigationService from '../../services/NavigationService'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+let revista = "http://www.revistagastroenterologiamexico.org/?codref=ddh3dk3Yjdsafg503zSInMNxBdsddsa545vs809jdn02nubHHtJufRpNPu3hjd673&py=7jb39db3"
 
 export default class MainMenu extends React.Component {
 
@@ -41,7 +44,7 @@ export default class MainMenu extends React.Component {
                 {open && <View style={[styles.circle]}>
                     <Text style={[styles.text]} >Revista</Text>
                     <Icon
-                        onPress={() => this._navigate('Revista')}
+                        onPress={() => Linking.openURL(revista)}
                         style={styles.icon} name="book" size={20} color="white" />
                 </View>}
                 {open && <View style={[styles.circle]}>
