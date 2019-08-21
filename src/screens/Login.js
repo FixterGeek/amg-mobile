@@ -17,6 +17,10 @@ import { AsyncStorage } from 'react-native'
 import { getEvents } from '../redux/EventsDuck';
 import { connect } from 'react-redux'
 import { tryLogin, loginSuccess } from '../redux/UserDuck'
+// import Video from 'react-native-video';
+import { Video } from 'expo-av';
+
+let video = "https://firebasestorage.googleapis.com/v0/b/reactfirebase-b16aa.appspot.com/o/videos%2FMasterApp.mp4?alt=media&token=52986935-a8b9-46b4-8ece-7c13c1605de6"
 
 
 let background = require('../../assets/login_bacground.png')
@@ -26,6 +30,7 @@ class Login extends React.Component {
     static navigationOptions = { headerVisible: false, header: null }
 
     state = {
+        eye: false,
         auth: {
             email: null,
             password: null
@@ -97,12 +102,29 @@ class Login extends React.Component {
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flex: 1, backgroundColor: "grey" }}>
 
-                <ImageBackground
+                <View style={styles.overlay}></View>
+
+                <Video
+                    //source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+                    source={{ uri: video }}
+                    rate={1.0}
+                    volume={1.0}
+                    isMuted={false}
+                    resizeMode="cover"
+                    shouldPlay
+                    isLooping
+                    style={styles.backgroundVideo}
+                />
+                <View
                     style={styles.container}
                     imageStyle={{ borderRadius: 0 }}
-                    source={background}>
+                //source={background}
+                >
                     <Spinner animation="fade" visible={fetching} />
                     <View style={styles.over}>
+
+
+
 
                         <Image
                             source={logo}
@@ -129,12 +151,22 @@ class Login extends React.Component {
                                 onChangeText={text => this.onChange("password", text)}
                                 style={styles.input}
                                 placeholder="Contraseña"
-                                secureTextEntry
+                                secureTextEntry={!this.state.eye}
                                 underlineColorAndroid="transparent"
                                 placeholderTextColor='#686666'
                             />
+                            <TouchableOpacity
+                                onPress={() => this.setState({ eye: !this.state.eye })}
+                            >
+                                <Icon
+
+                                    style={styles.searchIcon}
+                                    name={this.state.eye ? "eye" : "eye-slash"}
+                                    size={20}
+                                    color="#000" />
+                            </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 0, flexDirection: "row", justifyContent: "flex-start" }}>
+                        <View style={{ alignSelf: "flex-start", margin: 20, flex: 0, flexDirection: "row", justifyContent: "flex-start" }}>
                             <Icon style={[{ color: "#28abd8", paddingRight: 10, paddingBottom: 20 }]} name="check-circle" size={20} />
                             <Text style={{ color: "#bbbbbb" }} >Mantener mi sesion activa</Text>
                         </View>
@@ -165,8 +197,9 @@ class Login extends React.Component {
 
                     </View>
                     <View style={styles.layer}></View>
-
-                </ImageBackground>
+                </View>
+                {/* 
+                 // image */}
             </KeyboardAwareScrollView>
         )
     }
@@ -183,51 +216,64 @@ function mapStateToProps({ user }) {
 export default connect(mapStateToProps, { tryLogin, getEvents, loginSuccess })(Login)
 
 let styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: "rgba(0,0,0,0.5)",
+        zIndex: 999,
+
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        backgroundColor: "black",
+        opacity: .6,
+        zIndex: 1
+    },
+    backgroundVideo: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+
+    },
     error: {
         textAlign: "center",
         fontSize: 16,
         color: "red"
     },
     loginScreenButton: {
-        marginTop: 10,
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingHorizontal: 105,
+        paddingVertical: 20,
         backgroundColor: '#28abd8',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: 'transparent',
-        margin: 20
+        borderRadius: 5,
+        marginBottom: 20,
+        alignSelf: "stretch",
+        marginHorizontal: 20
     },
     loginText: {
+        fontSize: 16,
+        fontWeight: "bold",
         color: '#fff',
         textAlign: 'center',
-        // fontWeight: 900,
     },
     disableLogin: {
-        marginTop: 10,
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingHorizontal: 105,
+        paddingVertical: 20,
         backgroundColor: 'grey',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: 'transparent',
-        margin: 20
+        borderRadius: 5,
+        alignSelf: "stretch",
+        marginBottom: 20,
+        marginHorizontal: 20
     },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
 
-
-    },
     over: {
-        zIndex: 999,
-        flex: 1,
-        justifyContent: 'center',
+        width: "100%",
         alignItems: 'center',
+        zIndex: 999
     },
     login: {
         fontSize: 25,
@@ -245,30 +291,31 @@ let styles = StyleSheet.create({
         zIndex: 9
     },
     searchSection: {
-        flex: 0,
         flexDirection: 'row',
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#343434',
-        opacity: .5,
-        marginBottom: 20,
-        marginHorizontal: 20
+        opacity: .6,
+        marginVertical: 10,
+        marginHorizontal: 20,
+        alignSelf: "stretch",
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+        borderRadius: 5
     },
     searchIcon: {
-        padding: 10,
-        paddingTop: 20,
-        color: "#686666"
+        color: "#686666",
+        width: 30,
+        backgroundColor: "transparent",
     },
     input: {
+        width: "85%",
         fontSize: 20,
-        flex: 1,
-        paddingTop: 30,
-        paddingRight: 10,
-        paddingBottom: 0,
-        paddingLeft: 0,
         backgroundColor: 'transparent',
-        color: '#fff',
-        marginBottom: 20,
-
+        color: '#fff'
     },
 })
+
+
+// <Video source={{ uri: "https://video.fmex6-1.fna.fbcdn.net/v/t42.9040-2/10000000_2357590327629938_7256647928662458368_n.mp4?_nc_cat=1&efg=eyJ2ZW5jb2RlX3RhZyI6InN2ZV9zZCJ9&_nc_eui2=AeEMCXn6LN8f4FybyCwgmm7ExufWzOXs3iITPSdYGxw9E_q9CiqmajpNlXP5I_Mof8Y3ElPtCSdSX_GDGDCAJApW1tvMwoAi279ZUqHvOmFPJw&_nc_oc=AQlB-TkW87m2aiwOAMEOvRRjJW5-LVLzhRocTe5oS-z_DAP6YN2nzzXbb5IoENdMKuE&_nc_ht=video.fmex6-1.fna&oh=89c4662188d555b0abb0f3d99e2023bf&oe=5D5CA57D" }}   // Can be a URL or a local file.
+// style={styles.backgroundVideo} />

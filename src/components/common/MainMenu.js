@@ -22,7 +22,9 @@ export default class MainMenu extends React.Component {
     render() {
         let { open } = this.state
         return (
+
             <View style={[styles.container]} >
+                {open && <View style={styles.overlay}></View>}
                 {open &&
                     <View style={[styles.circle]}>
                         <Text style={[styles.text]} >Inicio</Text>
@@ -66,21 +68,33 @@ export default class MainMenu extends React.Component {
 
                     </View>
                 </TouchableOpacity>
+
             </View >
         )
     }
 }
 
 let styles = StyleSheet.create({
+    overlay: {
+        position: "absolute",
+        top: "-400%",
+        left: "-1000%",
+        width: "2000%",
+        height: "1000%",
+        backgroundColor: "black",
+        opacity: .6,
+        zIndex: 0
+    },
     container: {
+        zIndex: 9999,
         position: "absolute",
         bottom: 0,
-        right: 0
+        right: 0,
     },
     text: {
         position: "absolute",
         left: -80,
-        color: "darkgrey",
+        color: "white",
         fontSize: 15,
         width: 100
     },

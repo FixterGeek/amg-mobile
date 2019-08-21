@@ -29,7 +29,7 @@ class Modulo extends React.Component {
                 <ScrollView style={[styles.container]} >
                     <Text style={[styles.title]}>{module.title}</Text>
                     <Text style={[styles.description]}>{module.description}</Text>
-                    <View style={{ alignItems: "flex-start" }}>
+                    <View>
 
                         {module.activities.map((a, i) => {
                             return (<TouchableOpacity
@@ -38,16 +38,16 @@ class Modulo extends React.Component {
                                     actividad: a
                                 })}
                                 key={i}
-                                style={{ height: 60 }}>
+                            >
                                 <View
                                     style={[styles.flexCard]}>
-                                    <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
+                                    <View style={{ alignItems: "center", width: 70 }}>
                                         <Text style={[styles.roman]}>{moment(new Date(a.startTime)).format('h:mm')}</Text>
                                         <Text style={[styles.roman]}>{moment(new Date(a.startTime)).format('a').toUpperCase()}</Text>
                                     </View>
                                     <View style={[styles.wideCard]}>
                                         <Text >{a.activityName}</Text>
-                                        <Text style={styles.miniText}>{a.speakers[0].fullName}</Text>
+                                        {a.speakers[0].fullName && <Text style={styles.miniText}>{a.speakers[0].fullName}</Text>}
                                     </View>
                                 </View>
                             </TouchableOpacity>)
@@ -76,35 +76,28 @@ export default connect(mapState, {})(Modulo)
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: "column",
         paddingHorizontal: 10,
     },
     miniText: {
-        fontSize: 10,
-        marginBottom: 10
+        fontSize: 10
     },
     roman: {
-        width: 60,
         fontSize: 18,
-        marginLeft: 10
+        marginHorizontal: 10
     },
     flexCard: {
         flex: 1,
         flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 10
+        alignItems: "center"
     },
     wideCard: {
-        width: "80%",
-        height: "100%",
+        justifyContent: "center",
+        minHeight: 60,
         paddingHorizontal: 10,
-        // paddingVertical: 30,
         backgroundColor: "#cfecff",
-        flexDirection: "column",
-        flexWrap: "wrap",
-        // height: 80
-
+        width: "80%",
+        paddingVertical: 10,
+        marginBottom: 20
     },
     description: {
         fontSize: 12,

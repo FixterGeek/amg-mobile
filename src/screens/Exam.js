@@ -15,7 +15,7 @@ import { login } from '../services/auth'
 import Spinner from "react-native-loading-spinner-overlay";
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
-import { getExamsFromEventAction, getExamAction, saveAnswerAction, resetExamAction } from '../redux/examDuck'
+import { sendIncompleteExamAction, getExamsFromEventAction, getExamAction, saveAnswerAction, resetExamAction } from '../redux/examDuck'
 import moment from 'moment'
 import GastroModal from '../components/common/GastroModal'
 import RegisterButton from '../components/common/RegisterButton';
@@ -37,7 +37,7 @@ let initialState = {
     user: {},
     loading: false,
     open: false,
-    min: 4,
+    min: 0,
     sec: 59,
     interval,
     modalText: "El tiempo se ha agotado, gracias por participar.",
@@ -51,6 +51,7 @@ class Exam extends React.Component {
     state = { ...initialState }
 
     componentDidMount() {
+        if (this.props.questionDuration) this.setState({ min: this.props.questionDuration })
         interval = setInterval(this.count, 1000)
     }
 
@@ -72,12 +73,17 @@ class Exam extends React.Component {
         this.setState({ open: false })
         if (this.state.timeup) {
             // redireccionamos
-            return
+            return this.sendExamForce()
         }
         // Mostramos calificaion
     }
     onSelect = (a, i) => {
         this.setState({ selected: a })
+    }
+
+    sendExamForce = () => {
+        this.props.sendIncompleteExamAction()
+        this.setState({ ...initialState })
     }
 
     saveAnswer = () => {
@@ -88,7 +94,7 @@ class Exam extends React.Component {
         }
         this.props.saveAnswerAction(answer)
         // set next question
-        // check if is last
+        // check if is last or timesup
         // reset state
         this.setState({ ...initialState })
     }
@@ -129,11 +135,6 @@ class Exam extends React.Component {
                         />
                     </View>}
 
-
-
-
-
-
                     <GastroModal
                         isVisible={this.state.open}
                         text={this.state.modalText}
@@ -154,7 +155,7 @@ function mapState({ exam }) {
     }
 }
 
-export default connect(mapState, { resetExamAction, getExamsFromEventAction, getExamAction, saveAnswerAction })(Exam)
+export default connect(mapState, { sendIncompleteExamAction, resetExamAction, getExamsFromEventAction, getExamAction, saveAnswerAction })(Exam)
 
 let styles = StyleSheet.create({
     container: {

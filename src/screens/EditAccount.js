@@ -42,7 +42,7 @@ class EditAccount extends React.Component {
             },
             basicData: {
                 photoURL: null,
-                birthDate: '17/04/1987',
+                birthDate: '',
                 name: '',
                 dadSurname: '',
                 momSurname: ''
@@ -273,17 +273,17 @@ class EditAccount extends React.Component {
                                 <TextInput
                                     underlineColorAndroid="transparent"
                                     secureTextEntry={true}
-                                    style={[styles.password]}
+                                    style={[styles.input]}
                                     onChangeText={text => this.onChange("password", text)}
                                     value={user.password}
                                 />
                             </View>}
                             {!this.props.loggedIn && <View style={styles.inputContainer}>
-                                <Text style={[styles.label]} >Repite tu Password:</Text>
+                                <Text style={[styles.label]} >Repite tu password:</Text>
                                 <TextInput
                                     underlineColorAndroid="transparent"
                                     secureTextEntry={true}
-                                    style={[styles.password]}
+                                    style={[styles.input]}
                                     onChangeText={text => this.onChange("password2", text)}
                                     value={user.password2}
                                 />
@@ -292,7 +292,7 @@ class EditAccount extends React.Component {
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Fecha de nacimiento:</Text>
                                 <DatePicker
-                                    style={{ minWidth: 300, marginBottom: 20 }}
+                                    style={Object.assign(styles.input, { minWidth: 300, marginBottom: 20 })}
                                     locale="es"
                                     date={basicData.birthDate}
                                     //mode="time"
@@ -415,12 +415,13 @@ let styles = StyleSheet.create({
         fontSize: 18,
         marginTop: 20,
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 20,
         backgroundColor: "#1f2536",
-        height: 45,
+
         minWidth: "100%"
     },
     container: {
+        backgroundColor: "white",
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
@@ -435,8 +436,14 @@ let styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10
     },
-    input: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
-    password: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
+    input: {
+        color: "black",
+        paddingLeft: 20,
+        borderColor: 'transparent', borderWidth: 1,
+        backgroundColor: "#f5f8f9", fontSize: 20,
+        paddingVertical: 20, fontWeight: "300"
+    },
+    // password: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
     camera: {
         color: "#1f2536",
         fontSize: 30,

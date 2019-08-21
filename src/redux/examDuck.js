@@ -92,6 +92,19 @@ export function resetExamAction() {
     }
 }
 
+export let sendIncompleteExamAction = () => (dispatch, getState) => {
+    let { exam: { answers, _id }, user: { token } } = getState()
+    dispatch(finishExam())
+    return axios.post(`${baseURL}/exams/${_id}/answer`, { answers }, { headers: { Authorization: token } })
+        .then(res => {
+            dispatch({ type: UPLOAD_ANSWERS_SUCCESS, payload: res.data })
+        })
+        .catch(err => {
+            console.log(err)
+            dispatch({ type: UPLOAD_ANSWERS_ERROR, payload: err.response.data.message })
+        })
+}
+
 export let saveAnswerAction = (answer) => (dispatch, getState) => {
     let { exam: { currentIndex, totalQuestions, _id }, user: { token } } = getState()
     dispatch(saveAnswer(answer))

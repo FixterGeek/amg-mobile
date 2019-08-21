@@ -36,7 +36,6 @@ class Exams extends React.Component {
 
 
     componentWillMount() {
-
         let event = this.props.navigation.getParam('event')
         this.props.getExamsFromEventAction(event._id)
     }
@@ -59,25 +58,41 @@ class Exams extends React.Component {
     }
 
     render() {
+        let dates = {}
+        try {
+            this.props.exams.forEach(exam => {
+                dates[moment(exam.startTime, 'DD/MM/YYYY').toString()] = true
+            })
+        } catch (e) { }
+
         // if (this.props.fetching) return (<Spinner animation="fade" visible={this.props.fetching} />)
         return (
             <View sstyle={{ flex: 1 }}>
                 <ScrollView >
                     {this.props.exams.length < 1 && <Text style={styles.mainDate} >No hay examenes para este evento</Text>}
                     {this.props.exams.map((exam, i) => {
+                        let setDate = false
+                        try {
+                            if (dates[moment(exam.startTime, 'DD/MM/YYYY').toString()]) {
+                                setDate = true
+                                dates[moment(exam.startTime, 'DD/MM/YYYY').toString()] = false
+                            }
+                        } catch (e) { }
+
+
                         return (<TouchableOpacity
                             onPress={() => this.tryToFetchExam(exam)}
                             key={i}
                         >
-                            <Text style={styles.mainDate}>{moment(exam.startTime).format('LL')}</Text>
+                            {setDate && <Text style={styles.mainDate}>{moment(exam.startTime).format('LL')}</Text>}
                             <View
                                 style={[styles.flexCard]}>
                                 <View style={{ flex: 0, alignItems: "center", justifyContent: "center" }}>
                                     <Text style={[styles.roman]}>{moment(exam.startTime).format('h:mm')}</Text>
                                     <Text style={[styles.roman]}>{moment(exam.startTime).format('a').toUpperCase()}</Text>
                                 </View>
-                                <View style={[styles.wideCard]}>
-                                    <Text stye={styles.title}>{exam.title}</Text>
+                                <View style={[styles.wideCard, { textAlign: "left" }]}>
+                                    <Text stye={[styles.title]}>{exam.title}</Text>
                                     {/* <Text style={styles.miniText}>Dr. {a.speakers[0].fullName}</Text> */}
                                 </View>
                             </View>
@@ -128,7 +143,8 @@ let styles = StyleSheet.create({
     },
     title: {
         fontSize: 22,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textAlign: "left"
     },
     miniText: {
         fontSize: 10,
@@ -154,7 +170,7 @@ let styles = StyleSheet.create({
         backgroundColor: "#cfecff",
         flexDirection: "column",
         flexWrap: "wrap",
-        alignItems: "center",
+        alignItems: "left",
         justifyContent: "center"
         // height: 80
 

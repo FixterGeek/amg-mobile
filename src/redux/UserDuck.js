@@ -26,7 +26,7 @@ let initialState = {
     },
     basicData: {
         photoURL: null,
-        birthDate: '17/04/1987',
+        birthDate: '',
         name: '',
         dadSurname: '',
         momSurname: ''
