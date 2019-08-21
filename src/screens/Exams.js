@@ -67,7 +67,7 @@ class Exams extends React.Component {
 
         // if (this.props.fetching) return (<Spinner animation="fade" visible={this.props.fetching} />)
         return (
-            <View sstyle={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
                 <ScrollView >
                     {this.props.exams.length < 1 && <Text style={styles.mainDate} >No hay examenes para este evento</Text>}
                     {this.props.exams.map((exam, i) => {
