@@ -12,8 +12,13 @@ import MainMenu from '../components/common/MainMenu';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import RegisterButton from '../components/common/RegisterButton';
 import { Linking } from 'react-native'
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
 
 let map = require('../../assets/map.png')
+let visor = require('../../assets/visor.png')
+let paper = require('../../assets/paper.png')
+let mic = require('../../assets/mic.png')
+let download = require('../../assets/download.png')
 
 export default class EventDetail extends React.Component {
 
@@ -50,7 +55,8 @@ export default class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver programa</Text>
-                            <Icon style={styles.icon} name="eye" />
+                            <Image resizeMode={ImageResizeMode.contain} source={visor} />
+                            {/* <Icon style={styles.icon} name="eye" /> */}
                         </View>
                     </TouchableOpacity>
 
@@ -59,7 +65,8 @@ export default class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver ponentes</Text>
-                            <Icon style={styles.icon} name="microphone" />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
+                            {/* <Icon style={styles.icon} name="microphone" /> */}
                         </View>
                     </TouchableOpacity>
 
@@ -73,9 +80,8 @@ export default class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Descargar carta permiso</Text>
-                            <Icon
-
-                                style={styles.icon} name="download" />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 6 }} source={download} />
+                            {/* <Icon style={styles.icon} name="download" /> */}
                         </View>
 
                     </TouchableOpacity>
@@ -83,8 +89,8 @@ export default class EventDetail extends React.Component {
                         onPress={() => this.props.navigation.navigate('Exams', { event })}>
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Examenes</Text>
-                            <Icon
-                                style={styles.icon} name="check-square" />
+                            {/* <Icon style={styles.icon} name="check-square" /> */}
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={paper} />
                         </View>
 
                     </TouchableOpacity>
@@ -145,7 +151,7 @@ let styles = StyleSheet.create({
         marginBottom: 20
     },
     ver: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: "bold",
         marginVertical: 10,
         color: "#022047"

@@ -13,8 +13,7 @@ import { getSingleEventAction } from '../../redux/EventsDuck'
 
 let logo = require('../../../assets/gastro.jpg')
 
-function EventCard({ getSingleEventAction, event, title, startDate, mainImagesURLS, navigation }) {
-
+function EventCard({ getSingleEventAction, event, title, startDate, mainImagesURLS, navigation, location }) {
     function push() {
         if (!navigation) return
         getSingleEventAction(event._id)
@@ -36,6 +35,9 @@ function EventCard({ getSingleEventAction, event, title, startDate, mainImagesUR
                         {title}
                     </Text>
                     <Text style={styles.p}>
+                        {location.city}, {location.state}
+                    </Text>
+                    <Text style={styles.date}>
                         {moment(new Date(startDate)).format('LL')}
                     </Text>
                 </View>
@@ -63,6 +65,10 @@ let styles = StyleSheet.create({
     },
     p: {
         fontSize: 15,
+        color: "white"
+    },
+    date: {
+        fontSize: 12,
         color: "white"
     },
     logo: {
