@@ -37,7 +37,7 @@ let initialState = {
     user: {},
     loading: false,
     open: false,
-    min: 0,
+    min: 4,
     sec: 59,
     interval,
     modalText: "El tiempo se ha agotado, gracias por participar.",
