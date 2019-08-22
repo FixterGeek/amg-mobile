@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import EventCard from 'components/events/EventCard'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MainMenu from '../components/common/MainMenu';
+import MainMenu from '../components/common/AnimatedMenu';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import RegisterButton from '../components/common/RegisterButton';
 import { Linking } from 'react-native'
