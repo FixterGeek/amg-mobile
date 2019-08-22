@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 //import EventCard from 'components/events/EventCard'
 //import Icon from 'react-native-vector-icons/FontAwesome';
-import MainMenu from '../components/common/MainMenu';
+import MainMenu from '../components/common/AnimatedMenu';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux'
 import { setCurrentActivityAction } from '../redux/EventsDuck'

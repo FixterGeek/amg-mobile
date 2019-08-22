@@ -9,6 +9,7 @@ import EventCard from '../components/events/EventCard'
 import MainMenu from '../components/common/MainMenu';
 import { connect } from 'react-redux'
 import Spinner from 'react-native-loading-spinner-overlay'
+import AnimatedMenu from '../components/common/AnimatedMenu';
 
 class Events extends Component {
     static navigationOptions = { headerVisible: true, headerLeft: null, title: "Próximos Eventos" }
@@ -44,7 +45,8 @@ class Events extends Component {
                     {this.props.events.map(this.renderEventCard)}
                     {this.props.events.length < 1 && <Text style={styles.none}>No hay eventos publicados</Text>}
                 </ScrollView>
-                <MainMenu />
+                {/* <MainMenu /> */}
+                <AnimatedMenu />
                 <Spinner visible={this.state.spin} />
             </View>
         )
