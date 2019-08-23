@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios'
 
+
 let baseURL = "https://amg-api.herokuapp.com"
 let background = require('../../assets/login_bacground.png')
 let logo = require('../../assets/logo.png')
@@ -40,9 +41,10 @@ export default class PasswordRecovery extends React.Component {
             >
                 <Image
                     source={logo}
-                    style={{ width: 200 }}
+                    style={{ width: 200, margin: 0 }}
                     resizeMode='contain'
                 />
+                <Text style={styles.underLogo}>Restablecer contraseña</Text>
                 <Text style={styles.text}>En la bandeja de entrada de {this.state.email} encontrarás instrucciones sobre cómo restablecer tu contraseña.</Text>
                 <Text style={{ color: "#bbbbbb" }} >=================================</Text>
                 <Text style={{ color: "#bbbbbb" }}>¿Dudas si esa dirección de correo era correcta?   </Text>
@@ -50,35 +52,41 @@ export default class PasswordRecovery extends React.Component {
             </ImageBackground >
         )
         return (
-            <ImageBackground
-                source={background} style={styles.container}
-            >
-                <Image
-                    source={logo}
-                    style={{ width: 200 }}
-                    resizeMode='contain'
-                />
-                <Text style={styles.text}>Para restablecer tu contraseña, introduce la dirección de correo electrónico que utilizas para iniciar sesión en GASTRO</Text>
-                <View style={styles.searchSection}>
-                    <Icon style={styles.searchIcon} name="envelope" size={20} color="#000" />
-                    <TextInput
-                        value={this.state.email}
-                        onChangeText={email => this.setState({ email })}
-                        style={styles.input}
-                        placeholder="Correo electrónico"
-                        // onChangeText={(searchString) => {this.setState({searchString})}}
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor='#686666'
+            <KeyboardAwareScrollView
+                enableOnAndroid={true}
+                enableAutomaticScroll={(Platform.OS === 'ios')}
+                contentContainerStyle={{ flex: 1, backgroundColor: "grey" }}>
+                <ImageBackground
+                    source={background} style={styles.container}
+                >
+                    <Image
+                        source={logo}
+                        style={{ width: 200 }}
+                        resizeMode='contain'
                     />
-                </View>
-                <TouchableOpacity
-                    disabled={!this.state.email}
-                    style={!this.state.email ? styles.disableLogin : this.state.email.includes("@") ? styles.loginScreenButton : styles.disableLogin}
-                    onPress={this.sendRecoveryEmail}
-                    underlayColor='#fff'>
-                    <Text style={styles.loginText}>Obtener enlace para restablecer</Text>
-                </TouchableOpacity>
-            </ImageBackground>
+                    <Text style={styles.underLogo}>Restablecer contraseña</Text>
+                    <Text style={styles.text}>Para restablecer tu contraseña, introduce la dirección de correo electrónico que utilizas para iniciar sesión en GASTRO</Text>
+                    <View style={styles.searchSection}>
+                        <Icon style={styles.searchIcon} name="envelope" size={20} color="#000" />
+                        <TextInput
+                            value={this.state.email}
+                            onChangeText={email => this.setState({ email })}
+                            style={styles.input}
+                            placeholder="Correo electrónico"
+                            // onChangeText={(searchString) => {this.setState({searchString})}}
+                            underlineColorAndroid="transparent"
+                            placeholderTextColor='#686666'
+                        />
+                    </View>
+                    <TouchableOpacity
+                        disabled={!this.state.email}
+                        style={!this.state.email ? styles.disableLogin : this.state.email.includes("@") ? styles.loginScreenButton : styles.disableLogin}
+                        onPress={this.sendRecoveryEmail}
+                        underlayColor='#fff'>
+                        <Text style={styles.loginText}>Obtener enlace para restablecer</Text>
+                    </TouchableOpacity>
+                </ImageBackground>
+            </KeyboardAwareScrollView>
         )
     }
 }
@@ -96,7 +104,8 @@ let styles = StyleSheet.create({
         alignSelf: "stretch",
         paddingHorizontal: 20,
         paddingVertical: 20,
-        borderRadius: 5
+        borderRadius: 5,
+        marginVertical: 30
     },
     searchIcon: {
         color: "#686666",
@@ -107,14 +116,22 @@ let styles = StyleSheet.create({
         width: "85%",
         fontSize: 20,
         backgroundColor: 'transparent',
-        color: '#fff'
+        color: '#fff',
+
     },
     text: {
-        textAlign: "center",
+        textAlign: "left",
         paddingHorizontal: 20,
         fontSize: 18,
         color: "white",
 
+    },
+    underLogo: {
+        textAlign: "center",
+        paddingHorizontal: 20,
+        fontSize: 16,
+        color: "white",
+        marginBottom: 30
     },
     loginScreenButton: {
         paddingVertical: 20,
