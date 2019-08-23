@@ -85,6 +85,15 @@ export default class PasswordRecovery extends React.Component {
                         underlayColor='#fff'>
                         <Text style={styles.loginText}>Obtener enlace para restablecer</Text>
                     </TouchableOpacity>
+                    <View style={{ flex: 0, flexDirection: "row", marginTop: 100 }}>
+                        <Text style={{ color: "#fff" }} >¿No tienes cuenta? </Text>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Signup')}
+                        >
+                            <Text style={{ color: "#28abd8" }} > Registrate aquí</Text>
+                        </TouchableOpacity>
+
+                    </View>
                 </ImageBackground>
             </KeyboardAwareScrollView>
         )
