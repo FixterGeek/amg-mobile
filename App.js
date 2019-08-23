@@ -20,6 +20,7 @@ import Actividad from './src/screens/Actividad';
 import Exams from './src/screens/Exams';
 import Exam from './src/screens/Exam';
 import Speakers from './src/screens/Speakers';
+import PasswordRecovery from './src/screens/PasswordRecovery';
 //import ScoreScreen from './src/components/exams/ScoreScreen';
 
 console.disableYellowBox = true
@@ -124,7 +125,8 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Speakers: { screen: Speakers },
   Actividad: { screen: Actividad },
   Exams: { screen: Exams },
-  Exam: { screen: Exam }
+  Exam: { screen: Exam },
+  Recovery: { screen: PasswordRecovery }
 
 },
   {

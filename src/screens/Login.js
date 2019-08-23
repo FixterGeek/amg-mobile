@@ -181,7 +181,9 @@ class Login extends React.Component {
                         </TouchableOpacity>
 
                         <View>
-                            <Text style={{ color: "#28abd8" }} > ¿Olvidaste tu contraseña? </Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Recovery')}>
+                                <Text style={{ color: "#28abd8" }} > ¿Olvidaste tu contraseña? </Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ flex: 0, flexDirection: "row", marginTop: 100 }}>

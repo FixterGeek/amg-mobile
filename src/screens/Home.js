@@ -12,7 +12,6 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from '../services/auth'
-import Loader from "react-native-modal-loader";
 
 
 let background = require('../../assets/login_bacground.png')
