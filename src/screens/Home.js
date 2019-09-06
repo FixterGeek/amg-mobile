@@ -18,7 +18,7 @@ let background = require('../../assets/login_bacground.png')
 let logo = require('../../assets/logo.png')
 
 export default class Home extends React.Component {
-    static navigationOptions = { headerVisible: true }
+    static navigationOptions = { headerVisible: true, title: "Recursos" }
 
     state = {
         user: {},

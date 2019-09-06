@@ -131,7 +131,7 @@ export default class AnimatedMenu extends Component {
                     >
                         {open && <Text style={[styles.text]} >Recursos</Text>}
                         <Icon
-                            onPress={() => this.hanldeOptionPress('Recursos')}
+                            onPress={() => this.hanldeOptionPress('Resources')}
                             style={styles.icon} name="graduation-cap" />
                     </TouchableOpacity>
                 </Animated.View>

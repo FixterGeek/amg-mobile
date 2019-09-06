@@ -101,7 +101,7 @@ export default class PasswordRecovery extends React.Component {
 }
 
 let styles = StyleSheet.create({
-    container: { flex: 1, alignItems: "center", width: '100%', height: '150%', paddingTop: 100 },
+    container: { flex: 1, alignItems: "center", width: '100%', height: '150%', paddingTop: 50 },
     searchSection: {
         flexDirection: 'row',
         //justifyContent: 'center',
