@@ -12,6 +12,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from '../services/auth'
+import AnimatedMenu from '../components/common/AnimatedMenu';
 
 export default class Resources extends React.Component {
     static navigationOptions = { headerVisible: true, title: "Recursos" }
@@ -27,30 +28,33 @@ export default class Resources extends React.Component {
     render() {
 
         return (
-            <KeyboardAwareScrollView
-                enableOnAndroid={true}
-                enableAutomaticScroll={(Platform.OS === 'ios')}
-                contentContainerStyle={{ flex: 1 }}>
-                <View style={[styles.container]}>
-                    <View>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Guides')}
-                        >
-                            <Text style={[styles.item]}>
-                                Guías y consensos
+            <View style={{ flex: 1 }}>
+                <KeyboardAwareScrollView
+                    enableOnAndroid={true}
+                    enableAutomaticScroll={(Platform.OS === 'ios')}
+                    contentContainerStyle={{ flex: 1 }}>
+                    <View style={[styles.container]}>
+                        <View>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Guides')}
+                            >
+                                <Text style={[styles.item]}>
+                                    Guías y consensos
                     </Text>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity>
-                            <Text style={[styles.item]}>
-                                Publicaciones
+                            <TouchableOpacity>
+                                <Text style={[styles.item]}>
+                                    Publicaciones
                     </Text>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        </View>
+                        <Image style={[styles.image]} source={require('../../assets/takeda.png')} />
                     </View>
-                    <Image style={[styles.image]} source={require('../../assets/takeda.png')} />
-                </View>
 
-            </KeyboardAwareScrollView>
+                </KeyboardAwareScrollView>
+                <AnimatedMenu />
+            </View>
         )
     }
 }

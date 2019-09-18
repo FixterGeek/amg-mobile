@@ -13,6 +13,7 @@ import {
 } from 'rxjs/operators'
 import { concat, of, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
+import { signOutAction } from './UserDuck'
 
 
 let baseURL = "https://amg-api.herokuapp.com/"
@@ -173,11 +174,15 @@ export function getEventsEpic(action$, state$) {
             return concat(
                 ajax.get(baseURL + 'events?query={"status":"published"}', { 'Content-Type': 'application/json', "Authorization": token }).pipe(
                     map(res => {
-                        //console.log("res: ", res.response)
+                        // console.log("res: ", res.response)
                         return getEventsSuccess([...res.response])
                     }),
                     catchError(err => {
-                        console.log("error", err)
+                        if (err.status === 401) {
+                            AsyncStorage.multiRemove(['userData', "token"])
+                            return of(() => ({ type: "LOG_OUT" }))
+                        }
+                        // if (err.response.message === "Token is invalid or has expired 👀") 
                         return of(getEventsError(err.response.name))
                     })
                 )
