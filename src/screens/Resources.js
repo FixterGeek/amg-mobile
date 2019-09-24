@@ -43,7 +43,9 @@ export default class Resources extends React.Component {
                     </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Publications')}
+                            >
                                 <Text style={[styles.item]}>
                                     Publicaciones
                     </Text>

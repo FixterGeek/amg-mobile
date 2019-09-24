@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import axios from 'axios'
 
-export default class Guides extends React.Component {
+export default class Publications extends React.Component {
     static navigationOptions = { headerVisible: true, title: "Guías y consensos" }
 
     state = {
@@ -28,7 +28,7 @@ export default class Guides extends React.Component {
     componentDidMount() {
         AsyncStorage.getItem('token')
             .then(token => {
-                return axios.get('https://amg-api.herokuapp.com/recursos?query={"tipo":"Guías y consensos"}', { headers: { Authorization: token } })
+                return axios.get('https://amg-api.herokuapp.com/recursos?query={"tipo":"Publicaciones"}', { headers: { Authorization: token } })
             })
             .then(res => {
                 this.setState({ guides: res.data.data })
