@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import NavigationService from '../../services/NavigationService'
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 let revista = "http://www.revistagastroenterologiamexico.org/?codref=ddh3dk3Yjdsafg503zSInMNxBdsddsa545vs809jdn02nubHHtJufRpNPu3hjd673&py=7jb39db3"
 
@@ -37,7 +38,6 @@ export default class AnimatedMenu extends Component {
         ]
     }
     handlePress = () => {
-        this.setState({ open: !this.state.open })
         let toValue = this.state.open ? 0 : 1
         let flyouts = this.state.fabs.map((value, i) => {
             return Animated.spring(value, {
@@ -52,9 +52,12 @@ export default class AnimatedMenu extends Component {
             }),
             Animated.stagger(30, flyouts)
         ]).start()
+        this.setState({ open: !this.state.open })
+
 
 
     }
+
     hanldeOptionPress = (route) => {
         if (route === "Revista") return Linking.openURL(revista)
         this.handlePress()
@@ -91,7 +94,9 @@ export default class AnimatedMenu extends Component {
         let { open } = this.state
         return (
             // <View style={open ? styles.overlay : null}>
-            <Animated.View style={open ? [styles.overlay, backgroundStyle] : null}>
+            <Animated.View style={{ width: "100%", height: "100%", backgroundColor: "transparent", position: "absolute" }}>
+
+                <Animated.View style={open ? [styles.overlay, backgroundStyle] : null}></Animated.View>
 
                 <Animated.View style={[styles.flyout, styles.position, styles.fab, getTransformStyle(this.state.fabs[4]), backgoundButtonStyle]}>
                     <TouchableOpacity
@@ -146,16 +151,20 @@ export default class AnimatedMenu extends Component {
                     </TouchableOpacity>
                 </Animated.View>
 
-                <View style={[styles.position, { zIndex: 9999 }]}>
+                <Animated.View
+                    style={[styles.position, styles.fab, buttonStyle, { zIndex: 9999 }]}
+                // pointerEvents={'none'}
+                >
                     <TouchableWithoutFeedback
                         onPress={this.handlePress}
                     >
-                        <Animated.View style={[styles.fab, buttonStyle]}>
-                            <Icon
-                                style={[styles.icon]} name="bars" />
-                        </Animated.View>
+
+                        <Icon
+                            style={[styles.icon]} name="bars" />
+
+
                     </TouchableWithoutFeedback>
-                </View>
+                </Animated.View>
 
             </Animated.View >
         )
@@ -176,7 +185,7 @@ let styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.6)",
         width: "100%",
         height: "100%",
-        zIndex: 0
+        // zIndex: 0,
     },
     text: {
         position: "absolute",
