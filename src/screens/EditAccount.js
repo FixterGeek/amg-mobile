@@ -448,7 +448,6 @@ let styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 20,
         backgroundColor: "#1f2536",
-
         minWidth: "100%"
     },
     container: {

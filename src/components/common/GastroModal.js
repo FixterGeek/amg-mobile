@@ -1,8 +1,11 @@
 import React from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import Modal from 'react-native-modal'
 
+let clock = require('../../../assets/clock.png')
+
 export default function GastroModal({
+    clockImage,
     isVisible,
     title,
     text,
@@ -17,6 +20,7 @@ export default function GastroModal({
         <Modal isVisible={isVisible}>
             <View style={styles.modal}>
                 <Text style={styles.modalTitle}>{title}</Text>
+                {clockImage && <Image source={clock} />}
                 <Text style={styles.modalSubTitle}>{text}</Text>
                 {!noButtons && <View style={[styles.modalButtons]}>
                     {!onlyOne && <TouchableOpacity

@@ -24,6 +24,7 @@ import PasswordRecovery from './src/screens/PasswordRecovery';
 import Resources from './src/screens/Resources'
 import Guides from './src/screens/Guides';
 import Publications from './src/screens/Publications';
+import Membership from './src/screens/Membership';
 console.disableYellowBox = true
 
 class App extends Component {
@@ -114,7 +115,7 @@ export default App
 
 
 let AppWithNavigationState = createAppContainer(createStackNavigator({
-  Login: { screen: Login },
+  Login: { screen: Membership },
   Signup: { screen: EditAccount },
   Home: { screen: Login },
   Profile: { screen: AccountProfile },
@@ -130,7 +131,8 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Recovery: { screen: PasswordRecovery },
   Resources: { screen: Resources },
   Guides: { screen: Guides },
-  Publications: { screen: Publications }
+  Publications: { screen: Publications },
+  Membership: { screen: Membership }
 
 },
   {

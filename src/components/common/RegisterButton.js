@@ -8,7 +8,7 @@ import {
 
 export default function RegisterButton({ disabled, loading, text, style, marginVertical, onPress, alreadyRegistered, alreadyRegisteredText }) {
     if (disabled) return (
-        <View style={[styles.container, style, { marginVertical: marginVertical || 50, marginBottom: 100 }, styles.disabled]}>
+        <View style={[styles.container, { marginVertical: marginVertical || 50, marginBottom: 100 }, styles.disabled, style]}>
             <Text style={[styles.text]}>{text || "Registrarse"}</Text>
         </View>
     )
@@ -16,7 +16,7 @@ export default function RegisterButton({ disabled, loading, text, style, marginV
         <TouchableOpacity
             onPress={onPress}
         >
-            <View style={[styles.alreadyContainer, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
+            <View style={[styles.alreadyContainer, { marginVertical: marginVertical || 50, marginBottom: 100 }, style]}>
                 <Text style={[styles.text]}>{alreadyRegisteredText || "Registrado"}</Text>
             </View>
         </TouchableOpacity>
@@ -26,7 +26,7 @@ export default function RegisterButton({ disabled, loading, text, style, marginV
         <TouchableOpacity
             onPress={onPress}
         >
-            <View style={[styles.container, style, { marginVertical: marginVertical || 50, marginBottom: 100 }]}>
+            <View style={[styles.container, { marginVertical: marginVertical || 50, marginBottom: 100 }, style]}>
                 <Text style={[styles.text]}>{text || "Registrarse"}</Text>
             </View>
         </TouchableOpacity>
