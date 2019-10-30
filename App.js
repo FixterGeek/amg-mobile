@@ -115,7 +115,7 @@ export default App
 
 
 let AppWithNavigationState = createAppContainer(createStackNavigator({
-  Login: { screen: Membership },
+  Login: { screen: Login },
   Signup: { screen: EditAccount },
   Home: { screen: Login },
   Profile: { screen: AccountProfile },

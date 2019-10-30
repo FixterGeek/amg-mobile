@@ -39,6 +39,7 @@ export default class Method extends Component {
                     </TouchableOpacity>
                 </View>
                 <RegisterButton
+                    text="Siguiente"
                     onPress={this.props.pressNext}
                 />
             </View>

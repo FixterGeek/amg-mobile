@@ -18,6 +18,8 @@ import MessageScreen from '../components/membership/MessageScreen';
 import Facturacion from '../components/membership/Facturacion'
 import OxxoPayment from '../components/membership/OxxoPayment'
 import Referencia from '../components/membership/Referencia'
+import Conekta from '../services/conektaRN'
+import { makePaymen } from '../services/paymentsService'
 
 
 let background = require('../../assets/login_bacground.png')
@@ -32,7 +34,7 @@ class Membership extends React.Component {
         loading: false,
         facturando: false,
         generando: false,
-        method: "oxxo",
+        method: "card",
         step: 0,
         cardForm: {
             exp: null,
@@ -69,14 +71,12 @@ class Membership extends React.Component {
             if (value.length > 2) exp = exp.slice(0, 2) + "/" + exp.slice(2)
             else exp = value
             cardForm[name] = exp
-            console.log(exp)
         }
         else if (name === "number") {
             let exp = value.replace('-', '')
             if (value.length > 4) exp = exp.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim()
             else exp = value
             cardForm[name] = exp
-            console.log(exp.split(' ').join(''))
         }
         else cardForm[name] = value
         this.setState({ cardForm })
@@ -98,24 +98,45 @@ class Membership extends React.Component {
             this.setState({ error: "Completa todos los campos" })
             return
         }
-        console.log(this.state.facturaForm) // aqui facturamos
+        //console.log(this.state.facturaForm) // aqui facturamos
         this.setState({ facturando: true })
         setTimeout(() => {
-            this.setState({ step: 5, facturando: false })
+            this.setState({ step: 6, facturando: false })
         }, 5000)
 
     }
 
     tokenizeCard = () => {
+        let { cardForm } = this.state
         let normalized = this.normalizeData()
-        console.log(normalized)
+        console.log("nomilizada: ", normalized)
         if (normalized) {
             this.setState({ loading: true })
-            setTimeout(() => { // esto es al action pa cobrar
-                this.setState({ loading: false })
-                // el then una vez cobrado
-                this.setState({ step: 2 })
-            }, 5000)
+
+            // conekta!!
+            let conekta = new Conekta()
+            // console.log("conekta: ", conekta)
+            conekta.tokenizeCard(normalized)
+                .then(data => {
+                    if (data.object === "error") {
+                        console.log("ERRORs", data);
+                        this.setState({ loading: false, step: 3, error: data.message })
+                        return
+                    }
+                    // console.log("DATA", data);
+                    //this.setState({ loading: false, step: 2 })
+                    // al backend
+                    return console.log(data)
+                    return makePaymen(data, cardForm.tel)
+                })
+                .then(res => {
+                    console.log(res)
+                    this.setState({ loading: false, step: 2 })
+                })
+                .catch(error => {
+                    console.log("ERROR", error);
+                    this.setState({ loading: false, step: 3, error })
+                });
         }
 
     }
@@ -125,6 +146,7 @@ class Membership extends React.Component {
         let missing = false
         for (let k in cardForm) {
             if (!cardForm[k]) missing = true
+            if (k === "number" && cardForm[k] && cardForm[k].length < 16) missing = true
         }
         if (missing) {
             this.setState({ error: "Completa todos los campos" })
@@ -135,9 +157,10 @@ class Membership extends React.Component {
             normalized = {
                 name: cardForm.name,
                 cvc: cardForm.cvc,
-                cardNumber: cardForm.number.split(' ').join(''),
-                expMonth: cardForm.exp.split('/')[0],
-                expYear: cardForm.exp.split('/')[1],
+                number: cardForm.number.split(' ').join(''),
+                // expMonth: cardForm.exp.split('/')[0],
+                exp_month: cardForm.exp.split('/')[0],
+                exp_year: cardForm.exp.split('/')[1],
             }
 
         return normalized
@@ -250,7 +273,8 @@ class Membership extends React.Component {
     }
 }
 
-function mapState(state) {
+function mapState({ user }) {
+    console.log("USUARIO: ", user)
     return {}
 }
 

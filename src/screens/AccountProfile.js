@@ -119,6 +119,13 @@ class AccountProfile extends React.Component {
                                 <View style={[styles.histoyCard]}>
                                     <Text style={styles.historyText}>Mis publicaciones</Text>
                                 </View>
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate('Membership')}
+                                >
+                                    <View style={[styles.histoyCard]}>
+                                        <Text style={styles.historyText}>Membresía</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </TouchableOpacity>
                     </View>

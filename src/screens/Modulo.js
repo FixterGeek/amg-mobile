@@ -32,6 +32,7 @@ class Modulo extends React.Component {
                     <View>
 
                         {module.activities.map((a, i) => {
+                            let speakers = a.speakers
                             return (<TouchableOpacity
                                 onPress={() => this.props.navigation.navigate('Actividad', {
                                     // event.modulos[i]
@@ -47,7 +48,7 @@ class Modulo extends React.Component {
                                     </View>
                                     <View style={[styles.wideCard]}>
                                         <Text >{a.activityName}</Text>
-                                        {a.speakers[0].fullName && <Text style={styles.miniText}>{a.speakers[0].fullName}</Text>}
+                                        {speakers[0] && speakers[0].fullName && <Text style={styles.miniText}>{a.speakers[0].fullName}</Text>}
                                     </View>
                                 </View>
                             </TouchableOpacity>)
