@@ -53,7 +53,7 @@ class Actividad extends React.Component {
                     <Text style={[styles.description]}>{actividad.activityType}</Text>
                     <View style={styles.padder}>
                         <Text style={styles.title}>Ponente</Text>
-                        <View style={styles.flexCard}>
+                        {speaker && <View style={styles.flexCard}>
                             <Image
                                 style={{ width: 100, height: 100 }}
                                 source={{ uri: speaker.photoURL }} />
@@ -63,7 +63,7 @@ class Actividad extends React.Component {
                                 <Text>{speaker.origin}</Text>
                             </View>
 
-                        </View>
+                        </View>}
                         <Text style={styles.title}>Ubicación</Text>
                         <Image
                             style={styles.fake}
