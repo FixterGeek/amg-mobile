@@ -1,5 +1,7 @@
 import React, { Component, useState } from 'react';
 import { printToFileAsync, printAsync } from 'expo-print';
+import axios from 'axios';
+import { WebView } from 'react-native-webview';
 
 import { StyleSheet, View, Text, Image, TextInput, Linking } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
@@ -33,15 +35,20 @@ export default function Referencia({
             base64: true,
         })
             .then(result => {
-                setPdf(result.uri)
-                return firebase.storage().ref('oxxoPdfs').putString("data:application/pdf;base64," + result.data64, 'data_url')
+                // setPdf(result.uri)
+                // console.log(result.data64);
+                return axios.get(result.uri, {
+                    responseType: 'blob'
+                })
+                let obj = { uri: result.uri, type: 'application/pdf', name: 'oxxo.pdf' }
             })
+            .then(({ data }) => firebase.storage().ref('oxxoPdfs').child('oxxo.pdf').put(data))
             .then(function (snap) {
                 console.log('Uploaded a data_url string!');
                 return snap.ref.getDownloadURL()
             })
             .then(link => {
-                console.log("link: ", link)
+                Linking.openURL(link);
             })
     };
     if (pdf) return (<WebView style={{ flex: 1 }} source={{ uri: pdf }} />)
