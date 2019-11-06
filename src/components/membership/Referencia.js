@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, Image, TextInput, Linking } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
-import { WebView } from 'react-native-webview';
+import firebase from '../../services/firebase'
 
 
 
@@ -31,10 +31,18 @@ export default function Referencia({
         printToFileAsync({
             html: '<div>ok</div>',
             base64: true,
-        }).then(result => {
-            setPdf(result.uri)
-            //setPdf(result.base64)
-        });
+        })
+            .then(result => {
+                setPdf(result.uri)
+                return firebase.storage().ref('oxxoPdfs').putString("data:application/pdf;base64," + result.data64, 'data_url')
+            })
+            .then(function (snap) {
+                console.log('Uploaded a data_url string!');
+                return snap.ref.getDownloadURL()
+            })
+            .then(link => {
+                console.log("link: ", link)
+            })
     };
     if (pdf) return (<WebView style={{ flex: 1 }} source={{ uri: pdf }} />)
     return (
