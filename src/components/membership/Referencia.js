@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PDFlib, { PDFPage } from 'react-native-pdf-lib';
+import { printToFileAsync, printAsync } from 'expo-print';
+
 import { StyleSheet, View, Text, Image, TextInput } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -18,17 +19,15 @@ export default function Referencia({
     const amount = `${data[0].amount}`;
 
     const currency = (coins) => {
-        return Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(coins);
+        // return Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(coins);
+        return '0000'
     };
 
     const referenceGenerator = () => {
-        const doc = PDFPage
-            .create()
-            .drawImage(oxxoImg, 'png', {
-                x: 5,
-                y: 25,
-            });
-        console.log(doc);
+        printToFileAsync({
+            html: '<div>ok</div>',
+            base64: true,
+        }).then(result => console.log(result));
     };
 
     return (
