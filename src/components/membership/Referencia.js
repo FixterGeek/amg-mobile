@@ -5,6 +5,8 @@ import { StyleSheet, View, Text, Image, TextInput } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
+import { FileSystem } from 'expo';
+
 
 export default function Referencia({
     onAccept,
@@ -27,7 +29,18 @@ export default function Referencia({
         printToFileAsync({
             html: '<div>ok</div>',
             base64: true,
-        }).then(result => console.log(result));
+        }).then(result => {
+            FileSystem.downloadAsync(
+                result.uri,
+                FileSystem.documentDirectory + 'oxxos.pdf'
+            )
+                .then(({ uri }) => {
+                    console.log('Finished downloading to ', uri);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
     };
 
     return (
@@ -37,7 +50,7 @@ export default function Referencia({
                 <View style={styles.amountContainer}>
                     <Text style={styles.amountTitle}>MONTO A PAGAR</Text>
                     <Text style={styles.amount}>
-                        { currency(amount.substring(0, amount.length - 2) + '.' + amount.substring(amount.length - 2)) }
+                        {currency(amount.substring(0, amount.length - 2) + '.' + amount.substring(amount.length - 2))}
                     </Text>
                     <Text style={styles.smallLetter}>OXXO cobrará una comisión adicional al momento de realizar el pago</Text>
                 </View>
