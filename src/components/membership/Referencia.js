@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { printToFileAsync, printAsync } from 'expo-print';
 
-import { StyleSheet, View, Text, Image, TextInput } from 'react-native'
+import { StyleSheet, View, Text, Image, TextInput, Linking } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
@@ -30,16 +30,7 @@ export default function Referencia({
             html: '<div>ok</div>',
             base64: true,
         }).then(result => {
-            FileSystem.downloadAsync(
-                result.uri,
-                FileSystem.documentDirectory + 'oxxos.pdf'
-            )
-                .then(({ uri }) => {
-                    console.log('Finished downloading to ', uri);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            Linking.openURL(result.uri)
         });
     };
 
