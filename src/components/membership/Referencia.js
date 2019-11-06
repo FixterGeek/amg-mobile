@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { printToFileAsync, printAsync } from 'expo-print';
 
 import { StyleSheet, View, Text, Image, TextInput, Linking } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
-import { FileSystem } from 'expo';
+import { WebView } from 'react-native-webview';
+
 
 
 export default function Referencia({
@@ -19,6 +20,7 @@ export default function Referencia({
     const { charges = {} } = conektaOrder;
     const { data = [] } = charges;
     const amount = `${data[0].amount}`;
+    const [pdf, setPdf] = useState(null)
 
     const currency = (coins) => {
         // return Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(coins);
@@ -30,10 +32,11 @@ export default function Referencia({
             html: '<div>ok</div>',
             base64: true,
         }).then(result => {
-            Linking.openURL(result.uri)
+            setPdf(result.uri)
+            //setPdf(result.base64)
         });
     };
-
+    if (pdf) return (<WebView style={{ flex: 1 }} source={{ uri: pdf }} />)
     return (
         <View style={styles.container}>
             <View style={styles.oxxoHader}>

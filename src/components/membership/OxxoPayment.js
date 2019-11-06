@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { WebView } from 'react-native-webview';
 
 
 let texto = "Tu membresía ha sido renovada. Recibirás un correo de confirmación "
@@ -11,11 +10,6 @@ export default function OxxoPayment({
     onAccept,
 }) {
     let oxxo = require('../../../assets/oxxo.png')
-    return (<View style={{ flex: 1 }}>
-        <Text>Descargar</Text>
-        <WebView style={{
-            flex: 1,
-        }} source={{ uri: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' }} /></View>)
     return (
         <View style={styles.container}>
             <Text style={styles.title} >Pago en OXXO</Text>
