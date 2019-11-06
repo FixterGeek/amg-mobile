@@ -30,3 +30,13 @@ export async function makePaymen(token, phone) {
         return Promise.reject(e)
     }
 }
+
+
+export async function postPayment(paymentPayload, paymentType = 'subscription') {
+    const token = await AsyncStorage.getItem('token');
+    return axios.post(`${url}/payments/${paymentType}`, paymentPayload, {
+        headers: {
+            Authorization: token,
+        },
+    }).then(({ data }) => data);
+}

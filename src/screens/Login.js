@@ -222,7 +222,7 @@ let styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        background: "rgba(0,0,0,0.5)",
+        // background: "rgba(0,0,0,0.5)",
         zIndex: 999,
 
     },

@@ -7,12 +7,14 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable'
 import configReducer from './configDuck'
 import { userLoginEpic, persistUserEpic, hydrateUserEpic } from './UserDuck'
 import examReducer from './examDuck'
+import paymentDuck from './paymentDuck';
 
 let rootReducer = combineReducers({
     events: eventReducer,
     user: userReducer,
     config: configReducer,
-    exam: examReducer
+    exam: examReducer,
+    payment: paymentDuck,
 })
 
 let rootEpic = combineEpics(userLoginEpic, persistUserEpic, getEventsEpic)
