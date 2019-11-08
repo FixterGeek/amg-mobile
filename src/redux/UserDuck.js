@@ -156,10 +156,12 @@ export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
     let { user: { token } } = getState()
     return axios.post(baseURL + `events/${eventId}/assist`, {}, { headers: { Authorization: token } })
         .then(res => {
+            console.log(res);
             dispatch(subscribeToEventSuccess(res.data))
             return res.data
         })
         .catch(e => {
+            console.log(e);
             dispatch(subscribeToEventError(e.response.data.message))
             return e
         })

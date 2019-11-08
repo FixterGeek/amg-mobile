@@ -25,6 +25,8 @@ import Resources from './src/screens/Resources'
 import Guides from './src/screens/Guides';
 import Publications from './src/screens/Publications';
 import Membership from './src/screens/Membership';
+import EventPayment from './src/screens/EventPayment';
+
 console.disableYellowBox = true
 
 class App extends Component {
@@ -132,8 +134,8 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Resources: { screen: Resources },
   Guides: { screen: Guides },
   Publications: { screen: Publications },
-  Membership: { screen: Membership }
-
+  Membership: { screen: Membership },
+  EventPayment: { screen: EventPayment },
 },
   {
     navigationOptions: {

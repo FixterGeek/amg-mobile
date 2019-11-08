@@ -3,10 +3,15 @@ import { printToFileAsync, printAsync } from 'expo-print';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
 
-import { StyleSheet, View, Text, Image, TextInput, Linking } from 'react-native'
+import {
+    StyleSheet, View, Text,
+    Image, TextInput, Linking,
+    ActivityIndicator, ScrollView, Alert,
+} from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
+import oxxo  from '../../../assets/oxxopay_brand.png';
 import firebase from '../../services/firebase'
 
 
@@ -16,22 +21,55 @@ export default function Referencia({
     onPressButton2,
     conektaOrder,
 }) {
-    const oxxo = require('../../../assets/oxxopay_brand.png');
     console.log('ahorita vemos que pedo!', conektaOrder);
 
     const { charges = {} } = conektaOrder;
     const { data = [] } = charges;
     const amount = `${data[0].amount}`;
     const [pdf, setPdf] = useState(null)
+    const [generating, setGenerating] = useState(false);
 
     const currency = (coins) => {
         // return Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(coins);
-        return '0000'
+        return `$ ${coins} MXN`;
     };
 
+    console.log('OXXO', oxxo);
+
     const referenceGenerator = () => {
+        setGenerating(true);
         printToFileAsync({
-            html: '<div>ok</div>',
+            html:
+            `<div style="display: flex; justify-content: center; padding-top: 100px; font-family: Helvetica">
+                <div style="width: 500px; border: solid 2px #CCC">
+                   <div style="display: flex; justify-content: space-between; padding: 32px;">
+                   <div style="width: 40%; background-repeat: no-repeat; background-position: center; background-size: contain; heigth: 200px; background-image: url('https://raw.githubusercontent.com/conekta-examples/oxxopay-payment-stub/master/demo/oxxopay_brand.png')"></div>
+                    <div style="text-align: left; width: 50%;">
+                        <h4>MONTO A PAGAR</h5>
+                        <h2>${currency(amount.substring(0, amount.length - 2) + '.' + amount.substring(amount.length - 2))}</h3>
+                        <p style="font-size: 12px">OXXO cobrará una comisión adicional al momento de realizar el pago</p>
+                    </div>
+                   </div>
+                   <div style="box-sizing: border-box; margin-top: 32px; margin-bottom: 32px; padding-left: 50px; padding-right: 50px;">
+                    <h5>REFERENCIA</h5>
+                    <div style="display: flex; justify-content: center; align-items: center; font-size: 32px; padding: 16px; background: #eeeeee">
+                        ${conektaOrder.charges.data[0].payment_method.reference}
+                    </div>
+                   </div>
+                   <div style="padding: 32px; background: #eeeeee">
+                    <h5>INSTRUCCIONES</h5>
+                    <p>1. Acude a la tienda OXXO más cercana</p>
+                    <p>2. Indica en caja que quieres realizar un pago de OXXOPay</p>
+                    <p>3. Dicta al cajero el número de referencia en esta ficha para que tecleé directamete en la pantalla de venta.</p>
+                    <p>4. Realiza el pago correspondiente con dinero en efectivo.</p>
+                    <p>
+                        5. Al confirmar tu pago, el cajero te entregará un comprobante impreso.
+                        En el podrás verificar que se haya realizado correctamente.
+                        Conserva este comprobante de pago.
+                    </p>
+                   </div>
+                </div>
+            </div>'`,
             base64: true,
         })
             .then(result => {
@@ -48,12 +86,19 @@ export default function Referencia({
                 return snap.ref.getDownloadURL()
             })
             .then(link => {
+                setGenerating(false);
                 Linking.openURL(link);
+            })
+            .catch((error) => {
+                console.log(error);
+                setGenerating(false);
+                Alert.alert('Lo sentimos', 'Ocurrio un error al generar la referencia');
             })
     };
     if (pdf) return (<WebView style={{ flex: 1 }} source={{ uri: pdf }} />)
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
+          { generating && <ActivityIndicator /> }  
             <View style={styles.oxxoHader}>
                 <Image source={oxxo} style={{ width: 120 }} resizeMode="contain" />
                 <View style={styles.amountContainer}>
@@ -108,16 +153,16 @@ export default function Referencia({
                     Volver
                 </Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 
 }
 
 let styles = StyleSheet.create({
     container: {
-        flex: 1,
         paddingTop: 0,
         paddingHorizontal: 20,
+        paddingBottom: 100,
         // justifyContent: "center"
     },
     image: {
