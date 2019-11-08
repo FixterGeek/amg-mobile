@@ -21,8 +21,6 @@ export default function Referencia({
     onPressButton2,
     conektaOrder,
 }) {
-    console.log('ahorita vemos que pedo!', conektaOrder);
-
     const { charges = {} } = conektaOrder;
     const { data = [] } = charges;
     const amount = `${data[0].amount}`;
@@ -33,8 +31,6 @@ export default function Referencia({
         // return Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(coins);
         return `$ ${coins} MXN`;
     };
-
-    console.log('OXXO', oxxo);
 
     const referenceGenerator = () => {
         setGenerating(true);

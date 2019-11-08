@@ -35,6 +35,10 @@ function EventPayment({
     if (state.error) Alert.alert(`${state.error}`)
   }, [state.error]);
 
+  useEffect(() => {
+    if (user.basicData.phone) setWorkingOn({ ...paymentWorking, phone: user.basicData.phone });
+  }, [user.basicData])
+
   const generateReference = () => {
     makePayment(paymentWorking)
       .then(({ conektaOrder }) => {
@@ -44,7 +48,7 @@ function EventPayment({
       .catch(error => console.log(error.response))
   };
 
-  console.log(state.cardForm);
+  console.log(paymentWorking);
   
   if (step === 0) return (
     <ScrollView>
@@ -102,7 +106,14 @@ function EventPayment({
       // onPressButton1={this.tryAgain}
     />
   );
-}
+
+  return (
+    <MessageScreen
+      onPressButton1={() => setState( s => ({ ...s, step: 4 }))}
+      onPressButton2={() => navigation.navigate('Profile')}
+    />
+  )
+};
 
 function mapStateToProps({ user, payment: { payment, workingOn } }) {
   return {

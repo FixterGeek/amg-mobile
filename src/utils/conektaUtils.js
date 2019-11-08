@@ -26,7 +26,7 @@ export function normalizeData(cardForm, setState) {
 
 export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
   let normalized = normalizeData(cardForm, setState)
-  console.log("nomilizada: ", normalized)
+  // console.log("nomilizada: ", normalized)
   if (normalized) {
       setState(s => ({ ...s, loading: true }));
 
@@ -35,6 +35,7 @@ export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
       // console.log("conekta: ", conekta)
       conekta.tokenizeCard(normalized)
           .then(data => {
+              console.log('DATA!!!', data);
               if (data.object === "error") {
                   console.log("ERRORs", data);
                   setState(s => ({ ...s, loading: false, step: 3, error: data.message }))
@@ -44,10 +45,12 @@ export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
               //this.setState({ loading: false, step: 2 })
               // al backend
               // return console.log('token', data)
-              return makePayment({ ...paymentWorking, conektaToken: data }, 'event');
+              return makePayment({ ...paymentWorking, conektaToken: data }, 'event')
+                .then(data => console.log('MP!!', data))
+                .catch(error => console.log('MPERROR', error.response));
           })
           .then(res => {
-              console.log(res)
+              console.log('RESPONSE!!!', res)
               setState({ loading: false, step: 2 })
           })
           .catch(error => {

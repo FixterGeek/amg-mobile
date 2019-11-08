@@ -279,7 +279,6 @@ class Membership extends React.Component {
 }
 
 function mapState({ user, payment: { payment, workingOn } }) {
-    console.log('Santa madre', workingOn);
     return {
         paymentFetching: payment.fetching,
         paymentWorking: workingOn,

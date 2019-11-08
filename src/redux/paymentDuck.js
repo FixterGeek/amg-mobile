@@ -28,8 +28,15 @@ const makePaymentAction = (createdPayment) => ({ type: MAKE_PAYMENT, payload: cr
 export const makePayment = (paymentPayload, paymentType) => (dispatch) => {
   dispatch(fetching());
   return postPayment(paymentPayload, paymentType)
-    .then(createdPayment => successAction(dispatch, makePaymentAction, createdPayment, resetValues))
-    .catch(error => errorAction(dispatch, fetchingError, error, resetValues));
+    .then(createdPayment => {
+      successAction(dispatch, makePaymentAction, createdPayment, resetValues)
+      return createdPayment;
+    })
+    .catch(error => {
+      console.log('CUACK ERROR', error.response);
+      errorAction(dispatch, fetchingError, error, resetValues);
+      return error;
+    });
 }
 
 const initialPaymentState = {
