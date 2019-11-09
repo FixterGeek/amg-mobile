@@ -26,6 +26,8 @@ import Guides from './src/screens/Guides';
 import Publications from './src/screens/Publications';
 import Membership from './src/screens/Membership';
 import EventPayment from './src/screens/EventPayment';
+import EventCourses from './src/screens/EventCourses';
+import CourseDetail from './src/screens/CourseDetail';
 
 console.disableYellowBox = true
 
@@ -136,6 +138,8 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Publications: { screen: Publications },
   Membership: { screen: Membership },
   EventPayment: { screen: EventPayment },
+  EventCourses: { screen: EventCourses },
+  CourseDetail: { screen: CourseDetail },
 },
   {
     navigationOptions: {

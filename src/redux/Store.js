@@ -8,6 +8,7 @@ import configReducer from './configDuck'
 import { userLoginEpic, persistUserEpic, hydrateUserEpic } from './UserDuck'
 import examReducer from './examDuck'
 import paymentDuck from './paymentDuck';
+import courseDuck from './coursesDuck';
 
 let rootReducer = combineReducers({
     events: eventReducer,
@@ -15,6 +16,7 @@ let rootReducer = combineReducers({
     config: configReducer,
     exam: examReducer,
     payment: paymentDuck,
+    course: courseDuck,
 })
 
 let rootEpic = combineEpics(userLoginEpic, persistUserEpic, getEventsEpic)

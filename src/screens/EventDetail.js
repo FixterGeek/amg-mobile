@@ -74,6 +74,16 @@ class EventDetail extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('EventCourses', {event})}
+                    >
+                        <View style={[styles.button]}>
+                            <Text style={[styles.ver]} >Ver Cursos</Text>
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
+                            {/* <Icon style={styles.icon} name="microphone" /> */}
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
                         onPress={() => {
                             if (event.permisosURLS[0]) {
                                 Linking.openURL(event.permisosURLS[0])

@@ -8,12 +8,10 @@ function SubscriptionButton({
   user, eventOrActivityObject, subscribeToEventAction,
   subscriptionType = 'event', navigation,
 }) {
-  console.log(navigation);
   let userPays = false;
   if (user.membershipStatus === 'Free' && eventOrActivityObject.cost.freeCost > 0) userPays = true;
   if (user.membershipStatus === 'Residente' && eventOrActivityObject.cost.residentCost > 0) userPays = true;
   if (user.membershipStatus === 'Socio' && eventOrActivityObject.cost.socioCost > 0) userPays = true;
-  console.log(user.assistedEvents.includes(eventOrActivityObject._id));
 
   const handlePress = () => {
     if (subscriptionType === 'event') subscribeToEventAction(eventOrActivityObject._id);
