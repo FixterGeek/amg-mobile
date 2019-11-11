@@ -33,7 +33,6 @@ export const makePayment = (paymentPayload, paymentType) => (dispatch) => {
       return createdPayment;
     })
     .catch(error => {
-      console.log('CUACK ERROR', error.response);
       errorAction(dispatch, fetchingError, error, resetValues);
       return error;
     });

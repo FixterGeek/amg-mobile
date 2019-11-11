@@ -24,7 +24,7 @@ export function normalizeData(cardForm, setState) {
   return normalized
 }
 
-export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
+export function tokenizeCard (cardForm, setState, makePayment, paymentWorking, subscribeToEvent, eventId) {
   let normalized = normalizeData(cardForm, setState)
   // console.log("nomilizada: ", normalized)
   if (normalized) {
@@ -35,9 +35,8 @@ export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
       // console.log("conekta: ", conekta)
       conekta.tokenizeCard(normalized)
           .then(data => {
-              console.log('DATA!!!', data);
               if (data.object === "error") {
-                  console.log("ERRORs", data);
+                  // console.log("ERRORs", data);
                   setState(s => ({ ...s, loading: false, step: 3, error: data.message }))
                   return
               }
@@ -45,13 +44,29 @@ export function tokenizeCard (cardForm, setState, makePayment, paymentWorking) {
               //this.setState({ loading: false, step: 2 })
               // al backend
               // return console.log('token', data)
-              return makePayment({ ...paymentWorking, conektaToken: data }, 'event')
-                .then(data => console.log('MP!!', data))
-                .catch(error => console.log('MPERROR', error.response));
+              return makePayment({ ...paymentWorking, conektaToken: data }, 'event');
           })
           .then(res => {
-              console.log('RESPONSE!!!', res)
-              setState({ loading: false, step: 2 })
+              // console.log('RESPONSE!!!', res)
+              if (subscribeToEvent) {
+                subscribeToEvent(eventId).then(data => {
+                    console.log(data);
+                    setState(s => ({
+                      ...s,
+                      loading: false,
+                      step: 2,
+                      successMessage: `Te inscribiste al curso "${res.payment.concept}. Recibirás un correo de confirmación`
+                    }))
+                  }   
+                ).catch(error => console.log('subscription!!!', error));
+                return;
+              }
+              setState(s => ({
+                ...s,
+                loading: false,
+                step: 2,
+                successMessage: `Te inscribiste al curso "${res.payment.concept}. Recibirás un correo de confirmación`
+              }))
           })
           .catch(error => {
               console.log("ERROR", error);

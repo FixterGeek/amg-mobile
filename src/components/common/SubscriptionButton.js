@@ -6,7 +6,7 @@ import { subscribeToEventAction } from '../../redux/UserDuck';
 
 function SubscriptionButton({
   user, eventOrActivityObject, subscribeToEventAction,
-  subscriptionType = 'event', navigation,
+  subscriptionType = 'event', navigation, event,
 }) {
   let userPays = false;
   if (user.membershipStatus === 'Free' && eventOrActivityObject.cost.freeCost > 0) userPays = true;
@@ -25,7 +25,7 @@ function SubscriptionButton({
     </TouchableOpacity>
   )
 
-  if (user.assistedEvents.includes(eventOrActivityObject._id)) return (
+  if (event.assistants.includes(user._id)) return (
     <TouchableOpacity>
       <View style={styles.alreadyContainer}>
         <Text style={styles.text}>Ya estas registrado</Text>
@@ -34,7 +34,7 @@ function SubscriptionButton({
   )
 
   if (userPays) return (
-    <TouchableOpacity onPress={() => navigation.navigate('EventPayment')}>
+    <TouchableOpacity onPress={() => navigation.navigate('EventPayment', { event: eventOrActivityObject })}>
       <View style={styles.container}>
         <Text style={styles.text}>Pagar por este evento</Text>
       </View>
@@ -50,8 +50,12 @@ function SubscriptionButton({
   )
 }
 
-function mapStateToProps({ user }) {
-  return { user }
+function mapStateToProps({ user, events }, { navigation }) {
+  const evnt = navigation.getParam('event');
+  return {
+    user,
+    event: evnt._id ? events.array.filter(e => e._id === evnt._id)[0] : { assistants: [] },
+  }
 }
 export default connect(
   mapStateToProps, {

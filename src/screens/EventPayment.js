@@ -5,6 +5,7 @@ import { ScrollView, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { makePayment, setWorkingOn } from '../redux/paymentDuck';
+import { subscribeToEventAction } from '../redux/UserDuck';
 import Method from '../components/membership/Method';
 import OxxoPayment from '../components/membership/OxxoPayment';
 import OxxoReference from '../components/membership/Referencia';
@@ -15,6 +16,7 @@ import { onChangeCard, tokenizeCard } from '../utils/conektaUtils';
 function EventPayment({
   fetching, paymentWorking, user,
   makePayment, setWorkingOn, navigation,
+  subscribeToEventAction,
 }) {
   const [step, setStep] = useState(0);
   const [state, setState] = useState({
@@ -29,14 +31,17 @@ function EventPayment({
       tel: null,
     },
     error: null,
+    successMessage: null,
   });
+
+  const event = navigation.getParam('event');
 
   useEffect(() => {
     if (state.error) Alert.alert(`${state.error}`)
   }, [state.error]);
 
   useEffect(() => {
-    if (user.basicData.phone) setWorkingOn({ ...paymentWorking, phone: user.basicData.phone });
+    if (user.basicData.phone) setWorkingOn({ ...paymentWorking, phone: user.basicData.phone, eventId: event._id });
   }, [user.basicData])
 
   const generateReference = () => {
@@ -48,7 +53,6 @@ function EventPayment({
       .catch(error => console.log(error.response))
   };
 
-  console.log(paymentWorking);
   
   if (step === 0) return (
     <ScrollView>
@@ -84,7 +88,11 @@ function EventPayment({
       <CardPayment
         cardForm={state.cardForm}
         onChangeCard={(name, value) => onChangeCard(name, value, state, setState)}
-        onAccept={() => tokenizeCard(state.cardForm, setState, makePayment, paymentWorking)}
+        onAccept={() =>
+          tokenizeCard(
+            state.cardForm, setState, makePayment, paymentWorking, subscribeToEventAction, event._id
+          )
+        }
       />
     </KeyboardAwareScrollView>
   )
@@ -93,6 +101,7 @@ function EventPayment({
     <MessageScreen
       onPressButton1={() => setState( s => ({ ...s, step: 4 }))}
       onPressButton2={() => navigation.navigate('Profile')}
+      text={state.successMessage}
     />
   );
 
@@ -111,6 +120,7 @@ function EventPayment({
     <MessageScreen
       onPressButton1={() => setState( s => ({ ...s, step: 4 }))}
       onPressButton2={() => navigation.navigate('Profile')}
+      text={state.successMessage}
     />
   )
 };
@@ -127,6 +137,7 @@ export default connect(
   mapStateToProps, {
     makePayment,
     setWorkingOn,
+    subscribeToEventAction,
   }
 )(EventPayment);
 

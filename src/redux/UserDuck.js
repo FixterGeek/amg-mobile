@@ -161,7 +161,7 @@ export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
             return res.data
         })
         .catch(e => {
-            console.log(e);
+            console.log(e.response);
             dispatch(subscribeToEventError(e.response.data.message))
             return e
         })
