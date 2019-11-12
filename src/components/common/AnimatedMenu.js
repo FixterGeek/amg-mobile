@@ -37,6 +37,7 @@ export default class AnimatedMenu extends Component {
             new Animated.Value(0)
         ]
     }
+
     handlePress = () => {
         let toValue = this.state.open ? 0 : 1
         let flyouts = this.state.fabs.map((value, i) => {
@@ -53,9 +54,6 @@ export default class AnimatedMenu extends Component {
             Animated.stagger(30, flyouts)
         ]).start()
         this.setState({ open: !this.state.open })
-
-
-
     }
 
     hanldeOptionPress = (route) => {
@@ -103,7 +101,7 @@ export default class AnimatedMenu extends Component {
                     >
                         {open && <Text style={[styles.text]} >Inicio</Text>}
                         <Icon
-                            onPress={this.handlePress}
+                            onPress={() => this.hanldeOptionPress('Home')}
                             style={styles.icon} name="home" />
                     </TouchableOpacity>
                 </Animated.View>
