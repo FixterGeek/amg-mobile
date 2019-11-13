@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { ScrollView, FlatList, StyleSheet } from 'react-native';
+import {
+  ScrollView, FlatList, StyleSheet,
+  View, TouchableOpacity, Text
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -27,7 +30,7 @@ function Feed({
       contentContainerStyle={{ flex: 1, backgroundColor: "#f4f4f4" }}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        { fetching && <Spinner /> }
+        <Spinner visible={fetching} />
         <EventCard
           event={event}
           title={event.title}
@@ -36,6 +39,14 @@ function Feed({
           startDate={event.startDate}
           navigation={navigation}
         />
+        <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('CreatePost')}>
+          <View style={styles.fakeInput}>
+            <Text style={{ color: '#333333' }}>Cuentanos algo</Text>
+          </View>
+          <View style={styles.fakeButton}>
+            <Text style={{ color: 'white' }}>Publicar</Text>
+          </View>
+        </TouchableOpacity>
         <FlatList
           data={publications}
           renderItem={({ item }) => <PublicationCard
@@ -43,7 +54,7 @@ function Feed({
             userPhoto={item.user.basicData.photoURL}
             publicationText={item.text}
             date={item.createdAt}
-            publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : null}
+            publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
             navigation={navigation}
           />}
           keyExtractor={item => item._id}
@@ -58,12 +69,11 @@ Feed.navigationOptions = ({ navigation }) => ({
 });
 
 function mapStateToProps({ user, events, publication }) {
-  console.log(publication.array);
   return {
     user,
     event: events.array.filter(e => e.status === 'published').pop(),
     fetching: events.fetching || publication.fetching,
-    publications: publication.array,
+    publications: publication.array || [],
     noPublications: publication.noData,
   }
 }
@@ -85,5 +95,20 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  fakeContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  fakeInput: {
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    backgroundColor: '#f5f8f9',
+    flexGrow: 1,
+  },
+  fakeButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    backgroundColor: '#1f2536',
   }
 });

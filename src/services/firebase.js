@@ -13,4 +13,8 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+firebase.storage().constructor.prototype.uploadFiles = function(ref, files) {
+  const st = this;
+  return Promise.all(files.map(file => st.ref(ref).child(file.name).put(file)));
+}
 export default firebase 

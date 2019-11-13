@@ -5,7 +5,7 @@ import LB from 'react-native-image-view';
 
 import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const userImg = require('../../../assets/user-img.png')
+import UserHeader from '../common/UserHeader';
 
 function PublicationCard({
   userName, userPhoto, date, publicationText,
@@ -13,21 +13,9 @@ function PublicationCard({
 }) {
   const [currentImage, setCurrentImage] = useState(null);
 
-  console.log(currentImage);
-
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image
-          source={ userPhoto ? { uri: userPhoto } : userImg }
-          style={styles.userPhoto}
-          resizeMode="cover"
-        />
-        <View>
-          <Text style={styles.userNameText}>{ userName }</Text>
-          <Text>{ moment(date).fromNow() }</Text>
-        </View>
-      </View>
+      <UserHeader userPhoto={userPhoto} userName={userName} date={date} />
       {
         publicationText && (
           <View style={styles.publicationText}>
@@ -90,19 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f8f9',
     padding: 10,
     marginBottom: 10,
-  },
-  headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  userPhoto: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-  userNameText: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   publicationText: {
     paddingVertical: 10,
