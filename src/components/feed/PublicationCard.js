@@ -6,10 +6,12 @@ import LB from 'react-native-image-view';
 import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import UserHeader from '../common/UserHeader';
+import DocumentItem from '../common/DocumentItem';
 
 function PublicationCard({
   userName, userPhoto, date, publicationText,
   publicationImages = [], navigation,
+  publicationDocs = [],
 }) {
   const [currentImage, setCurrentImage] = useState(null);
 
@@ -30,6 +32,7 @@ function PublicationCard({
           publicationImages.slice(0, 4).map((i, index) => {
             if (publicationImages.length > 4 && index === 3) return (
               <TouchableOpacity
+                key={`img-${index}`}
                 onPress={() => navigation.navigate('Gallery', { imagesArray: publicationImages })}
                 style={styles.imageWrapper} >
                 <Text style={styles.moreImageText}>{`+ ${publicationImages.length - 4}`}</Text>
@@ -42,7 +45,9 @@ function PublicationCard({
               </TouchableOpacity>
             )
             return (
-              <TouchableOpacity onPress={() => setCurrentImage(i)} style={styles.imageWrapper}>
+              <TouchableOpacity
+                key={`img-${index}`}
+                onPress={() => setCurrentImage(i)} style={styles.imageWrapper} >
                 <Image
                   source={i}
                   style={styles.image}
@@ -51,6 +56,17 @@ function PublicationCard({
               </TouchableOpacity>
             )
           })
+        }
+      </View>
+      <View style={styles.imagesContainer}>
+        {
+          publicationDocs.map((d, index) => (
+            <DocumentItem
+              key={`doc-${index}`}
+              fileName={d.split('/').pop()}
+              link={d}
+            />
+          ))
         }
       </View>
       <LB

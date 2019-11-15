@@ -14,6 +14,7 @@ const initialWorking = {
   docsURLS: [],
   text: null,
   files: [],
+  docs: [],
 };
 
 const initialState = {

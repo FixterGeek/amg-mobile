@@ -13,11 +13,15 @@ export const getFeedPublicatios = (token) => {
 };
 
 export const getUserPublications = (userId, token) => {
+  console.log(userId);
   return axios.get(`${APIURL}?query={"user":"${userId}"}`, {
     headers: {
       Authorization: token,
     },
-  }).then(({ data }) => data);
+  }).then(({ data }) => {
+    console.log('SUCHI!!!!!!');
+    return data;
+  });
 };
 
 export const postPublication = (publicationPayload, userToken) => {
@@ -25,6 +29,7 @@ export const postPublication = (publicationPayload, userToken) => {
   formData.append('user', publicationPayload.user);
   if (publicationPayload.text) formData.append('text', publicationPayload.text);
   publicationPayload.files.map(f => formData.append('images', { uri: f.uri, type: `${f.type}/${f.uri.split('.').pop()}`, name: f.uri.split('/').pop() }))
+  publicationPayload.docs.map(d => formData.append('docs', { uri: d.uri, type: `application/${d.uri.split('.').pop()}`, name: d.name }))
 
   return axios.post(APIURL, formData, {
     headers: {

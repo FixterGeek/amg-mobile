@@ -110,15 +110,19 @@ class AccountProfile extends React.Component {
                         {/* history */}
                         <TouchableOpacity onPress={() => this.setState({ tooltip: true })}>
                             <View style={[styles.history]}>
-                                <View style={[styles.histoyCard]}>
-                                    <Text style={styles.historyText}>Mis pagos</Text>
-                                </View>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('UserPayments')}>
+                                    <View style={[styles.histoyCard]}>
+                                        <Text style={styles.historyText}>Mis pagos</Text>
+                                    </View>
+                                </TouchableOpacity>
                                 <View style={[styles.histoyCard]}>
                                     <Text style={styles.historyText}>Mis constancias</Text>
                                 </View>
-                                <View style={[styles.histoyCard]}>
-                                    <Text style={styles.historyText}>Mis publicaciones</Text>
-                                </View>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Home', { event: false })}>
+                                    <View style={[styles.histoyCard]}>
+                                        <Text style={styles.historyText}>Mis publicaciones</Text>
+                                    </View>
+                                </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => this.props.navigation.navigate('Membership')}
                                 >

@@ -25,7 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "mx.com.gastro.app"
+      "bundleIdentifier": "mx.com.gastro.app",
+      "usesIcloudStorage": true
     },
     "description": "AMG Mobile App v1.1",
     "androidStatusBar": {

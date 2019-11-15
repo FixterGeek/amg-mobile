@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 import {
   ScrollView, FlatList, StyleSheet,
-  View, TouchableOpacity, Text
+  View, TouchableOpacity, Text,
+  Platform
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -12,15 +13,20 @@ import { getEvents } from '../redux/EventsDuck';
 import { populatePublications } from '../redux/publicationDuck';
 import EventCard from '../components/events/EventCard';
 import PublicationCard from '../components/feed/PublicationCard';
+import MainMenu from '../components/common/AnimatedMenu';
 
 function Feed({
   getEvents, fetching, event,
   navigation, populatePublications,
   publications, noPublications, user,
 }) {
+  const showEvent = navigation.getParam('event')
   useEffect(() => {
     getEvents();
-    if (!publications[0] && !noPublications) populatePublications(false, user.token);
+    if (!publications[0] && !noPublications) {
+      if (showEvent) populatePublications(false, user.token);
+      else populatePublications(user._id, user.token);
+    }
   }, []);
 
   return (
@@ -31,14 +37,18 @@ function Feed({
     >
       <ScrollView contentContainerStyle={styles.container}>
         <Spinner visible={fetching} />
-        <EventCard
-          event={event}
-          title={event.title}
-          location={event.location}
-          mainImagesURLS={event.mainImagesURLS}
-          startDate={event.startDate}
-          navigation={navigation}
-        />
+        {
+          showEvent && (
+            <EventCard
+              event={event}
+              title={event.title}
+              location={event.location}
+              mainImagesURLS={event.mainImagesURLS}
+              startDate={event.startDate}
+              navigation={navigation}
+            />
+          )
+        }
         <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('CreatePost')}>
           <View style={styles.fakeInput}>
             <Text style={{ color: '#333333' }}>Cuentanos algo</Text>
@@ -56,10 +66,12 @@ function Feed({
             date={item.createdAt}
             publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
             navigation={navigation}
+            publicationDocs={item.docsURLS}
           />}
           keyExtractor={item => item._id}
         />
       </ScrollView>
+      <MainMenu />
     </KeyboardAwareScrollView>
   );
 }

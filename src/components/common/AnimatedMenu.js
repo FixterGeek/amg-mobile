@@ -56,14 +56,14 @@ export default class AnimatedMenu extends Component {
         this.setState({ open: !this.state.open })
     }
 
-    hanldeOptionPress = (route) => {
+    hanldeOptionPress = (route, state) => {
         if (route === "Revista") return Linking.openURL(revista)
         this.handlePress()
-        this._navigate(route)
+        this._navigate(route, state)
     }
-    _navigate = (route) => {
+    _navigate = (route, state) => {
         //this.setState({ open: false })
-        NavigationService.navigate(route)
+        NavigationService.navigate(route, state)
     }
     render() {
         let backgroundInterpolate = this.state.animate.interpolate({
@@ -101,7 +101,7 @@ export default class AnimatedMenu extends Component {
                     >
                         {open && <Text style={[styles.text]} >Inicio</Text>}
                         <Icon
-                            onPress={() => this.hanldeOptionPress('Home')}
+                            onPress={() => this.hanldeOptionPress('Home', { event: true })}
                             style={styles.icon} name="home" />
                     </TouchableOpacity>
                 </Animated.View>

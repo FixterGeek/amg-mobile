@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { postPayment } from '../services/paymentsService';
+import { postPayment, getUserPayments } from '../services/paymentsService';
 import { successAction, errorAction } from './responseActions';
 
 
@@ -12,6 +12,7 @@ const FETCHING_ERROR = `${PREFIX}/FETCHING_ERROR`;
 const RESET_VALUES = `${PREFIX}/RESET_VALUES`;
 
 const MAKE_PAYMENT = `${PREFIX}/MAKE_PAYMENT`;
+const POPULATE_USER_PAYMENTS = `${PREFIX}/POPULATE_USER_PAYMENTS`;
 
 
 /* ACTIONS CREATORS */
@@ -22,9 +23,23 @@ export const resetValues = () => ({ type: RESET_VALUES });
 
 // FOR PAYMENT
 const makePaymentAction = (createdPayment) => ({ type: MAKE_PAYMENT, payload: createdPayment });
+const populateUserPaymentsAction = (paymentsArray) =>
+  ({ type: POPULATE_USER_PAYMENTS, payload: paymentsArray });
 
 
 /* THUNKS */
+export const populateUserPayments = userId => (dispatch) => {
+  dispatch(fetching());
+  return getUserPayments(userId)
+    .then(paymentsArray => successAction(
+      dispatch, populateUserPaymentsAction, paymentsArray, resetValues,
+    ))
+    .catch(error => errorAction(
+      dispatch, fetchingError, error, resetValues, 'Pagos no disponibles',
+    ));
+};
+
+
 export const makePayment = (paymentPayload, paymentType) => (dispatch) => {
   dispatch(fetching());
   return postPayment(paymentPayload, paymentType)
@@ -37,6 +52,8 @@ export const makePayment = (paymentPayload, paymentType) => (dispatch) => {
       return error;
     });
 }
+
+
 
 const initialPaymentState = {
   array: [],
@@ -55,6 +72,10 @@ function paymentReducer(state = initialPaymentState, action) {
       return { ...state, status: 'error', error: action.payload };
     case RESET_VALUES:
       return { ...state, fetching: false, status: null };
+    /* POPULATE USER PAYMENTS */
+    case POPULATE_USER_PAYMENTS:
+      return { ...state, status: 'success', array: action.payload, noData: action.payload.length === 0 };
+
     /* PAYMENT */
     case MAKE_PAYMENT:
       return { ...state, status: 'success', array: [action.payload, ...state.array] };

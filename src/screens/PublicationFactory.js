@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ImagePicker, Permissions  } from 'expo';
+import * as DocumentPicker from 'expo-document-picker';
+import * as Permissions from 'expo-permissions'; 
+import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import LB from 'react-native-image-view';
 
 import {
   ScrollView, StyleSheet, TextInput,
   TouchableOpacity, View, Text, Image,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -17,6 +20,7 @@ import {
   setWorkingOn,
 } from '../redux/publicationDuck';
 import UserHeader from '../components/common/UserHeader';
+import DocumentItem from '../components/common/DocumentItem';
 
 function PublicationFactory({
   user, fetching, workingOn,
@@ -50,7 +54,16 @@ function PublicationFactory({
     if (result.cancelled === false) writeWorkingOn(workingOn, 'files', [...workingOn.files, result])
   }
 
-  console.log(fetching);
+  const handleDocumentPicker = async () => {
+    let result = null;
+    result = await DocumentPicker.getDocumentAsync({
+      type: '*/*',
+    })
+
+    if (result.type === 'success') {
+      writeWorkingOn(workingOn, 'docs', [...workingOn.docs, result])
+    }
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -110,6 +123,25 @@ function PublicationFactory({
             })
           }
         </View>
+
+        <TouchableOpacity style={styles.itemButton} onPress={() => handleDocumentPicker()}>
+          <View style={styles.item}>
+            <Icon name="paperclip" style={styles.itemButtonIcon} />
+            <Text style={{ fontSize: 18 }}>Archivos</Text>
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.docsContainer}>
+         {
+           workingOn.docs.map((doc, index) => (
+            <DocumentItem
+              key={`document-${index}`}
+              fileName={doc.name}
+            />
+           ))
+         } 
+        </View>
+
         <LB
           isVisible={currentIndex !== null}
           images={workingOn.files.map(f => ({ source: { uri: `data:${f.type}/${f.uri.split('.').pop()};base64,${f.base64}` } }))}
@@ -183,5 +215,9 @@ const styles = StyleSheet.create({
     width: "49%",
     height: 110,
     marginBottom: 5,
+  },
+  docsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   }
 });

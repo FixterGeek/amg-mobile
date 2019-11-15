@@ -40,3 +40,13 @@ export async function postPayment(paymentPayload, paymentType = 'subscription') 
         },
     }).then(({ data }) => data);
 }
+
+
+export async function getUserPayments(userId) {
+    const token = await AsyncStorage.getItem('token');
+    return axios.get(`${url}/payments?query={"user": "${userId}"}`, {
+        headers: {
+            Authorization: token,
+        },
+    }).then(({ data }) => data);
+}
