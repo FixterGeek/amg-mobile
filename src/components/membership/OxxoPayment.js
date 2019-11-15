@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+
 let texto = "Tu membresía ha sido renovada. Recibirás un correo de confirmación "
 
 export default function OxxoPayment({

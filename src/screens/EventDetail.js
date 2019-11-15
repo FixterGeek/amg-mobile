@@ -1,16 +1,18 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import {
     View,
     StyleSheet,
     Image,
     Text,
-
+    ActivityIndicator,
 } from 'react-native'
 import EventCard from 'components/events/EventCard'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MainMenu from '../components/common/AnimatedMenu';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import RegisterButton from '../components/common/RegisterButton';
+import SubscriptionButton from '../components/common/SubscriptionButton';
 import { Linking } from 'react-native'
 import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
 
@@ -20,7 +22,7 @@ let paper = require('../../assets/paper.png')
 let mic = require('../../assets/mic.png')
 let download = require('../../assets/download.png')
 
-export default class EventDetail extends React.Component {
+class EventDetail extends React.Component {
 
     static navigationOptions = {
         title: "Detalle del Evento"
@@ -34,6 +36,7 @@ export default class EventDetail extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
+                { this.props.fetching && <ActivityIndicator size="large" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} /> }
                 <ScrollView style={[styles.container]} >
                     <EventCard
                         {...event}
@@ -65,6 +68,16 @@ export default class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver ponentes</Text>
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
+                            {/* <Icon style={styles.icon} name="microphone" /> */}
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('EventCourses', {event})}
+                    >
+                        <View style={[styles.button]}>
+                            <Text style={[styles.ver]} >Ver Cursos</Text>
                             <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
                             {/* <Icon style={styles.icon} name="microphone" /> */}
                         </View>
@@ -116,16 +129,25 @@ export default class EventDetail extends React.Component {
                         </Text> */}
                     </View>
 
-
-
-                    <RegisterButton text="Inscribirse" />
+                    { this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} /> }
+                    {/* <RegisterButton text="Inscribirse" /> */}
                 </ScrollView>
                 <MainMenu />
             </View>
         )
     }
-
 }
+
+function mapStateToProps({ user, events }) {
+    return {
+        fetching: user.fetching || events.fetching,
+        user,
+    }
+}
+
+export default connect(
+    mapStateToProps,
+)(EventDetail)
 
 let styles = StyleSheet.create({
     container: {

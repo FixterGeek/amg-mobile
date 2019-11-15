@@ -172,7 +172,7 @@ let styles = StyleSheet.create({
         backgroundColor: "#cfecff",
         flexDirection: "column",
         flexWrap: "wrap",
-        alignItems: "left",
+        // alignItems: "left",
         justifyContent: "center"
         // height: 80
 

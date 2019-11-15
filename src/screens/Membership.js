@@ -20,6 +20,7 @@ import OxxoPayment from '../components/membership/OxxoPayment'
 import Referencia from '../components/membership/Referencia'
 import Conekta from '../services/conektaRN'
 import { makePaymen } from '../services/paymentsService'
+import { makePayment, setWorkingOn } from '../redux/paymentDuck';
 
 
 let background = require('../../assets/login_bacground.png')
@@ -56,6 +57,11 @@ class Membership extends React.Component {
 
     payMethod = (string) => {
         this.setState({ method: string })
+        if (string === 'oxxo') this.props.setWorkingOn({
+            ...this.props.paymentWorking,
+            phone: this.props.user.basicData.phone,
+            isOxxoPayment: true,
+        });
     }
 
     changeStep = (step) => {
@@ -171,11 +177,9 @@ class Membership extends React.Component {
     }
 
     generarReferencia = () => {
-        this.setState({ generando: true })
-        // generamos referencia
-        setTimeout(() => {
-            this.setState({ generando: false, step: 7 })
-        }, 5000)
+        this.props.makePayment(this.props.paymentWorking).then(({ conektaOrder }) => {
+            this.setState({ step: 7, conektaOrder });
+        })
     }
 
     render() {
@@ -205,6 +209,7 @@ class Membership extends React.Component {
                     {step === 7 && <Referencia
                         onAccept={this.generarReferencia}
                         onPressButton2={() => this.props.navigation.navigate('Profile')}
+                        conektaOrder={this.state.conektaOrder || {}}
                     />}
 
                     {step === 2 && <MessageScreen
@@ -257,7 +262,7 @@ class Membership extends React.Component {
                     clockImage
                 />
                 <GastroModal
-                    isVisible={generando}
+                    isVisible={this.props.paymentFetching}
                     text={"Generando referencia, tomará solo unos segundos"}
                     noButtons
                     clockImage
@@ -273,12 +278,18 @@ class Membership extends React.Component {
     }
 }
 
-function mapState({ user }) {
-    console.log("USUARIO: ", user)
-    return {}
+function mapState({ user, payment: { payment, workingOn } }) {
+    return {
+        paymentFetching: payment.fetching,
+        paymentWorking: workingOn,
+        user,
+    }
 }
 
-export default connect(mapState, {})(Membership)
+export default connect(mapState, {
+    makePayment,
+    setWorkingOn,
+})(Membership)
 
 let styles = StyleSheet.create({
     container: {

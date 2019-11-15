@@ -32,7 +32,7 @@ export default class MainMenu extends React.Component {
                     <View style={[styles.circle]}>
                         <Text style={[styles.text]} >Inicio</Text>
                         <Icon
-                            onPress={() => this._navigate('Events')}
+                            onPress={() => this._navigate('Home')}
                             style={styles.icon} name="home" size={20} color="white" />
                     </View>}
                 {open && <View style={[styles.circle]}>

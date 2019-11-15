@@ -25,6 +25,14 @@ import Resources from './src/screens/Resources'
 import Guides from './src/screens/Guides';
 import Publications from './src/screens/Publications';
 import Membership from './src/screens/Membership';
+import EventPayment from './src/screens/EventPayment';
+import EventCourses from './src/screens/EventCourses';
+import CourseDetail from './src/screens/CourseDetail';
+import Feed from './src/screens/Feed';
+import Gallery from './src/screens/Gallery';
+import PublicationFactory from './src/screens/PublicationFactory';
+import UserPayments from './src/screens/UserPayments';
+
 console.disableYellowBox = true
 
 class App extends Component {
@@ -132,8 +140,14 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Resources: { screen: Resources },
   Guides: { screen: Guides },
   Publications: { screen: Publications },
-  Membership: { screen: Membership }
-
+  Membership: { screen: Membership },
+  EventPayment: { screen: EventPayment },
+  EventCourses: { screen: EventCourses },
+  CourseDetail: { screen: CourseDetail },
+  Home: { screen: Feed },
+  Gallery: { screen: Gallery },
+  CreatePost: { screen: PublicationFactory },
+  UserPayments: { screen: UserPayments },
 },
   {
     navigationOptions: {
