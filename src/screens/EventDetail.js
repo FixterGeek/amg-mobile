@@ -20,6 +20,7 @@ let map = require('../../assets/map.png')
 let visor = require('../../assets/visor.png')
 let paper = require('../../assets/paper.png')
 let mic = require('../../assets/mic.png')
+let course = require('../../assets/CursosGastro.png')
 let download = require('../../assets/download.png')
 
 class EventDetail extends React.Component {
@@ -36,7 +37,7 @@ class EventDetail extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                { this.props.fetching && <ActivityIndicator size="large" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} /> }
+                {this.props.fetching && <ActivityIndicator size="large" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />}
                 <ScrollView style={[styles.container]} >
                     <EventCard
                         {...event}
@@ -74,11 +75,11 @@ class EventDetail extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('EventCourses', {event})}
+                        onPress={() => this.props.navigation.navigate('EventCourses', { event })}
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver Cursos</Text>
-                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={course} />
                             {/* <Icon style={styles.icon} name="microphone" /> */}
                         </View>
                     </TouchableOpacity>
@@ -129,7 +130,7 @@ class EventDetail extends React.Component {
                         </Text> */}
                     </View>
 
-                    { this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} /> }
+                    {this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} />}
                     {/* <RegisterButton text="Inscribirse" /> */}
                 </ScrollView>
                 <MainMenu />
