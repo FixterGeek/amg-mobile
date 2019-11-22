@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     Animated,
     TouchableOpacity,
@@ -25,7 +26,7 @@ function getTransformStyle(animation) {
     }
 }
 
-export default class AnimatedMenu extends Component {
+class AnimatedMenu extends Component {
     state = {
         open: false,
         animate: new Animated.Value(0),
@@ -90,22 +91,26 @@ export default class AnimatedMenu extends Component {
             backgroundColor: buttonColorInterpolate
         }
         let { open } = this.state
+
+        const { user } = this.props;
         return (
             // <View style={open ? styles.overlay : null}>
             <Animated.View style={open?{ width: "100%", height: "100%", backgroundColor: "transparent", position: "absolute" }:null}>
 
                 <Animated.View style={open ? [styles.overlay, backgroundStyle] : null}></Animated.View>
-
-                <Animated.View style={[styles.flyout, styles.position, styles.fab, getTransformStyle(this.state.fabs[4]), backgoundButtonStyle]}>
-                    <TouchableOpacity
-                    >
-                        {open && <Text style={[styles.text]} >Inicio</Text>}
-                        <Icon
-                            onPress={() => this.hanldeOptionPress('Home', { event: true })}
-                            style={styles.icon} name="home" />
-                    </TouchableOpacity>
-                </Animated.View>
-
+                {
+                    user.userStatus === 'Aprobado' && user.membershipStatus !== 'Free' ? (
+                        <Animated.View style={[styles.flyout, styles.position, styles.fab, getTransformStyle(this.state.fabs[4]), backgoundButtonStyle]}>
+                            <TouchableOpacity
+                            >
+                                {open && <Text style={[styles.text]} >Inicio</Text>}
+                                <Icon
+                                    onPress={() => this.hanldeOptionPress('Home', { event: true })}
+                                    style={styles.icon} name="home" />
+                            </TouchableOpacity>
+                        </Animated.View>
+                    ) : null
+                }
 
                 <Animated.View style={[styles.flyout, styles.position, styles.fab, getTransformStyle(this.state.fabs[3]), backgoundButtonStyle]}>
                     <TouchableOpacity
@@ -168,6 +173,18 @@ export default class AnimatedMenu extends Component {
         )
     }
 }
+
+function mapStateToProps({ user }) {
+    return {
+        user
+    }
+}
+
+export default connect(
+    mapStateToProps, {
+
+    }
+)(AnimatedMenu)
 
 let styles = StyleSheet.create({
     position: {
