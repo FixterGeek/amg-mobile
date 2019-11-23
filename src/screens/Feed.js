@@ -15,70 +15,77 @@ import EventCard from '../components/events/EventCard';
 import PublicationCard from '../components/feed/PublicationCard';
 import MainMenu from '../components/common/AnimatedMenu';
 
-function Feed({
-  getEvents, fetching, event,
-  navigation, populatePublications,
-  publications, noPublications, user,
-}) {
-  const showEvent = navigation.getParam('event')
-  useEffect(() => {
-    getEvents();
-    if (!publications[0] && !noPublications) {
-      if (showEvent) populatePublications(false, user.token);
-      else populatePublications(user._id, user.token);
+class Feed extends React.Component {
+  state = {
+    showEvent: this.props.navigation.getParam('event')
+  }
+  componentWillMount() {
+    this.props.getEvents();
+    if (!this.props.publications[0] && !this.props.noPublications) {
+      if (this.state.showEvent) this.props.populatePublications(false, this.props.user.token);
+      else this.props.populatePublications(this.props.user._id, this.props.user.token);
     }
-  }, []);
+  }
+  render() {
+    let {
+      getEvents, fetching, event,
+      navigation, populatePublications,
+      publications, noPublications, user,
+    } = this.props
+    let { showEvent } = this.state
 
-  return (
-    <KeyboardAwareScrollView
-      enableOnAndroid={true}
-      enableAutomaticScroll={(Platform.OS === 'ios')}
-      contentContainerStyle={{ flex: 1, backgroundColor: "#f4f4f4" }}
-    >
-      <ScrollView contentContainerStyle={styles.container}>
-        <Spinner visible={fetching} />
-        {
-          showEvent && (
-            <EventCard
-              event={event}
-              title={event.title}
-              location={event.location}
-              mainImagesURLS={event.mainImagesURLS}
-              startDate={event.startDate}
-              navigation={navigation}
+    return (
+      <View style={{ flex: 1 }}>
+        <KeyboardAwareScrollView
+          enableOnAndroid={true}
+          enableAutomaticScroll={(Platform.OS === 'ios')}
+          contentContainerStyle={{ flex: 1, backgroundColor: "#f4f4f4" }}
+        >
+          <ScrollView contentContainerStyle={styles.container}>
+            <Spinner visible={fetching} />
+            {
+              showEvent && (
+                <EventCard
+                  event={event}
+                  title={event.title}
+                  location={event.location}
+                  mainImagesURLS={event.mainImagesURLS}
+                  startDate={event.startDate}
+                  navigation={navigation}
+                />
+              )
+            }
+            <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('CreatePost')}>
+              <View style={styles.fakeInput}>
+                <Text style={{ color: '#333333' }}>Cuentanos algo</Text>
+              </View>
+              <View style={styles.fakeButton}>
+                <Text style={{ color: 'white' }}>Publicar</Text>
+              </View>
+            </TouchableOpacity>
+            <FlatList
+              data={publications}
+              renderItem={({ item }) => <PublicationCard
+                userName={`${item.user.basicData.name} ${item.user.basicData.dadSurname}`}
+                userPhoto={item.user.basicData.photoURL}
+                publicationText={item.text}
+                date={item.createdAt}
+                publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
+                navigation={navigation}
+                publicationDocs={item.docsURLS}
+              />}
+              keyExtractor={item => item._id}
             />
-          )
-        }
-        <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('CreatePost')}>
-          <View style={styles.fakeInput}>
-            <Text style={{ color: '#333333' }}>Cuentanos algo</Text>
-          </View>
-          <View style={styles.fakeButton}>
-            <Text style={{ color: 'white' }}>Publicar</Text>
-          </View>
-        </TouchableOpacity>
-        <FlatList
-          data={publications}
-          renderItem={({ item }) => <PublicationCard
-            userName={`${item.user.basicData.name} ${item.user.basicData.dadSurname}`}
-            userPhoto={item.user.basicData.photoURL}
-            publicationText={item.text}
-            date={item.createdAt}
-            publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
-            navigation={navigation}
-            publicationDocs={item.docsURLS}
-          />}
-          keyExtractor={item => item._id}
-        />
-      </ScrollView>
-      <MainMenu />
-    </KeyboardAwareScrollView>
-  );
+          </ScrollView>
+
+        </KeyboardAwareScrollView>
+        <MainMenu />
+      </View>
+    );
+  }
 }
 
-Feed.navigationOptions = ({ navigation }) => ({
-  title: 'Inicio',
-});
+Feed.navigationOptions = ({ navigation }) => ({ headerVisible: true, headerLeft: null, title: "Inicio" });
 
 function mapStateToProps({ user, events, publication }) {
   return {
@@ -92,9 +99,9 @@ function mapStateToProps({ user, events, publication }) {
 
 export default connect(
   mapStateToProps, {
-    getEvents,
-    populatePublications,
-  }
+  getEvents,
+  populatePublications,
+}
 )(Feed);
 
 const styles = StyleSheet.create({

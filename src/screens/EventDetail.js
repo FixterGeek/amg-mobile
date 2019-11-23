@@ -25,18 +25,25 @@ let download = require('../../assets/download.png')
 class EventDetail extends React.Component {
 
     static navigationOptions = {
-        title: "Detalle del Evento"
+        title: "Detalle del Evento",
+        // event: this.props.navigation.getParam('event')
     }
+
+    // componentWillMount() {
+    //     let event = this.props.navigation.getParam('event')
+    //     this.setState({ event })
+    // }
 
 
     render() {
-        let event = this.props.navigation.getParam('event')
+        let location = {}
+        let { event = location } = this.props
 
         //        console.warn(event)
 
         return (
             <View style={{ flex: 1 }}>
-                { this.props.fetching && <ActivityIndicator size="large" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} /> }
+                {this.props.fetching && <ActivityIndicator size="large" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />}
                 <ScrollView style={[styles.container]} >
                     <EventCard
                         {...event}
@@ -47,10 +54,10 @@ class EventDetail extends React.Component {
                         resizeMode="cover"
                     />
                     <TouchableOpacity >
-                        <View>
+                        {event.location && <View>
                             <Text style={[styles.bolder]} >{event.location.city}, {event.location.state}</Text>
                             <Text>{event.location.street}</Text>
-                        </View>
+                        </View>}
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -74,7 +81,7 @@ class EventDetail extends React.Component {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('EventCourses', {event})}
+                        onPress={() => this.props.navigation.navigate('EventCourses', { event })}
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver Cursos</Text>
@@ -112,9 +119,9 @@ class EventDetail extends React.Component {
                         <Text style={styles.title}>
                             Dirigido a
                     </Text>
-                        <Text>
+                        {event.description && <Text>
                             {event.description[0]}
-                        </Text>
+                        </Text>}
                         {/* <Text style={styles.title}>
                             Valor curricular
                     </Text>
@@ -129,7 +136,7 @@ class EventDetail extends React.Component {
                         </Text> */}
                     </View>
 
-                    { this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} /> }
+                    {this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} />}
                     {/* <RegisterButton text="Inscribirse" /> */}
                 </ScrollView>
                 <MainMenu />
@@ -142,6 +149,7 @@ function mapStateToProps({ user, events }) {
     return {
         fetching: user.fetching || events.fetching,
         user,
+        event: events.currentEvent
     }
 }
 

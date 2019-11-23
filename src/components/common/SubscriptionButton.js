@@ -9,9 +9,9 @@ function SubscriptionButton({
   subscriptionType = 'event', navigation, event,
 }) {
   let userPays = false;
-  if (user.membershipStatus === 'Free' && eventOrActivityObject.cost.freeCost > 0) userPays = true;
-  if (user.membershipStatus === 'Residente' && eventOrActivityObject.cost.residentCost > 0) userPays = true;
-  if (user.membershipStatus === 'Socio' && eventOrActivityObject.cost.socioCost > 0) userPays = true;
+  if (user.membershipStatus === 'Free' && eventOrActivityObject.cost && eventOrActivityObject.cost.freeCost > 0) userPays = true;
+  if (user.membershipStatus === 'Residente' && eventOrActivityObject.cost && eventOrActivityObject.cost.residentCost > 0) userPays = true;
+  if (user.membershipStatus === 'Socio' && eventOrActivityObject.cost && eventOrActivityObject.cost.socioCost > 0) userPays = true;
 
   const handlePress = () => {
     if (subscriptionType === 'event') subscribeToEventAction(eventOrActivityObject._id);
@@ -59,31 +59,32 @@ function mapStateToProps({ user, events }, { navigation }) {
 }
 export default connect(
   mapStateToProps, {
-    subscribeToEventAction,
-  }
+  subscribeToEventAction,
+}
 )(SubscriptionButton);
 
 const styles = StyleSheet.create({
   disabled: {
-      backgroundColor: "lightgrey"
+    backgroundColor: "lightgrey"
   },
   alreadyContainer: {
-      flex: 0,
-      padding: 20,
-      backgroundColor: "green",
-      borderColor: "black",
-      alignItems: "center"
+    flex: 0,
+    padding: 20,
+    backgroundColor: "green",
+    borderColor: "black",
+    alignItems: "center"
   },
   container: {
-      flex: 0,
-      padding: 20,
-      backgroundColor: "#1f2536",
-      borderColor: "black",
-      alignItems: "center"
+    flex: 0,
+    padding: 20,
+    backgroundColor: "#1f2536",
+    borderColor: "black",
+    alignItems: "center",
+    marginVertical: 25
   },
   text: {
-      fontWeight: "bold",
-      fontSize: 18,
-      color: "white"
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "white"
   }
 })

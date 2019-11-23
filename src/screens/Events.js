@@ -21,10 +21,10 @@ class Events extends Component {
     componentWillReceiveProps(newProps) {
         if (!newProps.fetching) {
             // console.log("apagar")
-            setTimeout(() => this.setState({ spin: false }), 300)
+            // setTimeout(() => this.setState({ spin: false }), 300)
         } else if (newProps.fetching) {
             // console.log("encender")
-            setTimeout(() => this.setState({ spin: true }), 300)
+            //  setTimeout(() => this.setState({ spin: true }), 300)
         }
     }
 
@@ -47,7 +47,8 @@ class Events extends Component {
                 </ScrollView>
                 {/* <MainMenu /> */}
                 <AnimatedMenu />
-                <Spinner visible={this.state.spin} />
+                {/* <Spinner visible={this.state.spin} /> */}
+                <Spinner visible={this.props.fetching} />
             </View>
         )
     }

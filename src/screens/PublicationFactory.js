@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as DocumentPicker from 'expo-document-picker';
-import * as Permissions from 'expo-permissions'; 
+import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import LB from 'react-native-image-view';
@@ -40,8 +40,8 @@ function PublicationFactory({
     let result = null;
     let status = null;
     status = await Permissions.getAsync(Permissions.CAMERA_ROLL).then(({ status }) => status);
-    console.log(status);
-    if (status === 'undetermined') status = await Permissions.askAsync(Permissions.CAMERA_ROLL).then(({ status}) => status);
+    //console.log(status);
+    if (status === 'undetermined') status = await Permissions.askAsync(Permissions.CAMERA_ROLL).then(({ status }) => status);
     if (status === 'granted') result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
@@ -51,19 +51,27 @@ function PublicationFactory({
       allowsMultipleSelection: true,
     })
 
+    //if(result.width>5000) return
+
     if (result.cancelled === false) writeWorkingOn(workingOn, 'files', [...workingOn.files, result])
   }
 
-  const handleDocumentPicker = async () => {
-    let result = null;
-    result = await DocumentPicker.getDocumentAsync({
-      type: '*/*',
-    })
+  function removeImage(index, file) {
+    let copy = Object.assign(workingOn, {})
+    copy.files.splice(index, 1)
+    writeWorkingOn(copy, 'files', [...copy.files])
+  }
 
-    if (result.type === 'success') {
-      writeWorkingOn(workingOn, 'docs', [...workingOn.docs, result])
-    }
-  };
+  // const handleDocumentPicker = async () => {
+  //   let result = null;
+  //   result = await DocumentPicker.getDocumentAsync({
+  //     type: '*/*',
+  //   })
+
+  //   if (result.type === 'success') {
+  //     writeWorkingOn(workingOn, 'docs', [...workingOn.docs, result])
+  //   }
+  // };
 
   return (
     <KeyboardAwareScrollView
@@ -101,7 +109,7 @@ function PublicationFactory({
           </View>
         </TouchableOpacity>
 
-        { fetching && <Text>Subiendo</Text> }
+        {fetching && <Text>Subiendo</Text>}
 
         <View style={{
           flexDirection: 'row', flexWrap: 'wrap',
@@ -110,36 +118,46 @@ function PublicationFactory({
           {
             workingOn.files.map((file, index) => {
               return (
-                <TouchableOpacity
-                  key={`image-${index}`}
-                  style={styles.imageToUpload}
-                  onPress={() => setCurrentIndex(index)} >
-                  <Image
-                    style={{ width: '100%', height: 110 }}
-                    source={{ uri: `data:${file.type}/${file.uri.split('.').pop()};base64,${file.base64}` }}
-                  />
-                </TouchableOpacity>
+
+                <View
+                  style={[styles.imageToUpload, styles.preview]}>
+                  <TouchableOpacity
+                    onPress={() => removeImage(index, file)} >
+                    <Text style={styles.x}>X</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ zIndex: -9999 }}
+                    key={`image-${index}`}
+                    onPress={() => setCurrentIndex(index)} >
+                    <Image
+                      style={{ width: '100%', height: 110 }}
+                      source={{ uri: `data:${file.type}/${file.uri.split('.').pop()};base64,${file.base64}` }}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+
               )
             })
           }
         </View>
 
-        <TouchableOpacity style={styles.itemButton} onPress={() => handleDocumentPicker()}>
+        {/* <TouchableOpacity style={styles.itemButton} onPress={() => handleDocumentPicker()}>
           <View style={styles.item}>
             <Icon name="paperclip" style={styles.itemButtonIcon} />
             <Text style={{ fontSize: 18 }}>Archivos</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={styles.docsContainer}>
-         {
-           workingOn.docs.map((doc, index) => (
-            <DocumentItem
-              key={`document-${index}`}
-              fileName={doc.name}
-            />
-           ))
-         } 
+          {
+            workingOn.docs.map((doc, index) => (
+              <DocumentItem
+                key={`document-${index}`}
+                fileName={doc.name}
+              />
+            ))
+          }
         </View>
 
         <LB
@@ -168,13 +186,28 @@ function mapStateToProps({ user, publication }) {
 
 export default connect(
   mapStateToProps, {
-    createPublication,
-    setWorkingOn,
-    writeWorkingOn,
-  }
+  createPublication,
+  setWorkingOn,
+  writeWorkingOn,
+}
 )(PublicationFactory);
 
 const styles = StyleSheet.create({
+  preview: {
+    position: "relative",
+    zIndex: -1
+  },
+  x: {
+    color: "white",
+    backgroundColor: "black",
+    padding: 10,
+    borderRadius: 15,
+    overflow: "hidden",
+    position: "absolute",
+    top: -15,
+    right: -15,
+    zIndex: 1
+  },
   container: {
     paddingHorizontal: 20,
     paddingVertical: 10,
