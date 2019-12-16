@@ -25,13 +25,16 @@ class Speakers extends React.Component {
 
     renderSpeaker = ({ photoURL, city, fullName, title }, i) => {
         // using avatars just for he first event
+        // changed for actual image
+        let image = photoURL ? true : false;
         return (
             <View
                 key={i}
                 style={[styles.flexCard]}>
-                <Image style={styles.image} source={title === "Dr." ? dr : dra} />
+                {image ? <Image style={styles.image} source={{ uri: photoURL }} /> : <Image style={styles.image} source={title === "Médico" ? dr : dra} />}
                 <View style={[styles.wideCard]}>
-                    <Text stye={styles.title}>{title} {fullName}</Text>
+                    <Text stye={styles.title}>{fullName}</Text>
+                    <Text style={styles.miniTextTwo}>{title}</Text>
                     <Text style={styles.miniText}>{city}</Text>
                 </View>
             </View>
@@ -72,12 +75,12 @@ export default connect(mapState, {})(Speakers)
 let styles = StyleSheet.create({
     image: {
         width: 50,
-        height: 50
+        height: 60
     },
     flexCard: {
         flexDirection: "row",
         alignItems: "center",
-        maxHeight: 50,
+        maxHeight: 60,
         marginVertical: 10,
         minWidth: "100%",
         alignSelf: 'stretch',
@@ -111,10 +114,15 @@ let styles = StyleSheet.create({
     },
     title: {
         fontSize: 22,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginTop: 10
     },
     miniText: {
         fontSize: 10,
         marginBottom: 10
+    },
+    miniTextTwo: {
+        fontWeight: "bold",
+        fontSize: 10
     },
 })

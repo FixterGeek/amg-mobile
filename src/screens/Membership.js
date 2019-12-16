@@ -21,6 +21,7 @@ import Referencia from '../components/membership/Referencia'
 import Conekta from '../services/conektaRN'
 import { makePaymen } from '../services/paymentsService'
 import { makePayment, setWorkingOn } from '../redux/paymentDuck';
+import MemTypeCard from '../components/membership/MemTypeCard'
 
 
 let background = require('../../assets/login_bacground.png')
@@ -30,6 +31,7 @@ class Membership extends React.Component {
     static navigationOptions = { headerVisible: true, title: "Pago de membresía" }
 
     state = {
+        priceSelected: 0,
         error: false,
         user: {},
         loading: false,
@@ -183,13 +185,23 @@ class Membership extends React.Component {
     }
 
     render() {
-        let { step, error, loading, method, facturando, generando } = this.state
+        let { step, error, loading, method, facturando, priceSelected } = this.state
         return (
             <View style={{ flex: 1 }}>
                 <KeyboardAwareScrollView
                     enableOnAndroid={true}
                     enableAutomaticScroll={(Platform.OS === 'ios')}
                     contentContainerStyle={{ flex: 1 }}>
+
+                    {step === 0 && <View style={{ flex: 1 }}>
+                        <MemTypeCard onPress={() => this.setState({ priceSelected: 0 })}
+                            tipo={this.props.tipoSocio[0].tipo}
+                            price={this.props.tipoSocio[0].price}
+                            active={this.state.priceSelected === 0 && true} />
+                        <MemTypeCard onPress={() => this.setState({ priceSelected: 1 })}
+                            price={this.props.tipoSocio[1].price}
+                            tipo={this.props.tipoSocio[1].tipo}
+                            active={this.state.priceSelected === 1 && true} /></View>}
 
                     {step === 0 && < Method
                         payMethod={this.payMethod}
@@ -273,16 +285,29 @@ class Membership extends React.Component {
                     noButtons
                     clockImage
                 />
-            </View>
+            </View >
         )
     }
 }
 
 function mapState({ user, payment: { payment, workingOn } }) {
+
+    // Hace falta bajar los tipos de socio con su  precio a los que tine acceso
+
     return {
         paymentFetching: payment.fetching,
         paymentWorking: workingOn,
         user,
+        tipoSocio: [
+            {
+                price: 4750,
+                tipo: "Socio"
+            },
+            {
+                price: 625,
+                tipo: "Socio en entrenamiento"
+            }
+        ]
     }
 }
 

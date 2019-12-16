@@ -66,12 +66,12 @@ export const populatePublications = (userId, userToken) => (dispatch) => {
     ));
 
   return getUserPublications(userId, userToken)
-      .then(publicationsArray => successAction(
-        dispatch, populatePublicationsAction, publicationsArray, resetValues,
-      ))
-      .catch(error => errorAction(
-        dispatch, fetchingError, error, resetValues, 'Publicaciones no disponibles',
-      ));
+    .then(publicationsArray => successAction(
+      dispatch, populatePublicationsAction, publicationsArray, resetValues,
+    ))
+    .catch(error => errorAction(
+      dispatch, fetchingError, error, resetValues, 'Publicaciones no disponibles',
+    ));
 }
 
 export const createPublication = (publicationData, token, user) => async (dispatch) => {

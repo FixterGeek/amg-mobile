@@ -60,21 +60,21 @@ class App extends Component {
       Asset.loadAsync([
         require('./assets/splash.jpg'),
       ]),
-      //Font.loadAsync({
-      //'museo-sans-100': require('./assets/fonts/MuseoSans-100.otf')
-      //     'museo-sans-100-italic': require(
-      //       './assets/fonts/MuseoSans-100Italic.otf'),
-      //     'museo-sans-300': require('./assets/fonts/MuseoSans-300.otf'),
-      //     'museo-sans-300-italic': require(
-      //       './assets/fonts/MuseoSans-300Italic.otf'),
-      //     'museo-sans-700': require('./assets/fonts/MuseoSans_700.otf'),
-      //     'museo-sans-700-italic': require(
-      //       './assets/fonts/MuseoSans-700Italic.otf'),
-      //     'museo-sans-500': require('./assets/fonts/MuseoSans_500.otf'),
-      //     'museo-sans-500-italic': require(
-      //       './assets/fonts/MuseoSans_500_Italic.otf'),
-      //     'museo-sans-900': require('./assets/fonts/MuseoSans_900.otf'),
-      //}),
+      Font.loadAsync({
+        'museo-sans-100': require('./assets/fonts/MuseoSans-100.otf'),
+        // 'museo-sans-100-italic': require(
+        //   './assets/fonts/MuseoSans-100Italic.otf'),
+        'museo-sans-300': require('./assets/fonts/MuseoSans-300.otf'),
+        // 'museo-sans-300-italic': require(
+        //   './assets/fonts/MuseoSans-300Italic.otf'),
+        'museo-sans-700': require('./assets/fonts/MuseoSans_700.otf'),
+        // 'museo-sans-700-italic': require(
+        //   './assets/fonts/MuseoSans-700Italic.otf'),
+        'museo-sans-500': require('./assets/fonts/MuseoSans_500.otf'),
+        // 'museo-sans-500-italic': require(
+        //   './assets/fonts/MuseoSans_500_Italic.otf'),
+        // 'museo-sans-900': require('./assets/fonts/MuseoSans_900.otf'),
+      }),
     ])
   }
 
@@ -125,7 +125,7 @@ export default App
 let AppWithNavigationState = createAppContainer(createStackNavigator({
   Login: { screen: Login },
   Signup: { screen: EditAccount },
-  Home: { screen: Login },
+  Home: { screen: Feed },
   Profile: { screen: AccountProfile },
   EditAccount: { screen: EditAccount },
   Events: { screen: Events },
@@ -144,7 +144,6 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   EventPayment: { screen: EventPayment },
   EventCourses: { screen: EventCourses },
   CourseDetail: { screen: CourseDetail },
-  Home: { screen: Feed },
   Gallery: { screen: Gallery },
   CreatePost: { screen: PublicationFactory },
   UserPayments: { screen: UserPayments },

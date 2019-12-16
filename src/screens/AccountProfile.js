@@ -65,7 +65,9 @@ class AccountProfile extends React.Component {
     }
 
     render() {
-        let { title, name, dadSurname, momSurname, birthDate, city, state, membershipStatus, speciality, photoURL } = this.props
+        let { followers = [],
+            following = [],
+            title, name, dadSurname, momSurname, birthDate, city, state, membershipStatus, speciality, photoURL } = this.props
         let { user, open, tooltip } = this.state
         let nombre = `${name || ''} ${dadSurname || ''} ${momSurname || ''}`
         if (nombre === '  ' || !nombre) nombre = "No has completado tus datos"
@@ -98,13 +100,17 @@ class AccountProfile extends React.Component {
                                 <Text style={styles.followers}>
                                     Seguidores:
                            </Text>
-                                <Text style={styles.followNumber}>0</Text>
+                                <Text style={styles.followNumber}>
+                                    {followers.length}
+                                </Text>
                             </View>
                             <View style={[styles.number]}>
                                 <Text style={styles.followers}>
                                     Seguidos:
                            </Text>
-                                <Text style={styles.followNumber}>0</Text>
+                                <Text style={styles.followNumber}>
+                                    {following.length}
+                                </Text>
                             </View>
                         </View>
                         {/* history */}
@@ -155,6 +161,7 @@ class AccountProfile extends React.Component {
 }
 
 function mapState({ user }) {
+    console.log(user)
     return {
         ...user,
         ...user.basicData,

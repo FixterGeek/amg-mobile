@@ -42,7 +42,7 @@ class Login extends React.Component {
     componentDidUpdate() {
         if (this.props.loggedIn) {
             this.props.getEvents()
-            this.props.navigation.navigate('Events', {
+            this.props.navigation.navigate('Home', {
                 user: this.props.user,
                 reload: false
             })

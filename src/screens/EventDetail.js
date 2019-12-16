@@ -26,12 +26,19 @@ let download = require('../../assets/download.png')
 class EventDetail extends React.Component {
 
     static navigationOptions = {
-        title: "Detalle del Evento"
+        title: "Detalle del Evento",
+        // event: this.props.navigation.getParam('event')
     }
+
+    // componentWillMount() {
+    //     let event = this.props.navigation.getParam('event')
+    //     this.setState({ event })
+    // }
 
 
     render() {
-        let event = this.props.navigation.getParam('event')
+        let location = {}
+        let { event = location } = this.props
 
         //        console.warn(event)
 
@@ -48,10 +55,10 @@ class EventDetail extends React.Component {
                         resizeMode="cover"
                     />
                     <TouchableOpacity >
-                        <View>
+                        {event.location && <View>
                             <Text style={[styles.bolder]} >{event.location.city}, {event.location.state}</Text>
                             <Text>{event.location.street}</Text>
-                        </View>
+                        </View>}
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -113,9 +120,9 @@ class EventDetail extends React.Component {
                         <Text style={styles.title}>
                             Dirigido a
                     </Text>
-                        <Text>
+                        {event.description && <Text>
                             {event.description[0]}
-                        </Text>
+                        </Text>}
                         {/* <Text style={styles.title}>
                             Valor curricular
                     </Text>
@@ -143,6 +150,7 @@ function mapStateToProps({ user, events }) {
     return {
         fetching: user.fetching || events.fetching,
         user,
+        event: events.currentEvent
     }
 }
 

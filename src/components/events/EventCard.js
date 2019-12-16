@@ -34,9 +34,9 @@ function EventCard({ getSingleEventAction, event, title, startDate, mainImagesUR
                     <Text style={styles.size}>
                         {title}
                     </Text>
-                    <Text style={styles.p}>
+                    {location && <Text style={styles.p}>
                         {location.city}, {location.state}
-                    </Text>
+                    </Text>}
                     <Text style={styles.date}>
                         {moment(new Date(startDate)).format('LL')}
                     </Text>

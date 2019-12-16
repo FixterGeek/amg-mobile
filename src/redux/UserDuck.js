@@ -188,6 +188,7 @@ export let updateUserAction = (formData) => (dispatch, getState) => {
     dispatch({ type: UPDATE_USER })
     return axios.patch(`${baseURL}users/${_id}`, formData, { headers: { Authorization: token } })
         .then(res => {
+            console.log("aupdate: ", res)
             dispatch({ type: UPDATE_USER_SUCCESS, payload: { ...res.data } })
             let { user } = getState()
             AsyncStorage.setItem('userData', JSON.stringify(user))

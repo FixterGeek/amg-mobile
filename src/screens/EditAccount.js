@@ -25,7 +25,8 @@ import 'moment/locale/es'
 import BasePicker from '../components/common/BasePicker';
 moment.locale('es')
 
-let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
+//let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
+let pic = require('../../assets/person.png')
 
 @connectActionSheet
 class EditAccount extends React.Component {
@@ -220,7 +221,7 @@ class EditAccount extends React.Component {
                             <Image
                                 style={styles.image}
                                 //source={{ uri: file }}
-                                source={photo ? { uri: photo.uri } : basicData.photoURL ? { uri: basicData.photoURL } : { uri: pic }}
+                                source={photo ? { uri: photo.uri } : basicData.photoURL ? { uri: basicData.photoURL } : pic}
                             />
 
 
@@ -293,7 +294,7 @@ class EditAccount extends React.Component {
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Fecha de nacimiento:</Text>
                                 <DatePicker
-                                    style={Object.assign(styles.input, { minWidth: 300, marginBottom: 20 })}
+                                    style={[styles.input, { minWidth: 300, marginBottom: 20 }]}
                                     locale="es"
                                     date={basicData.birthDate}
                                     //mode="time"
@@ -361,17 +362,7 @@ class EditAccount extends React.Component {
                                     onChange={text => this.onChange("speciality", text)}
                                     defaultValue={basicData.speciality}
                                 />
-                                {/* <Picker
-                                    selectedValue={basicData.speciality}
-                                    style={styles.picker}
-                                    onValueChange={text => this.onChange("speciality", text)} >
-                                    <Picker.Item label="Cirujano" value="Cirujano" />
-                                    <Picker.Item label="Gastroenterología" value="Gastroenterología" />
-                                    <Picker.Item label="Endoscopia" value="Endoscopia" />
-                                    <Picker.Item label="Motilidad" value="Motilidad" />
-                                    <Picker.Item label="Medicina Interna" value="Medicina Interna" />
-                                    <Picker.Item label="Otra" value="Otra" />
-                                </Picker> */}
+
                             </View>
                             {!this.props.loggedIn ?
                                 <TouchableOpacity
@@ -469,9 +460,12 @@ let styles = StyleSheet.create({
     input: {
         color: "black",
         paddingLeft: 20,
-        borderColor: 'transparent', borderWidth: 1,
-        backgroundColor: "#f5f8f9", fontSize: 20,
-        paddingVertical: 20, fontWeight: "300"
+        borderColor: 'transparent',
+        borderWidth: 1,
+        backgroundColor: "#f5f8f9",
+        fontSize: 20,
+        paddingVertical: 20,
+        fontWeight: "300"
     },
     // password: { paddingLeft: 20, height: 40, borderColor: '#cfecff', borderWidth: 1 },
     camera: {
