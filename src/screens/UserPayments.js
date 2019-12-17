@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import GastroModal from '../components/common/GastroModal'
 
 import {
   ScrollView, View, Text,
@@ -14,12 +15,24 @@ import BoxItem from '../components/events/BoxItem';
 function UserPayments({
   userId, fetching, payments,
   populateUserPayments, noPayments,
+  navigation
 }) {
+
+  let [open, setOpen] = useState(true)
 
   useEffect(() => {
     if (!payments[0] && !noPayments) populateUserPayments(userId);
   }, [payments.length])
 
+  if (noPayments) return <GastroModal
+    onAccept={() => {
+      setOpen(false)
+      navigation.navigate('Profile')
+    }}
+    text="No has realizado ningún pago"
+    onlyOne={true}
+    isVisible={open}
+  />
   return (
     <View style={{ marginHorizontal: 20, marginVertical: 10, flex: 1 }}>
       <Spinner visible={fetching} />
@@ -46,6 +59,7 @@ function mapStateToProps({ user, payment: { payment } }) {
     fetching: user.fetching || payment.fetching,
     payments: payment.array,
     noPayments: payment.noData,
+    // noPayments: true
   }
 }
 
@@ -55,6 +69,6 @@ UserPayments.navigationOptions = () => ({
 
 export default connect(
   mapStateToProps, {
-    populateUserPayments,
-  }
+  populateUserPayments,
+}
 )(UserPayments)

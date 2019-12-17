@@ -13,6 +13,7 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { signOutAction } from '../redux/UserDuck'
 import { connect } from 'react-redux'
 import GastroModal from '../components/common/GastroModal';
+import axios from 'axios'
 
 
 
@@ -20,59 +21,52 @@ let userImg = require('../../assets/user-img.png')
 
 class AccountProfile extends React.Component {
 
-    static navigationOptions = ({ navigation }) => {
-        let params = navigation.state.params || {}
-        return {
-            headerTitle: (params.title) || navigation.state.routeName,
-            headerRight: params.headerRight,
-            headerLeft: params.headerLeft
-        }
-    }
-
+    static navigationOptions = { headerVisible: true, title: "Perfil público" }
 
     state = {
-        tooltip: false,
-        text: "Esta función estará disponible en la siguiente versión",
-        title: "Versión de prueba",
         user: {},
-        loading: false,
-        open: false
-    }
-
-    _setNavigationParams = () => {
-        let headerLeft = (<Icon
-            onPress={() => {
-                this.setState({ open: true })
-            }}
-            style={styles.editIcon} name="power-off" size={20} color="#000" />)
-        let headerRight = (<Icon
-            onPress={() => this.props.navigation.navigate('EditAccount')}
-            style={styles.editIcon} name="edit" size={20} color="#000" />)
-
-        this.props.navigation.setParams({
-            title: "Perfil de usuario",
-            headerLeft,
-            headerRight,
-            hideTabBar: false
-        })
+        followText: "Seguir"
     }
 
     componentWillMount() {
-        this._setNavigationParams()
+        let user = this.props.navigation.getParam('item')
+        this.setState({ user }, this.checkIfFollow)
+
     }
 
-    logOut = () => {
-        this.props.signOutAction()
-        this.props.navigation.navigate('Login')
+    checkIfFollow = () => {
+        console.log("orale", this.state.user.followers)
+        // if (!this.state.user || !this.state.user.followers) return
+        let following = this.state.user.followers.find(f => f == this.props.myId)
+        if (following) this.setState({ followText: "Siguiendo" })
+        else this.setState({ followText: "Seguir" })
+    }
+
+    follow = () => {
+        axios.post(`https://amg-api.herokuapp.com/users/${this.state.user._id}/follow`,
+            {},
+            { headers: { Authorization: this.props.token } })
+            .then(res => {
+                this.setState({ user: res.data.following }, this.checkIfFollow)
+            })
+            .catch(e => {
+                console.log(e)
+            })
+
     }
 
     render() {
-        let { followers = [],
-            following = [],
-            title, name, dadSurname, momSurname, birthDate, city, state, membershipStatus, speciality, photoURL } = this.props
-        let { user, open, tooltip } = this.state
+        let { followers = [], following = [], basicData = {}, address = {}, membershipStatus } = this.state.user
+        let { city, state, } = address
+        let {
+            name, dadSurname,
+            momSurname,
+            birthDate,
+            speciality,
+            photoURL
+        } = basicData
         let nombre = `${name || ''} ${dadSurname || ''} ${momSurname || ''}`
-        if (nombre === '  ' || !nombre) nombre = "No has completado tus datos"
+        let { followText } = this.state
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -87,14 +81,21 @@ class AccountProfile extends React.Component {
                                 {nombre}
                             </Text>
                             <Text style={[styles.simpleText]}>
-                                {city ? `${city}, ${state}` : "Completa tu datos de ubicación"}
+                                {city ? `${city}, ${state}` : "datos de ubicación incompletos"}
                             </Text>
                             <View>
                                 <Text style={[styles.header]}>
-                                    {`Socio ${membershipStatus}`}
+                                    {`${membershipStatus}`}
                                 </Text>
                                 <Text>{speciality}</Text>
                             </View>
+                            {this.props.myId !== this.state.user._id && <TouchableOpacity
+                                onPress={this.follow}
+                            >
+                                <Text style={[styles.followButton]}>
+                                    {followText}
+                                </Text>
+                            </TouchableOpacity>}
                         </View>
                         {/* Followers */}
                         <View style={[styles.info]}>
@@ -115,61 +116,20 @@ class AccountProfile extends React.Component {
                                 </Text>
                             </View>
                         </View>
-                        {/* history */}
-                        <TouchableOpacity onPress={() => this.setState({ tooltip: true })}>
-                            <View style={[styles.history]}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('UserPayments')}>
-                                    <View style={[styles.histoyCard]}>
-                                        <Text style={styles.historyText}>Mis pagos</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.setState({ text: "Asiste a los eventos de AMG y podrás descargar tu constancia.", title: "Constancias", tooltip: true, })}>
-                                    <View style={[styles.histoyCard]}>
-                                        <Text style={styles.historyText}>Mis constancias</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Home', { event: false })}>
-                                    <View style={[styles.histoyCard]}>
-                                        <Text style={styles.historyText}>Mis publicaciones</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate('Membership')}
-                                >
-                                    <View style={[styles.histoyCard]}>
-                                        <Text style={styles.historyText}>Membresía</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableOpacity>
+
                     </View>
                 </ScrollView>
                 <MainMenu />
-                <GastroModal
-                    isVisible={open}
-                    text={"¿Estas segur@ de que deseas cerrar sesión?"}
-                    onCancel={() => this.setState({ open: false })}
-                    onAccept={this.logOut}
-                    acceptButtonText="Cerrar sesión"
-                />
-                <GastroModal
-                    isVisible={tooltip}
-                    title={this.state.title}
-                    text={this.state.text}
-                    onAccept={() => this.setState({ tooltip: false })}
-                    onlyOne={true}
-                />
+
             </KeyboardAwareScrollView>
         )
     }
 }
 
 function mapState({ user }) {
-    console.log(user)
     return {
-        ...user,
-        ...user.basicData,
-        ...user.address
+        myId: user._id,
+        token: user.token
     }
 }
 
@@ -258,5 +218,12 @@ let styles = StyleSheet.create({
         backgroundColor: "#eaf0f7",
         marginVertical: 10
     },
+    followButton: {
+        alignSelf: "stretch",
+        backgroundColor: "#eaf0f7",
+        paddingHorizontal: 30,
+        paddingVertical: 15,
+        marginBottom: 20
+    }
 
 })

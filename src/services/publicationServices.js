@@ -14,12 +14,13 @@ export const getFeedPublicatios = (token) => {
 
 export const getUserPublications = (userId, token) => {
   console.log(userId);
-  return axios.get(`${APIURL}?query={"user":"${userId}"}`, {
+  // return axios.get(`${APIURL}?query={"user":"${userId}"}`, {
+  return axios.get(`${APIURL}`, {
     headers: {
       Authorization: token,
     },
   }).then(({ data }) => {
-    console.log('SUCHI!!!!!!');
+    // return data.reverse();
     return data;
   });
 };

@@ -14,9 +14,11 @@ import { populatePublications } from '../redux/publicationDuck';
 import EventCard from '../components/events/EventCard';
 import PublicationCard from '../components/feed/PublicationCard';
 import MainMenu from '../components/common/AnimatedMenu';
+import GastroModal from '../components/common/GastroModal'
 
 class Feed extends React.Component {
   state = {
+    open: true,
     showEvent: this.props.navigation.getParam('event')
   }
   componentWillMount() {
@@ -26,6 +28,18 @@ class Feed extends React.Component {
       else this.props.populatePublications(this.props.user._id, this.props.user.token);
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user.membershipStatus === "Free") {
+      this.setState({ open: true })
+    }
+  }
+
+  goBack = () => {
+    this.setState({ open: false })
+    this.props.navigation.navigate("Events")
+  }
+
   render() {
     let {
       getEvents, fetching, event,
@@ -34,6 +48,7 @@ class Feed extends React.Component {
     } = this.props
     let { showEvent } = this.state
 
+    if (this.props.user.membershipStatus === "Free") return <GastroModal onlyOne={true} onAccept={this.goBack} isVisible={this.state.open} title="Feed" text="Esta sección de Feed, está solo disponible para usuarios con membresía" />
     return (
       <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView
@@ -55,6 +70,12 @@ class Feed extends React.Component {
                 />
               )
             }
+            <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('Users')}>
+              <View style={styles.fakeInput}>
+                <Text style={{ color: '#333333' }}>Buscar colegas</Text>
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('CreatePost')}>
               <View style={styles.fakeInput}>
                 <Text style={{ color: '#333333' }}>Cuentanos algo</Text>

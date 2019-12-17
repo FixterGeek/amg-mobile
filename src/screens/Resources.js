@@ -7,7 +7,8 @@ import {
     ImageBackground,
     StyleSheet,
     TouchableOpacity,
-    Platform
+    Platform,
+    Linking
 } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -51,7 +52,9 @@ export default class Resources extends React.Component {
                     </Text>
                             </TouchableOpacity>
                         </View>
-                        <Image style={[styles.image]} source={require('../../assets/takeda.png')} />
+                        <TouchableOpacity onPress={() => Linking.openURL("https://www.takeda.com/es-mx/")}>
+                            <Image style={[styles.image]} source={require('../../assets/takeda.png')} />
+                        </TouchableOpacity>
                     </View>
 
                 </KeyboardAwareScrollView>

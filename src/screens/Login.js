@@ -166,10 +166,10 @@ class Login extends React.Component {
                                     color="#000" />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ alignSelf: "flex-start", margin: 20, flex: 0, flexDirection: "row", justifyContent: "flex-start" }}>
+                        {/* <View style={{ alignSelf: "flex-start", margin: 20, flex: 0, flexDirection: "row", justifyContent: "flex-start" }}>
                             <Icon style={[{ color: "#28abd8", paddingRight: 10, paddingBottom: 20 }]} name="check-circle" size={20} />
                             <Text style={{ color: "#bbbbbb" }} >Mantener mi sesion activa</Text>
-                        </View>
+                        </View> */}
 
                         <TouchableOpacity
                             disabled={!this.state.auth.email || !this.state.auth.password}

@@ -95,7 +95,7 @@ class AnimatedMenu extends Component {
         const { user } = this.props;
         return (
             // <View style={open ? styles.overlay : null}>
-            <Animated.View style={open?{ width: "100%", height: "100%", backgroundColor: "transparent", position: "absolute" }:null}>
+            <Animated.View style={open ? { width: "100%", height: "100%", backgroundColor: "transparent", position: "absolute" } : null}>
 
                 <Animated.View style={open ? [styles.overlay, backgroundStyle] : null}></Animated.View>
                 {
@@ -183,7 +183,7 @@ function mapStateToProps({ user }) {
 export default connect(
     mapStateToProps, {
 
-    }
+}
 )(AnimatedMenu)
 
 let styles = StyleSheet.create({

@@ -5,7 +5,7 @@ import {
 } from '../services/publicationServices';
 import axios from 'axios';
 import { successAction, errorAction } from './responseActions';
-import firebase from '../services/firebase';
+import { url } from '../services/url'
 
 const initialWorking = {
   user: null,
@@ -23,9 +23,14 @@ const initialState = {
   fetching: false,
   status: null,
   workingOn: initialWorking,
+  users: []
 };
 
 /* CONSTANTS */
+const GET_USERS = "GET_USERS"
+const GET_USERS_SUCCESS = "GET_USERS_SUCCESS"
+const GET_USERS_ERROR = "GET_USERS_ERROR"
+
 const PREFIX = 'PUBLICATIONS';
 
 const FETCHING = `${PREFIX}/FETCHING`;
@@ -54,6 +59,26 @@ const createPublicationAction = (createdPublication) => ({ type: CREATE_PUBLICAT
 
 
 /* THUNKS */
+export let getUsersAction = () => (dispatch, getState) => {
+  const APIURL = `${url}/users`;
+  dispatch({ type: GET_USERS })
+  let { user: { token }, publication } = getState()
+  if (publication.users.length > 0) return dispatch({ type: GET_USERS_SUCCESS, payload: publication.users })
+  return axios.get('https://amg-api.herokuapp.com/users', {
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then(res => {
+      dispatch({ type: GET_USERS_SUCCESS, payload: res.data })
+    })
+    .catch(e => {
+      console.log("erro: ", e)
+      console.log("erro: ", e.response)
+      dispatch({ type: GET_USERS_ERROR, payload: e.response ? e.response.message : "Error en el servidor" })
+    })
+}
+
 export const populatePublications = (userId, userToken) => (dispatch) => {
   dispatch(fetching());
 
@@ -89,6 +114,14 @@ export const createPublication = (publicationData, token, user) => async (dispat
 /* REDUCERS */
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+
+    case GET_USERS:
+      return { ...state, fetching: true }
+    case GET_USERS_SUCCESS:
+      return { ...state, users: [...action.payload], fetching: false }
+    case GET_USERS_ERROR:
+      return { ...state, fetching: false, error: action.payload }
+
     case FETCHING:
       return { ...state, fetching: true };
     case FETCHING_ERROR:
