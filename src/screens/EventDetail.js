@@ -37,10 +37,10 @@ class EventDetail extends React.Component {
 
 
     render() {
-        let location = {}
-        let { event = location } = this.props
-
-        //        console.warn(event)
+        let { event = {} } = this.props
+        let { location = {} } = event
+        let mapImage = location.mapImage
+        // console.warn("si?", event.location)
 
         return (
             <View style={{ flex: 1 }}>
@@ -49,11 +49,17 @@ class EventDetail extends React.Component {
                     <EventCard
                         {...event}
                     />
-                    <Image
-                        style={styles.fake}
-                        source={map}
-                        resizeMode="cover"
-                    />
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(`https://www.google.com/maps/place/${location.street}`)}
+                    >
+                        <Image
+                            style={styles.fake}
+                            // source={map}
+                            source={{ uri: mapImage }}
+                            resizeMode="cover"
+                        />
+                    </TouchableOpacity>
+
                     <TouchableOpacity >
                         {event.location && <View>
                             <Text style={[styles.bolder]} >{event.location.city}, {event.location.state}</Text>
