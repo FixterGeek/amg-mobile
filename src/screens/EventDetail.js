@@ -50,7 +50,7 @@ class EventDetail extends React.Component {
                         {...event}
                     />
                     <TouchableOpacity
-                        onPress={() => Linking.openURL(`https://www.google.com/maps/@${location.coordinates[0]},${location.coordinates[1]},16z`)}
+                        onPress={() => Linking.openURL(`https://www.google.com/maps/search/${location.street}`)}
                     >
                         <Image
                             style={styles.fake}
