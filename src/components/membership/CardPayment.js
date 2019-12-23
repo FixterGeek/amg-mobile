@@ -71,7 +71,7 @@ export default class CardPayment extends Component {
                                 <Text style={[styles.label]} >Expiración:</Text>
                                 <Text style={[styles.label, { marginLeft: 80 }]} >CVC:</Text>
                             </View>
-                            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                            <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
                                 <TextInput
                                     placeholder="MM/YYYY"
                                     underlineColorAndroid="transparent"

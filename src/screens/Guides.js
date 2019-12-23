@@ -101,8 +101,8 @@ let styles = StyleSheet.create({
         marginBottom: 20,
     },
     icon: {
-        color: "#fff",
-        fontSize: 30,
+        color: "#8e8e93",
+        fontSize: 24,
         marginRight: 25
     },
     render: {

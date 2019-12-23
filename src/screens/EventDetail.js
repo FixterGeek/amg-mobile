@@ -40,7 +40,7 @@ class EventDetail extends React.Component {
         let { event = {} } = this.props
         let { location = {} } = event
         let mapImage = location.mapImage
-        // console.warn("si?", event.location)
+        console.warn("si?", event.location)
 
         return (
             <View style={{ flex: 1 }}>
@@ -50,7 +50,7 @@ class EventDetail extends React.Component {
                         {...event}
                     />
                     <TouchableOpacity
-                        onPress={() => Linking.openURL(`https://www.google.com/maps/place/${location.street}`)}
+                        onPress={() => Linking.openURL(`https://www.google.com/maps/@${location.coordinates[0]},${location.coordinates[1]},16z`)}
                     >
                         <Image
                             style={styles.fake}

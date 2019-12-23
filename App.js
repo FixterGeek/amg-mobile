@@ -1,6 +1,6 @@
 //import 'moment/locale/es'
 import React, { Component } from 'react'
-import Events from 'screens/Events'
+import Events from './src/screens/Events'
 import EventDetail from 'screens/EventDetail'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import Login from './src/screens/Login';

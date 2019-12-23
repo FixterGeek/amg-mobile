@@ -78,11 +78,10 @@ let styles = StyleSheet.create({
     },
     modalButton: {
         marginHorizontal: 5,
-        backgroundColor: "#28abd8",
+        backgroundColor: "#5dbcd2",
         borderWidth: 0,
         paddingHorizontal: 15,
         paddingVertical: 15,
-        borderRadius: 10,
         minWidth: 120,
         textAlign: "center"
     },
@@ -92,7 +91,7 @@ let styles = StyleSheet.create({
         textAlign: "center"
     },
     textCancel: {
-        color: "#28abd8",
+        color: "#5dbcd2",
         fontWeight: "bold",
         textAlign: "center"
     },
@@ -101,8 +100,7 @@ let styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 15,
         backgroundColor: "white",
-        borderRadius: 10,
-        borderColor: "#28abd8",
+        borderColor: "#5dbcd2",
         borderWidth: 2,
         minWidth: 120,
 
