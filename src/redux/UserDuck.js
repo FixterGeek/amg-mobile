@@ -13,6 +13,7 @@ import {
 import { concat, of, EMPTY } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
 import axios from 'axios'
+import { populatePublications } from './publicationDuck'
 
 let baseURL = "https://amg-api.herokuapp.com/"
 //let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
@@ -156,7 +157,7 @@ export let subscribeToEventAction = (eventId) => (dispatch, getState) => {
     let { user: { token } } = getState()
     return axios.post(baseURL + `events/${eventId}/assist`, {}, { headers: { Authorization: token } })
         .then(res => {
-            console.log(res);
+            // console.log(res);
             dispatch(subscribeToEventSuccess(res.data))
             return res.data
         })
@@ -188,10 +189,11 @@ export let updateUserAction = (formData) => (dispatch, getState) => {
     dispatch({ type: UPDATE_USER })
     return axios.patch(`${baseURL}users/${_id}`, formData, { headers: { Authorization: token } })
         .then(res => {
-            console.log("aupdate: ", res)
+            // console.log("aupdate: ", res)
             dispatch({ type: UPDATE_USER_SUCCESS, payload: { ...res.data } })
             let { user } = getState()
             AsyncStorage.setItem('userData', JSON.stringify(user))
+            populatePublications(false, user.token)(dispatch, getState)
             return res.data
         })
         .catch(e => {

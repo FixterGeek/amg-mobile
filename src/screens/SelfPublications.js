@@ -28,7 +28,7 @@ class SelfPublications extends React.Component {
 
     populate = () => {
         // this.props.getEvents()
-        console.log(this.props.user._id, this.props.user.token)
+        // console.log(this.props.user._id, this.props.user.token)
         this.props.populatePublications(this.props.user._id, this.props.user.token);
     }
 
@@ -110,7 +110,7 @@ class SelfPublications extends React.Component {
     }
 }
 
-SelfPublications.navigationOptions = ({ navigation }) => ({ headerVisible: true, headerLeft: null, title: "Inicio" });
+SelfPublications.navigationOptions = ({ navigation }) => ({ headerVisible: true, headerLeft: null, title: "Publicaciones propias" });
 
 function mapStateToProps({ user, events, publication }) {
     let publications = publication.array.filter(p => p.user._id == user._id)
