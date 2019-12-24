@@ -13,6 +13,43 @@ import {
 import RegisterButton from '../common/RegisterButton'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import BasePicker from '../common/BasePicker';
+
+
+let estados = [
+    { "label": "AGUASCALIENTES", "value": "AGUASCALIENTES" },
+    { "label": "BAJA CALIFORNIA", "value": "BAJA CALIFORNIA" },
+    { "label": "BAJA CALIFORNIA SUR", "value": "BAJA CALIFORNIA SUR" },
+    { "label": "CHIHUAHUA", "value": "CHIHUAHUA" },
+    { "label": "CHIAPAS", "value": "CHIAPAS" },
+    { "label": "CAMPECHE", "value": "CAMPECHE" },
+    { "label": "CIUDAD DE MEXICO", "value": "CIUDAD DE MEXICO" },
+    { "label": "COAHUILA", "value": "COAHUILA" },
+    { "label": "COLIMA", "value": "COLIMA" },
+    { "label": "DURANGO", "value": "DURANGO" },
+    { "label": "GUERRERO", "value": "GUERRERO" },
+    { "label": "GUANAJUATO", "value": "GUANAJUATO" },
+    { "label": "HIDALGO", "value": "HIDALGO" },
+    { "label": "JALISCO", "value": "JALISCO" },
+    { "label": "MICHOACAN", "value": "MICHOACAN" },
+    { "label": "ESTADO DE MEXICO", "value": "ESTADO DE MEXICO" },
+    { "label": "MORELOS", "value": "MORELOS" },
+    { "label": "NAYARIT", "value": "NAYARIT" },
+    { "label": "NUEVO LEON", "value": "NUEVO LEON" },
+    { "label": "OAXACA", "value": "OAXACA" },
+    { "label": "PUEBLA", "value": "PUEBLA" },
+    { "label": "QUINTANA ROO", "value": "QUINTANA ROO" },
+    { "label": "QUERETARO", "value": "QUERETARO" },
+    { "label": "SINALOA", "value": "SINALOA" },
+    { "label": "SAN LUIS POTOSI", "value": "SAN LUIS POTOSI" },
+    { "label": "SONORA", "value": "SONORA" },
+    { "label": "TABASCO", "value": "TABASCO" },
+    { "label": "TLAXCALA", "value": "TLAXCALA" },
+    { "label": "TAMAULIPAS", "value": "TAMAULIPAS" },
+    { "label": "VERACRUZ", "value": "VERACRUZ" },
+    { "label": "YUCATAN", "value": "YUCATAN" },
+    { "label": "ZACATECAS", "value": "ZACATECAS" }
+]
 
 
 
@@ -77,7 +114,7 @@ export default class Facturacion extends Component {
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Municipio</Text>
                                 <TextInput
-                                    placeholder="Benito Juares"
+                                    placeholder="Benito Juárez"
                                     underlineColorAndroid="transparent"
                                     onChangeText={text => onChangeFactura("city", text)}
                                     style={[styles.input]}
@@ -86,12 +123,12 @@ export default class Facturacion extends Component {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Estado</Text>
-                                <TextInput
-                                    placeholder="Ciudad de México"
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={text => onChangeFactura("state", text)}
-                                    style={[styles.input]}
-                                    value={facturaForm.state}
+                                <BasePicker
+                                    style={styles.picker}
+                                    placeholder={'Selecciona tu Estado'}
+                                    dataSource={estados}
+                                    onChange={text => onChangeFactura("state", text)}
+                                    defaultValue={facturaForm.state}
                                 />
                             </View>
 
@@ -118,6 +155,9 @@ export default class Facturacion extends Component {
 
 
 let styles = StyleSheet.create({
+    picker: {
+        height: 200, minWidth: 300
+    },
     container: {
         backgroundColor: "white",
         flex: 1,

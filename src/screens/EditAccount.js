@@ -27,6 +27,40 @@ moment.locale('es')
 
 //let pic = "https://images-cdn.9gag.com/photo/aerjWqO_700b.jpg"
 let pic = require('../../assets/person.png')
+let estados = [
+    { "label": "AGUASCALIENTES", "value": "AGUASCALIENTES" },
+    { "label": "BAJA CALIFORNIA", "value": "BAJA CALIFORNIA" },
+    { "label": "BAJA CALIFORNIA SUR", "value": "BAJA CALIFORNIA SUR" },
+    { "label": "CHIHUAHUA", "value": "CHIHUAHUA" },
+    { "label": "CHIAPAS", "value": "CHIAPAS" },
+    { "label": "CAMPECHE", "value": "CAMPECHE" },
+    { "label": "CIUDAD DE MEXICO", "value": "CIUDAD DE MEXICO" },
+    { "label": "COAHUILA", "value": "COAHUILA" },
+    { "label": "COLIMA", "value": "COLIMA" },
+    { "label": "DURANGO", "value": "DURANGO" },
+    { "label": "GUERRERO", "value": "GUERRERO" },
+    { "label": "GUANAJUATO", "value": "GUANAJUATO" },
+    { "label": "HIDALGO", "value": "HIDALGO" },
+    { "label": "JALISCO", "value": "JALISCO" },
+    { "label": "MICHOACAN", "value": "MICHOACAN" },
+    { "label": "ESTADO DE MEXICO", "value": "ESTADO DE MEXICO" },
+    { "label": "MORELOS", "value": "MORELOS" },
+    { "label": "NAYARIT", "value": "NAYARIT" },
+    { "label": "NUEVO LEON", "value": "NUEVO LEON" },
+    { "label": "OAXACA", "value": "OAXACA" },
+    { "label": "PUEBLA", "value": "PUEBLA" },
+    { "label": "QUINTANA ROO", "value": "QUINTANA ROO" },
+    { "label": "QUERETARO", "value": "QUERETARO" },
+    { "label": "SINALOA", "value": "SINALOA" },
+    { "label": "SAN LUIS POTOSI", "value": "SAN LUIS POTOSI" },
+    { "label": "SONORA", "value": "SONORA" },
+    { "label": "TABASCO", "value": "TABASCO" },
+    { "label": "TLAXCALA", "value": "TLAXCALA" },
+    { "label": "TAMAULIPAS", "value": "TAMAULIPAS" },
+    { "label": "VERACRUZ", "value": "VERACRUZ" },
+    { "label": "YUCATAN", "value": "YUCATAN" },
+    { "label": "ZACATECAS", "value": "ZACATECAS" }
+]
 
 @connectActionSheet
 class EditAccount extends React.Component {
@@ -312,12 +346,19 @@ class EditAccount extends React.Component {
 
                             <View style={styles.inputContainer}>
                                 <Text style={[styles.label]} >Estado:</Text>
-                                <TextInput
+                                <BasePicker
+                                    style={styles.picker}
+                                    placeholder={'Selecciona tu Estado'}
+                                    dataSource={estados}
+                                    onChange={text => this.onChange("state", text)}
+                                    defaultValue={address.state}
+                                />
+                                {/* <TextInput
                                     underlineColorAndroid="transparent"
                                     style={[styles.input]}
                                     onChangeText={text => this.onChange("state", text)}
                                     value={address.state}
-                                />
+                                /> */}
                             </View>
 
                             <View style={styles.inputContainer}>

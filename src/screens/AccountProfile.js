@@ -128,7 +128,7 @@ class AccountProfile extends React.Component {
                                         <Text style={styles.historyText}>Mis constancias</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Home', { event: false })}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SelfPublications', { event: true })}>
                                     <View style={[styles.histoyCard]}>
                                         <Text style={styles.historyText}>Mis publicaciones</Text>
                                     </View>
@@ -165,7 +165,7 @@ class AccountProfile extends React.Component {
 }
 
 function mapState({ user }) {
-    console.log(user)
+    // console.log(user)
     return {
         ...user,
         ...user.basicData,

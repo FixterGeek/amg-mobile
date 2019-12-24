@@ -40,7 +40,7 @@ class EventDetail extends React.Component {
         let { event = {} } = this.props
         let { location = {} } = event
         let mapImage = location.mapImage
-        console.warn("si?", event.location)
+        // console.warn("si?", event.location)
 
         return (
             <View style={{ flex: 1 }}>
@@ -72,7 +72,7 @@ class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver programa</Text>
-                            <Image resizeMode={ImageResizeMode.contain} source={visor} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 12 }} source={visor} />
                             {/* <Icon style={styles.icon} name="eye" /> */}
                         </View>
                     </TouchableOpacity>
@@ -82,7 +82,7 @@ class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver ponentes</Text>
-                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={mic} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 18 }} source={mic} />
                             {/* <Icon style={styles.icon} name="microphone" /> */}
                         </View>
                     </TouchableOpacity>
@@ -92,7 +92,7 @@ class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Ver Cursos</Text>
-                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={course} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 12 }} source={course} />
                             {/* <Icon style={styles.icon} name="microphone" /> */}
                         </View>
                     </TouchableOpacity>
@@ -107,7 +107,7 @@ class EventDetail extends React.Component {
                     >
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Descargar carta permiso</Text>
-                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 6 }} source={download} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 14 }} source={download} />
                             {/* <Icon style={styles.icon} name="download" /> */}
                         </View>
 
@@ -117,7 +117,7 @@ class EventDetail extends React.Component {
                         <View style={[styles.button]}>
                             <Text style={[styles.ver]} >Examenes</Text>
                             {/* <Icon style={styles.icon} name="check-square" /> */}
-                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 7 }} source={paper} />
+                            <Image resizeMode={ImageResizeMode.contain} style={{ marginRight: 16 }} source={paper} />
                         </View>
 
                     </TouchableOpacity>
@@ -143,7 +143,11 @@ class EventDetail extends React.Component {
                         </Text> */}
                     </View>
 
-                    {this.props.user._id && <SubscriptionButton navigation={this.props.navigation} eventOrActivityObject={event} />}
+                    {this.props.user._id && <SubscriptionButton
+                        text={this.props.attending ? "Inscrito" : undefined}
+                        color={this.props.attending ? "#4ce2a7" : undefined}
+                        navigation={this.props.navigation}
+                        eventOrActivityObject={event} />}
                     {/* <RegisterButton text="Inscribirse" /> */}
                 </ScrollView>
                 <MainMenu />
@@ -153,10 +157,12 @@ class EventDetail extends React.Component {
 }
 
 function mapStateToProps({ user, events }) {
+    let attending = user.assistedEvents.find(id => id == events.currentEvent._id)
     return {
         fetching: user.fetching || events.fetching,
         user,
-        event: events.currentEvent
+        event: events.currentEvent,
+        attending
     }
 }
 

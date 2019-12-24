@@ -14,8 +14,8 @@ export const getFeedPublicatios = (token) => {
 
 export const getUserPublications = (userId, token) => {
   console.log(userId);
-  // return axios.get(`${APIURL}?query={"user":"${userId}"}`, {
-  return axios.get(`${APIURL}`, {
+  return axios.get(`${APIURL}?query={"user":"${userId}"}`, {
+    // return axios.get(`${APIURL}`, {
     headers: {
       Authorization: token,
     },

@@ -11,7 +11,7 @@ import {
 import RegisterButton from '../common/RegisterButton'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import oxxoImg from '../../../assets/oxxocard.png';
-import oxxo  from '../../../assets/oxxopay_brand.png';
+import oxxo from '../../../assets/oxxopay_brand.png';
 import firebase from '../../services/firebase'
 
 
@@ -21,8 +21,11 @@ export default function Referencia({
     onPressButton2,
     conektaOrder,
 }) {
+    console.log("pelusa ", conektaOrder)
+    if (!conektaOrder) return <View></View>
+    console.log("pelusinaHomeoffice ,", conektaOrder)
     const { charges = {} } = conektaOrder;
-    const { data = [] } = charges;
+    const { data = [{}] } = charges;
     const amount = `${data[0].amount}`;
     const [pdf, setPdf] = useState(null)
     const [generating, setGenerating] = useState(false);
@@ -36,7 +39,7 @@ export default function Referencia({
         setGenerating(true);
         printToFileAsync({
             html:
-            `<div style="display: flex; justify-content: center; padding-top: 100px; font-family: Helvetica">
+                `<div style="display: flex; justify-content: center; padding-top: 100px; font-family: Helvetica">
                 <div style="width: 500px; border: solid 2px #CCC">
                    <div style="display: flex; justify-content: space-between; padding: 32px;">
                    <div style="width: 40%; background-repeat: no-repeat; background-position: center; background-size: contain; heigth: 200px; background-image: url('https://raw.githubusercontent.com/conekta-examples/oxxopay-payment-stub/master/demo/oxxopay_brand.png')"></div>
@@ -94,7 +97,7 @@ export default function Referencia({
     if (pdf) return (<WebView style={{ flex: 1 }} source={{ uri: pdf }} />)
     return (
         <ScrollView contentContainerStyle={styles.container}>
-          { generating && <ActivityIndicator /> }  
+            {generating && <ActivityIndicator />}
             <View style={styles.oxxoHader}>
                 <Image source={oxxo} style={{ width: 120 }} resizeMode="contain" />
                 <View style={styles.amountContainer}>

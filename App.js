@@ -34,6 +34,7 @@ import PublicationFactory from './src/screens/PublicationFactory';
 import UserPayments from './src/screens/UserPayments';
 import PublicProfile from './src/screens/PublicProfile';
 import UserList from './src/screens/UserList'
+import SelfPublications from './src/screens/SelfPublications';
 
 console.disableYellowBox = true
 
@@ -128,6 +129,7 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Login: { screen: Login },
   Signup: { screen: EditAccount },
   Home: { screen: Feed },
+  SelfPublications: { screen: SelfPublications },
   Profile: { screen: AccountProfile },
   PublicProfile: { screen: PublicProfile },
   Users: { screen: UserList },

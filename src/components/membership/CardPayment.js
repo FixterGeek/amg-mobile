@@ -73,7 +73,7 @@ export default class CardPayment extends Component {
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
                                 <TextInput
-                                    placeholder="MM/YYYY"
+                                    placeholder="MM/AAAA"
                                     underlineColorAndroid="transparent"
                                     style={[styles.input, { width: 150, marginRight: 10 }]}
                                     onChangeText={text => onChangeCard("exp", text)}
@@ -96,7 +96,7 @@ export default class CardPayment extends Component {
                         <View style={styles.inputContainer}>
                             <Text style={[styles.label]} >Teléfono:</Text>
                             <TextInput
-                                placeholder="7712412828"
+                                placeholder="5552412829"
                                 underlineColorAndroid="transparent"
                                 onChangeText={text => onChangeCard("tel", text)}
                                 style={[styles.input]}

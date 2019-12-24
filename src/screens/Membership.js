@@ -59,10 +59,12 @@ class Membership extends React.Component {
 
     payMethod = (string) => {
         this.setState({ method: string })
+        // return
         if (string === 'oxxo') this.props.setWorkingOn({
             ...this.props.paymentWorking,
-            phone: this.props.user.basicData.phone,
+            phone: this.props.user.basicData.phone || "5534347623",
             isOxxoPayment: true,
+            price: this.props.tipoSocio[this.state.priceSelected].price
         });
     }
 
@@ -117,7 +119,7 @@ class Membership extends React.Component {
     tokenizeCard = () => {
         let { cardForm } = this.state
         let normalized = this.normalizeData()
-        console.log("nomilizada: ", normalized)
+        // console.log("nomilizada: ", normalized)
         if (normalized) {
             this.setState({ loading: true })
 
@@ -138,7 +140,7 @@ class Membership extends React.Component {
                     return makePaymen(data, cardForm.tel)
                 })
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.setState({ loading: false, step: 2 })
                 })
                 .catch(error => {
@@ -184,6 +186,12 @@ class Membership extends React.Component {
         })
     }
 
+    onChangePrice = (index) => {
+        this.setState({ priceSelected: index }, () => {
+            this.payMethod(this.state.method)
+        })
+    }
+
     render() {
         let { step, error, loading, method, facturando, priceSelected } = this.state
         return (
@@ -194,11 +202,11 @@ class Membership extends React.Component {
                     contentContainerStyle={{ flex: 1 }}>
 
                     {step === 0 && <View style={{ flex: 1 }}>
-                        <MemTypeCard onPress={() => this.setState({ priceSelected: 0 })}
+                        <MemTypeCard onPress={() => this.onChangePrice(0)}
                             tipo={this.props.tipoSocio[0].tipo}
                             price={this.props.tipoSocio[0].price}
                             active={this.state.priceSelected === 0 && true} />
-                        <MemTypeCard onPress={() => this.setState({ priceSelected: 1 })}
+                        <MemTypeCard onPress={() => this.onChangePrice(1)}
                             price={this.props.tipoSocio[1].price}
                             tipo={this.props.tipoSocio[1].tipo}
                             active={this.state.priceSelected === 1 && true} /></View>}
@@ -221,7 +229,7 @@ class Membership extends React.Component {
                     {step === 7 && <Referencia
                         onAccept={this.generarReferencia}
                         onPressButton2={() => this.props.navigation.navigate('Profile')}
-                        conektaOrder={this.state.conektaOrder || {}}
+                        conektaOrder={this.state.conektaOrder || null}
                     />}
 
                     {step === 2 && <MessageScreen

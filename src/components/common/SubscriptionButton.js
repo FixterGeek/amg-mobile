@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
-
+import GastroModal from '../common/GastroModal'
 import { subscribeToEventAction } from '../../redux/UserDuck';
 
 function SubscriptionButton({
   user, eventOrActivityObject, subscribeToEventAction,
-  subscriptionType = 'event', navigation, event,
+  subscriptionType = 'event', navigation, event, color,
+  text = "Inscribirme"
 }) {
+  let [open, setOpen] = useState(false)
   let userPays = false;
   if (user.membershipStatus === 'Free' && eventOrActivityObject.cost && eventOrActivityObject.cost.freeCost > 0) userPays = true;
   if (user.membershipStatus === 'Residente' && eventOrActivityObject.cost && eventOrActivityObject.cost.residentCost > 0) userPays = true;
@@ -15,6 +17,7 @@ function SubscriptionButton({
 
   const handlePress = () => {
     if (subscriptionType === 'event') subscribeToEventAction(eventOrActivityObject._id);
+    setOpen(true)
   }
 
   if (user.userStatus !== 'Aprobado') return (
@@ -42,11 +45,20 @@ function SubscriptionButton({
   );
 
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Inscribirme</Text>
-      </View>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={[styles.container, { backgroundColor: color ? color : "#1f2536" }]}>
+          <Text style={styles.text}>{text}</Text>
+        </View>
+      </TouchableOpacity>
+      <GastroModal
+        isVisible={open}
+        title={"Inscrito a " + event.title}
+        text="Ya estas inscrito a este evento"
+        onlyOne
+        onAccept={() => setOpen(false)}
+      />
+    </View>
   )
 }
 

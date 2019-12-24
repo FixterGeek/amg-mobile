@@ -19,14 +19,19 @@ import GastroModal from '../components/common/GastroModal'
 class Feed extends React.Component {
   state = {
     open: true,
-    showEvent: this.props.navigation.getParam('event')
+    showEvent: false,
+    done: false
   }
   componentWillMount() {
-    this.props.getEvents();
-    if (!this.props.publications[0] && !this.props.noPublications) {
-      if (this.state.showEvent) this.props.populatePublications(false, this.props.user.token);
-      else this.props.populatePublications(this.props.user._id, this.props.user.token);
-    }
+    this.populate()
+  }
+
+  componentDidMount() {
+    this.populate()
+  }
+  populate = () => {
+    this.props.getEvents()
+    this.props.populatePublications(false, this.props.user.token);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -62,7 +62,7 @@ const SUBSCRIBE_TO_ACTIVITY_ERROR = "SUBSCRIBE_TO_ACTIVITY_ERROR"
 //actionCreators
 export let subscribeToActivitySuccess = (activity) => ({ type: SUBSCRIBE_TO_ACTIVITY_SUCCESS, payload: activity })
 export let subscribeToActivityError = (err) => ({ type: SUBSCRIBE_TO_ACTIVITY_ERROR, payload: err })
-export let subscribeToEventSuccess = (event) => ({ type: SUBSCRIBE_TO_EVENT_SUCCESS, payload: event })
+export let subscribeToEventSuccess = (event) => ({ type: SUBSCRIBE_TO_EVENT_SUCCESS, payload: event._id })
 export let subscribeToEventError = (err) => ({ type: SUBSCRIBE_TO_EVENT_ERROR, payload: err })
 
 export function tryLogin(auth) {
