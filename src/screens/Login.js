@@ -79,7 +79,8 @@ class Login extends React.Component {
 
     onChange = (field, text) => {
         let { auth } = this.state
-        auth[field] = text.toLowerCase()
+        let t = text.toLowerCase()
+        auth[field] = t
         this.setState({ auth })
     }
 
