@@ -47,9 +47,9 @@ class Feed extends React.Component {
 
   render() {
     let {
-      getEvents, fetching, event,
+      fetching,
       navigation, populatePublications,
-      publications, noPublications, user,
+      publications, noPublications, user, event
     } = this.props
     let { showEvent } = this.state
 
@@ -64,14 +64,16 @@ class Feed extends React.Component {
           <ScrollView contentContainerStyle={styles.container}>
             <Spinner visible={fetching} />
             {
-              showEvent && (
+              event && (
                 <EventCard
+                  {...event}
+                  event={event}
+                  navigation={navigation}
                   event={event}
                   title={event.title}
                   location={event.location}
                   mainImagesURLS={event.mainImagesURLS}
                   startDate={event.startDate}
-                  navigation={navigation}
                 />
               )
             }
@@ -116,7 +118,7 @@ Feed.navigationOptions = ({ navigation }) => ({ headerVisible: true, headerLeft:
 function mapStateToProps({ user, events, publication }) {
   return {
     user,
-    event: events.array.filter(e => e.status === 'published').pop(),
+    event: events.array[0],
     fetching: events.fetching || publication.fetching,
     publications: publication.array || [],
     noPublications: publication.noData,

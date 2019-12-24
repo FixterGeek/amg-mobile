@@ -28,13 +28,13 @@ function SubscriptionButton({
     </TouchableOpacity>
   )
 
-  if (event.assistants.includes(user._id)) return (
-    <TouchableOpacity>
-      <View style={styles.alreadyContainer}>
-        <Text style={styles.text}>Ya estas registrado</Text>
-      </View>
-    </TouchableOpacity>
-  )
+  // if (event.assistants.includes(user._id)) return (
+  //   <TouchableOpacity>
+  //     <View style={styles.alreadyContainer}>
+  //       <Text style={styles.text}>Ya estas registrado</Text>
+  //     </View>
+  //   </TouchableOpacity>
+  // )
 
   if (userPays) return (
     <TouchableOpacity onPress={() => navigation.navigate('EventPayment', { event: eventOrActivityObject })}>
@@ -46,14 +46,14 @@ function SubscriptionButton({
 
   return (
     <View>
-      <TouchableOpacity onPress={handlePress}>
+      <TouchableOpacity onPress={color ? () => setOpen(true) : handlePress}>
         <View style={[styles.container, { backgroundColor: color ? color : "#1f2536" }]}>
           <Text style={styles.text}>{text}</Text>
         </View>
       </TouchableOpacity>
       <GastroModal
         isVisible={open}
-        title={"Inscrito a " + event.title}
+        title={"Inscrito a " + eventOrActivityObject.title}
         text="Ya estas inscrito a este evento"
         onlyOne
         onAccept={() => setOpen(false)}
