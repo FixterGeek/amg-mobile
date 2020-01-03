@@ -101,6 +101,8 @@ class Feed extends React.Component {
                 publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
                 navigation={navigation}
                 publicationDocs={item.docsURLS}
+                {...item}
+                userId={user._id}
               />}
               keyExtractor={item => item._id}
             />
@@ -116,6 +118,7 @@ class Feed extends React.Component {
 Feed.navigationOptions = ({ navigation }) => ({ headerVisible: true, headerLeft: null, title: "Inicio" });
 
 function mapStateToProps({ user, events, publication }) {
+
   return {
     user,
     event: events.array[0],

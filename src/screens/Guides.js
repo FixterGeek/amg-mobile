@@ -75,10 +75,10 @@ export default class Guides extends React.Component {
                     </View>
 
 
-                    <FlatList
+                    {filtered.length > 0 ? <FlatList
                         data={filtered}
                         renderItem={this.renderItem}
-                    />
+                    /> : <Text>No hay resultados que coincidan con tu búsqueda</Text>}
                 </View>
             </KeyboardAwareScrollView>
         )

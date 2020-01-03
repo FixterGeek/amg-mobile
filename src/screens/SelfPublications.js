@@ -74,7 +74,7 @@ class SelfPublications extends React.Component {
                                 />
                             )
                         }
-                        <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('Users')}>
+                        {/* <TouchableOpacity style={styles.fakeContainer} onPress={() => navigation.navigate('Users')}>
                             <View style={styles.fakeInput}>
                                 <Text style={{ color: '#333333' }}>Buscar colegas</Text>
                             </View>
@@ -87,7 +87,7 @@ class SelfPublications extends React.Component {
                             <View style={styles.fakeButton}>
                                 <Text style={{ color: 'white' }}>Publicar</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <FlatList
                             data={publications}
                             renderItem={({ item }) => <PublicationCard
@@ -98,6 +98,8 @@ class SelfPublications extends React.Component {
                                 publicationImages={item.imagesURLS[0] ? item.imagesURLS.map(i => ({ uri: i })) : []}
                                 navigation={navigation}
                                 publicationDocs={item.docsURLS}
+                                userId={user._id}
+                                {...item}
                             />}
                             keyExtractor={item => item._id}
                         />

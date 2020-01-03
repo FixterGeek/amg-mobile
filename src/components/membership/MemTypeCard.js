@@ -48,9 +48,9 @@ let styles = StyleSheet.create({
         fontWeight: "bold"
     },
     title: {
-        fontSize: 22
+        fontSize: 18
     },
     price: {
-        fontSize: 42
+        fontSize: 36
     }
 })

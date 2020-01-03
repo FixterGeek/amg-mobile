@@ -17,13 +17,13 @@ function UserHeader({
   return (
     <View style={styles.headerContainer}>
       <Image
-        source={ userPhoto ? { uri: userPhoto } : userImg }
+        source={userPhoto ? { uri: userPhoto } : userImg}
         style={styles.userPhoto}
         resizeMode="cover"
       />
       <View>
-        <Text style={styles.userNameText}>{ userName }</Text>
-        { !noDate && <Text>{ moment(date).fromNow() }</Text> }
+        <Text style={styles.userNameText}>{userName}</Text>
+        {!noDate && <Text>{moment(date).fromNow()}</Text>}
       </View>
     </View>
   )

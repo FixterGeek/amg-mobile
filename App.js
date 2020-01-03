@@ -12,7 +12,8 @@ import {
 import { AppLoading, Asset, Font } from 'expo'
 import { Provider } from 'react-redux'
 import NavigationService from './src/services/NavigationService'
-//import { AsyncStorage } from 'react-native'
+import { AsyncStorage, StatusBar } from 'react-native'
+
 import generateStore from './src/redux/Store'
 import Programa from './src/screens/Programa'
 import Modulo from './src/screens/Modulo';
@@ -105,12 +106,14 @@ class App extends Component {
     } else {
       return (
         <Provider store={generateStore()}>
+          <StatusBar backgroundColor="white" barStyle="dark-content" />
           <ActionSheetProvider>
             <AppWithNavigationState
               ref={navigatorRef => {
                 NavigationService.setTopLevelNavigator(navigatorRef);
               }}
             />
+
           </ActionSheetProvider>
         </Provider>
       )

@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types'
-import moment from 'moment';
+// import moment from 'moment';
 import LB from 'react-native-image-view';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { likedislikeAction, deletePublicationAction } from '../../redux/publicationDuck'
+import { connect } from 'react-redux'
+import GastroModal from '../common/GastroModal'
+
 
 import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -12,22 +17,38 @@ function PublicationCard({
   userName, userPhoto, date, publicationText,
   publicationImages = [], navigation,
   publicationDocs = [],
+  liked = [], userId, likedislikeAction, deletePublicationAction, _id, user
 }) {
+  let [open, setOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState(null);
+  let youLiked = liked.find(id => id == userId)
+  let isYours = user ? userId == user._id : false
+  function likePublication() {
+    likedislikeAction(_id)
+  }
+
+  function deletePost() {
+    setOpen(false)
+    deletePublicationAction(_id)
+  }
 
   return (
+
     <View style={styles.container}>
-      <UserHeader userPhoto={userPhoto} userName={userName} date={date} />
+
+      <UserHeader
+        userPhoto={userPhoto} userName={userName} date={date} />
       {
         publicationText && (
           <View style={styles.publicationText}>
             <Text>
-              { publicationText }
+              {publicationText}
             </Text>
           </View>
         )
       }
       <View style={styles.imagesContainer}>
+
         {
           publicationImages.slice(0, 4).map((i, index) => {
             if (publicationImages.length > 4 && index === 3) return (
@@ -75,11 +96,41 @@ function PublicationCard({
         images={[{ source: currentImage }]}
         onClose={() => setCurrentImage(null)}
       />
+      <TouchableOpacity
+        onPress={likePublication}
+      >
+        <View style={{ alignItems: "center", display: "flex", flexDirection: "row", marginVertical: 10, marginHorizontal: 20, position: "absolute", right: 0, bottom: 0 }}>
+          <Icon
+            name="heart" color={youLiked ? "red" : null} size={20}
+          />
+          <Text style={{ marginLeft: 10 }}>{liked.length ? liked.length : null}</Text>
+        </View>
+      </TouchableOpacity>
+      {isYours &&
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+        >
+          <Icon style={{ position: "absolute", right: -15, bottom: 0, marginHorizontal: 10, marginVertical: 10 }} size={20} name="trash" />
+        </TouchableOpacity>
+      }
+
+
+      <GastroModal
+        title="Eliminar"
+        text="¿Estas segurx de eliminar tu publicación?"
+        onCancel={() => setOpen(false)}
+        onAccept={deletePost}
+        isVisible={open}
+      />
     </View>
   );
 }
 
-export default PublicationCard;
+function mapState() {
+  return {}
+}
+
+export default connect(mapState, { deletePublicationAction, likedislikeAction })(PublicationCard)
 
 PublicationCard.propTypes = {
   date: PropTypes.string,
