@@ -19,8 +19,9 @@ import Facturacion from '../components/membership/Facturacion'
 import OxxoPayment from '../components/membership/OxxoPayment'
 import Referencia from '../components/membership/Referencia'
 import Conekta from '../services/conektaRN'
-import { makePaymen } from '../services/paymentsService'
+// import { makePaymen } from '../services/paymentsService'
 import { makePayment, setWorkingOn } from '../redux/paymentDuck';
+import { payMembershipAction } from '../redux/UserDuck'
 import MemTypeCard from '../components/membership/MemTypeCard'
 
 
@@ -131,13 +132,9 @@ class Membership extends React.Component {
                     if (data.object === "error") {
                         console.log("ERRORs", data);
                         this.setState({ loading: false, step: 3, error: data.message })
-                        return
+                        return Promise.reject(data.message)
                     }
-                    // console.log("DATA", data);
-                    //this.setState({ loading: false, step: 2 })
-                    // al backend
-                    return console.log(data)
-                    return makePaymen(data, cardForm.tel)
+                    return this.props.payMembershipAction(data.id, this.props.tipoSocio[this.state.priceSelected].price, cardForm.tel)
                 })
                 .then(res => {
                     // console.log(res)
@@ -145,7 +142,7 @@ class Membership extends React.Component {
                 })
                 .catch(error => {
                     console.log("ERROR", error);
-                    this.setState({ loading: false, step: 3, error })
+                    this.setState({ loading: false, step: 3, error: true })
                 });
         }
 
@@ -271,7 +268,7 @@ class Membership extends React.Component {
                 </KeyboardAwareScrollView>
                 <GastroModal
                     isVisible={error}
-                    text={error}
+                    text={"Ocurrió un error al procesar el pago, intenta nuevamente"}
                     onlyOne
                     onAccept={() => this.setState({ error: false })}
                 />
@@ -322,6 +319,7 @@ function mapState({ user, payment: { payment, workingOn } }) {
 export default connect(mapState, {
     makePayment,
     setWorkingOn,
+    payMembershipAction
 })(Membership)
 
 let styles = StyleSheet.create({

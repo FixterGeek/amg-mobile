@@ -53,11 +53,11 @@ function UserPayments({
 }
 
 function mapStateToProps({ user, payment: { payment } }) {
-  console.log(payment);
+  let payments = payment ? payment.array.reverse() : []
   return {
     userId: user._id,
     fetching: user.fetching || payment.fetching,
-    payments: payment.array,
+    payments,
     noPayments: payment.noData,
     // noPayments: true
   }

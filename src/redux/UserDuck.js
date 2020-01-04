@@ -35,10 +35,14 @@ let initialState = {
     error: null,
     fetching: false,
     status: "logedOut", // logedOut || fetching || success ||
-    loggedIn: false
+    loggedIn: false,
 }
 
 //constants
+const PAY_MEMBERSHIP = "PAY_MEMBERSHIP"
+const PAY_MEMBERSHIP_SUCCESS = "PAY_MEMBERSHIP_SUCCESS"
+const PAY_MEMBERSHIP_ERROR = "PAY_MEMBERSHIP_ERROR"
+
 const CREATE_USER = "CREATE_USER"
 const CREATE_USER_ERROR = "CREATE_USER_ERROR"
 const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS"
@@ -89,6 +93,13 @@ export function loginUserError(error) {
 // reducer
 function reducer(state = initialState, action) {
     switch (action.type) {
+        case PAY_MEMBERSHIP:
+            return { ...state, fetching: true }
+        case PAY_MEMBERSHIP_ERROR:
+            return { ...state, fetching: false, error: action.payload }
+        case PAY_MEMBERSHIP_SUCCESS:
+            return { ...state, fetching: false }
+
         case CREATE_USER:
             return { fetching: true, status: "fetching" }
         case CREATE_USER_ERROR:
@@ -136,7 +147,33 @@ function reducer(state = initialState, action) {
     }
 }
 
-// action creators
+// thunks
+export let payMembershipAction = (conektaToken, price, phone) => (dispatch, getState) => {
+    // dispatch({
+    //     type: PAY_MEMBERSHIP
+    // })
+    let { user, user: { token } } = getState()
+    let form = {
+        conektaToken: { id: conektaToken },
+        concept: "Plan - socio",
+        price,
+        phone,
+        subscriptionType: "Subscription",
+        paymentType: "Subscription"
+    }
+    return axios.post('https://amg-api.herokuapp.com/payments/subscription', form, { headers: { Authorization: token } })
+    // .then(res => {
+    //     // dispatch({ type: PAY_MEMBERSHIP_SUCCESS, payload: { ...res.data.payment } })
+    //     // dispatch({ type: LOGIN_SUCCESS, payload: { ...user, token: user.token } })
+    //     return true
+    // })
+    // .catch(err => {
+    //     console.log(err)
+    //     dispatch({ type: PAY_MEMBERSHIP_ERROR, payload: err.response ? err.response.data.message : "Error de sevidor" })
+    //     return false
+    // })
+}
+
 export let createUserAction = (user) => (dispatch) => {
     dispatch({ type: CREATE_USER })
     return axios.post(`${baseURL}auth/signup`, user)
