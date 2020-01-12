@@ -9,7 +9,7 @@ import AccountProfile from './src/screens/AccountProfile';
 import {
   ActionSheetProvider
 } from '@expo/react-native-action-sheet'
-import { AppLoading, Asset, Font } from 'expo'
+import { AppLoading, Asset, Font, Updates } from 'expo'
 import { Provider } from 'react-redux'
 import NavigationService from './src/services/NavigationService'
 import { AsyncStorage, StatusBar } from 'react-native'
@@ -36,8 +36,23 @@ import UserPayments from './src/screens/UserPayments';
 import PublicProfile from './src/screens/PublicProfile';
 import UserList from './src/screens/UserList'
 import SelfPublications from './src/screens/SelfPublications';
+import CoursePayment from './src/screens/CousePayment'
 
 console.disableYellowBox = true
+
+async function updates() {
+  try {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      await Updates.fetchUpdateAsync();
+      // ... notify user of update ...
+      Updates.reloadFromCache();
+    }
+  } catch (e) {
+    // handle or log error
+  }
+}
+updates()
 
 class App extends Component {
 
@@ -156,6 +171,7 @@ let AppWithNavigationState = createAppContainer(createStackNavigator({
   Gallery: { screen: Gallery },
   CreatePost: { screen: PublicationFactory },
   UserPayments: { screen: UserPayments },
+  CoursePayment: { screen: CoursePayment }
 },
   {
     navigationOptions: {

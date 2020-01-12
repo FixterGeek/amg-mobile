@@ -21,7 +21,7 @@ export default class Method extends Component {
                             {this.props.method === "card" ? <Icon style={styles.searchIcon} name="check-square" size={20} color="#000" />
                                 : <Icon style={styles.searchIcon} name="square" size={20} color="#000" />}
                             <Text style={styles.text}>
-                                Tarjeta debito / Credito
+                                Tarjeta débito / Credito
                     </Text>
                         </View>
                     </TouchableOpacity>
@@ -71,6 +71,6 @@ let styles = StyleSheet.create({
         alignItems: "center",
     },
     text: {
-        marginLeft: 20
+        marginLeft: 20,
     }
 })

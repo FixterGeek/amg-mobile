@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { postPayment, getUserPayments } from '../services/paymentsService';
 import { successAction, errorAction } from './responseActions';
+import axios from 'axios'
+import { AsyncStorage } from 'react-native'
 
 
 /* NO WORKING ON */
@@ -28,6 +30,19 @@ const populateUserPaymentsAction = (paymentsArray) =>
 
 
 /* THUNKS */
+export let payCourseAction = (body) => () => {
+  return AsyncStorage.getItem('token')
+    .then(token => {
+      return axios.post('http://amg-api.herokuapp.com/payments/course', body, { headers: { Authorization: token } })
+        .then(res => {
+          console.log("Respuesta data: ", res.data)
+          return res.data
+        })
+        .catch(e => console.log("ERROR", e))
+    })
+}
+
+
 export const populateUserPayments = userId => (dispatch) => {
   dispatch(fetching());
   return getUserPayments(userId)
