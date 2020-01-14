@@ -201,7 +201,7 @@ class EditAccount extends React.Component {
                     formData.append(`${k}[]`, el)
                 }
             } if (typeof user[k] === "object") {
-                if (k === "photoURL") continue
+                if (k === "photoURL" || k === "selectables") continue
                 for (let key in user[k]) {
                     formData.append(`${k}[${key}]`, user[k][key])
                 }
