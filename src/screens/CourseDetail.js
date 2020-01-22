@@ -13,16 +13,16 @@ class CourseDetail extends React.Component {
   render() {
     const course = this.props.navigation.getParam('course');
     const { modules = [] } = course;
-  
+
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>{ course.title }</Text>
+        <Text style={styles.title}>{course.title}</Text>
         <View>
           {
             modules.map(module => {
               return (
                 <View>
-                  <Text style={styles.subtitle}>{ module.title }</Text>
+                  <Text style={styles.subtitle}>{module.title}</Text>
                   {
                     module.activities.map(activity => (
                       <BoxItem

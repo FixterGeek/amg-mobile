@@ -72,10 +72,8 @@ class CoursePayment extends React.Component {
         if (course) courseIds.push(course._id)
         if (course2) courseIds.push(course2._id)
         let o = { isOxxoPayment: true, amount: this.getPrice(), courseIds, phone: "7717677676" }
-        console.log("perro", o)
         this.setState({ open: true, modalTitle: "Generando referencia, tomará solo unos segundos" })
         this.props.payCourseAction(o).then(({ conektaOrder }) => {
-            console.log("soloOrder: ", conektaOrder)
             this.setState({ step: 4, conektaOrder, open: false });
             this.subscribeToCourses()
         })
@@ -178,9 +176,9 @@ class CoursePayment extends React.Component {
     }
     getPrice = (curso) => {
         let { status } = this.props
-        let course = curso ? curso : this.props.navigation.getParam('Precongreso');
+        let course = curso ? curso : this.props.navigation.getParam('Precongreso') ? this.props.navigation.getParam('Precongreso') : this.props.navigation.getParam('Trascongreso');
         let price = 0
-        if (!status || status === "Free") price = course.cost.freeCost
+        if (!status || status === "Free") price = course.cost ? course.cost.freeCost : 0
         if (status === "Residente" || status === "Socio en Entrenamiento") price = course.cost.residentCost
         if (status === "Socio" || status === "Veterano" || status === "Mesa Directiva") price = course.cost.socioCost
         return price
@@ -234,7 +232,7 @@ class CoursePayment extends React.Component {
 
             />
         </View>)
-        if ((!course.cost && (course2.cost && this.getPrice(course2) == 0)) || (!course2.cost && (course.cost && this.getPrice(course) == 0))) return (<View style={{ paddingHorizontal: 10, flex: 1, justifyContent: "center" }}>
+        if ((!course.cost && !course2.cost) || (!course.cost && (course2.cost && this.getPrice(course2) == 0)) || (!course2.cost && (course.cost && this.getPrice(course) == 0))) return (<View style={{ paddingHorizontal: 10, flex: 1, justifyContent: "center" }}>
             <Text style={{
                 fontSize: 18,
                 marginTop: 10
